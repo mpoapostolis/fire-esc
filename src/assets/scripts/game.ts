@@ -53,45 +53,43 @@ export class Game {
     const player = new Player(this._scene, world.camera);
     const playerMeshes = await player.load();
 
-    // --- Minimap Setup ---
-    // Define camera layers
-    const MAIN_CAMERA_LAYER = 0x1;
-    const MINIMAP_CAMERA_LAYER = 0x2;
+    // --- Minimap Setup with ArcRotateCamera ---
+    const WORLD_LAYER = 0x1;
+    const PLAYER_LAYER = 0x2;
+    const MINIMAP_UI_LAYER = 0x4;
 
-    // Set layers for existing cameras and meshes
-    world.camera.layerMask = MAIN_CAMERA_LAYER;
-    playerMeshes.forEach((m) => (m.layerMask = MAIN_CAMERA_LAYER));
+    world.camera.layerMask = WORLD_LAYER | PLAYER_LAYER;
 
-    // Create a static top-down orthographic camera for the minimap
-    const mapSize = 100; // Match the ground size
+    // Create a new ArcRotateCamera for the minimap, looking straight down
     const minimapCamera = new ArcRotateCamera(
       "minimap",
+      -Math.PI / 2,
       0,
-      0,
-      mapSize,
-      new Vector3(0, 0, 0),
+      30,
+      player.capsule.position,
       this._scene
     );
-    minimapCamera.mode = Camera.PERSPECTIVE_CAMERA;
-    minimapCamera.position = new Vector3(0, 100, 0); // Position high above the center
-    minimapCamera.setTarget(Vector3.Zero());
+    minimapCamera.detachControl(); // User cannot move this camera
 
-    // Create a red dot to represent the player on the minimap
-    const redDot = MeshBuilder.CreateSphere(
-      "playerDot",
-      { diameter: 5 },
+    // Create a red arrow to represent the player on the minimap
+    const redArrow = MeshBuilder.CreateCylinder(
+      "playerArrow",
+      { height: 1, diameterTop: 0, diameterBottom: 4 },
       this._scene
     );
-    redDot.position = new Vector3(0, 10, 0); // Slightly above ground
-    redDot.material = new StandardMaterial("redDotMat", this._scene);
-    (redDot.material as StandardMaterial).diffuseColor = new Color3(1, 0, 0);
-    (redDot.material as StandardMaterial).emissiveColor = new Color3(1, 0, 0);
-    redDot.layerMask = MINIMAP_CAMERA_LAYER; // Only show the dots on the minimap
+    const redArrowMat = new StandardMaterial("redArrowMat", this._scene);
+    redArrowMat.diffuseColor = new Color3(1, 0, 0);
+    redArrowMat.emissiveColor = new Color3(1, 0, 0);
+    redArrow.material = redArrowMat;
+    redArrow.layerMask = MINIMAP_UI_LAYER;
+    redArrow.position.y = 5;
 
     // Define viewports
     world.camera.viewport = new Viewport(0, 0, 1, 1);
-    minimapCamera.viewport = new Viewport(0.65, 0.65, 0.3, 0.3);
-    minimapCamera.layerMask = MINIMAP_CAMERA_LAYER | MAIN_CAMERA_LAYER; // Minimap sees the world AND the red dot
+    minimapCamera.viewport = new Viewport(0.75, 0.75, 0.25, 0.25);
+
+    // Minimap camera sees world and its own UI layer
+    minimapCamera.layerMask = WORLD_LAYER | MINIMAP_UI_LAYER;
 
     // Add both cameras to the scene
     this._scene.activeCameras.push(world.camera);
@@ -105,10 +103,11 @@ export class Game {
 
     // Start the render loop
     this._engine.runRenderLoop(() => {
-      // Update the red dot's position to match the player, but keep it flat
-      redDot.position.x = player.capsule.position.x;
-      redDot.position.z = player.capsule.position.z;
-
+      // Make the minimap camera and the arrow follow the player
+      minimapCamera.target.copyFrom(player.capsule.position);
+      redArrow.position.x = player.capsule.position.x;
+      redArrow.position.z = player.capsule.position.z;
+      // redArrow.rotation.y = player.getHeroRotation();
       player.update();
       occlusion.update();
       this._scene.render();
