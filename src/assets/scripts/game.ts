@@ -1,7 +1,7 @@
 import { Engine, Scene, Vector3 } from "@babylonjs/core";
 import { getHavokPlugin } from "./physics/physics";
-import { createEnvironment } from "./world/environment";
-import { createCharacterController, type CharacterController } from "./player/characterController";
+import { World } from "./world";
+import { Player } from "./player";
 
 export class Game {
     private _scene: Scene;
@@ -17,16 +17,21 @@ export class Game {
         const havokPlugin = await getHavokPlugin();
         this._scene.enablePhysics(new Vector3(0, -9.81, 0), havokPlugin);
 
-        // Create the environment (loads the city)
-        await createEnvironment(this._scene);
+        // Create the world and camera
+        const world = new World(this._scene);
+        await world.load();
 
-        // Create the character controller from the new module
-        const character: CharacterController = await createCharacterController(this._scene);
+        // Create the player
+        const player = new Player(this._scene, world.camera);
+        const playerMeshes = await player.load();
+
+        // Setup camera occlusion
+        const occlusion = world.setupCameraOcclusion(() => player.capsule.position, playerMeshes);
 
         // Start the render loop
         this._engine.runRenderLoop(() => {
-            // The character controller's update function now drives everything
-            character.update();
+            player.update();
+            occlusion.update();
             this._scene.render();
         });
 
