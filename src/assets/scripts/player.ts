@@ -23,7 +23,7 @@ export class Player {
   private _currentPlayingAnim: AnimationGroup;
   private _inputMap: { [key: string]: boolean } = {};
 
-  private readonly _walkSpeed = 4;
+  private readonly _walkSpeed = 20;
   private readonly _sprintSpeed = 8;
 
   constructor(scene: Scene, camera: ArcRotateCamera) {
@@ -45,11 +45,11 @@ export class Player {
     this._heroRoot.position = startPosition;
     this._heroRoot.scaling = new Vector3(1.5, 1.5, 1.5);
 
-            result.meshes.forEach((mesh) => {
-                mesh.cullingStrategy = AbstractMesh.CULLINGSTRATEGY_BOUNDINGSPHERE_ONLY;
-                mesh.layerMask = 2; // Assign to layer 2 (Player)
-                if (mesh.material) mesh.material.freeze();
-            });
+    result.meshes.forEach((mesh) => {
+      mesh.cullingStrategy = AbstractMesh.CULLINGSTRATEGY_BOUNDINGSPHERE_ONLY;
+      mesh.layerMask = 2; // Assign to layer 2 (Player)
+      if (mesh.material) mesh.material.freeze();
+    });
     this._createPhysicsCapsule(startPosition);
     this._setupAnimations(result.animationGroups);
 

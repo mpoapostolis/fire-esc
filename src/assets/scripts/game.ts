@@ -1,17 +1,10 @@
-import {
-  Engine,
-  Scene,
-  Vector3,
-  ArcRotateCamera,
-  Viewport,
-  MeshBuilder,
-  StandardMaterial,
-  Color3,
-  Camera,
-} from "@babylonjs/core";
+// game.ts
+
+import { Engine, Scene, Vector3 } from "@babylonjs/core";
 import { getHavokPlugin } from "./physics";
 import { World } from "./world";
 import { Player } from "./player";
+import { Minimap } from "./mini-map"; // <-- Import the new Minimap class
 
 export class Game {
   private _scene: Scene;
@@ -23,7 +16,7 @@ export class Game {
   }
 
   public async run(): Promise<void> {
-    // --- Loading Screen Logic ---
+    // --- Loading Screen Logic --- (omitted for brevity, same as before)
     const loadingScreen = document.getElementById("loading-screen");
     const loadingText = document.getElementById("loading-text");
     const loadingMessages = [
@@ -45,7 +38,7 @@ export class Game {
     const havokPlugin = await getHavokPlugin();
     this._scene.enablePhysics(new Vector3(0, -9.81, 0), havokPlugin);
 
-    // Create the world and camera
+    // Create the world
     const world = new World(this._scene);
     await world.load();
 
@@ -53,45 +46,20 @@ export class Game {
     const player = new Player(this._scene, world.camera);
     const playerMeshes = await player.load();
 
-    // --- Minimap Setup with ArcRotateCamera ---
+    // Define main rendering layers
     const WORLD_LAYER = 0x1;
     const PLAYER_LAYER = 0x2;
-    const MINIMAP_UI_LAYER = 0x4;
 
+    // Main camera sees the world and the player model
     world.camera.layerMask = WORLD_LAYER | PLAYER_LAYER;
 
-    // Create a new ArcRotateCamera for the minimap, looking straight down
-    const minimapCamera = new ArcRotateCamera(
-      "minimap",
-      -Math.PI / 2,
-      0,
-      30,
-      player.capsule.position,
-      this._scene
-    );
-    minimapCamera.detachControl(); // User cannot move this camera
+    // --- Minimap Setup ---
+    // Create an instance of the Minimap class
+    const minimap = new Minimap(this._scene, player);
+    // Initialize it and get the camera it created
+    const minimapCamera = minimap.initialize();
 
-    // Create a red arrow to represent the player on the minimap
-    const redArrow = MeshBuilder.CreateCylinder(
-      "playerArrow",
-      { height: 1, diameterTop: 0, diameterBottom: 4 },
-      this._scene
-    );
-    const redArrowMat = new StandardMaterial("redArrowMat", this._scene);
-    redArrowMat.diffuseColor = new Color3(1, 0, 0);
-    redArrowMat.emissiveColor = new Color3(1, 0, 0);
-    redArrow.material = redArrowMat;
-    redArrow.layerMask = MINIMAP_UI_LAYER;
-    redArrow.position.y = 5;
-
-    // Define viewports
-    world.camera.viewport = new Viewport(0, 0, 1, 1);
-    minimapCamera.viewport = new Viewport(0.75, 0.75, 0.25, 0.25);
-
-    // Minimap camera sees world and its own UI layer
-    minimapCamera.layerMask = WORLD_LAYER | MINIMAP_UI_LAYER;
-
-    // Add both cameras to the scene
+    // Add both cameras to the scene's active cameras
     this._scene.activeCameras.push(world.camera);
     this._scene.activeCameras.push(minimapCamera);
 
@@ -103,15 +71,12 @@ export class Game {
 
     // Start the render loop
     this._engine.runRenderLoop(() => {
-      // Make the minimap camera and the arrow follow the player
-      minimapCamera.target.copyFrom(player.capsule.position);
-      redArrow.position.x = player.capsule.position.x;
-      redArrow.position.z = player.capsule.position.z;
-      // redArrow.rotation.y = player.getHeroRotation();
       player.update();
       occlusion.update();
+      minimap.update(); // <-- Call the minimap's update method each frame
       this._scene.render();
     });
+
     // Handle window resize
     window.addEventListener("resize", () => {
       this._engine.resize();
