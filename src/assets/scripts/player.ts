@@ -14,26 +14,17 @@ import {
 } from "@babylonjs/core";
 
 export class Player {
-  // Public properties
   public camera: ArcRotateCamera;
   public capsule: AbstractMesh;
-
-  // Private properties
   private _scene: Scene;
   private _heroRoot: AbstractMesh;
   private _physicsAggregate: PhysicsAggregate;
-
-  // Animation
   private _animations = new Map<string, AnimationGroup>();
   private _currentPlayingAnim: AnimationGroup;
-
-  // Input
   private _inputMap: { [key: string]: boolean } = {};
 
-  // Movement
   private readonly _walkSpeed = 4;
   private readonly _sprintSpeed = 8;
-  private readonly _velocitySmoothing = 0.1;
 
   constructor(scene: Scene, camera: ArcRotateCamera) {
     this._scene = scene;
@@ -52,13 +43,13 @@ export class Player {
     );
     this._heroRoot = result.meshes[0];
     this._heroRoot.position = startPosition;
-    this._heroRoot.scaling = new Vector3(0.75, 0.75, 0.75);
+    this._heroRoot.scaling = new Vector3(1.5, 1.5, 1.5);
 
-    result.meshes.forEach((mesh) => {
-      mesh.cullingStrategy = AbstractMesh.CULLINGSTRATEGY_BOUNDINGSPHERE_ONLY;
-      if (mesh.material) mesh.material.freeze();
-    });
-
+            result.meshes.forEach((mesh) => {
+                mesh.cullingStrategy = AbstractMesh.CULLINGSTRATEGY_BOUNDINGSPHERE_ONLY;
+                mesh.layerMask = 2; // Assign to layer 2 (Player)
+                if (mesh.material) mesh.material.freeze();
+            });
     this._createPhysicsCapsule(startPosition);
     this._setupAnimations(result.animationGroups);
 
@@ -84,7 +75,7 @@ export class Player {
       this._scene
     );
     this._physicsAggregate.body.setAngularDamping(1);
-    this._physicsAggregate.body.setLinearDamping(0.95);
+    this._physicsAggregate.body.setLinearDamping(0.5); // Apply some damping
     this._physicsAggregate.body.setMassProperties({
       inertia: new Vector3(0, 0, 0),
     });
@@ -92,12 +83,17 @@ export class Player {
   }
 
   private _setupAnimations(animationGroups: AnimationGroup[]): void {
+    console.log(
+      "Available animations:",
+      animationGroups.map((ag) => ag.name)
+    );
     animationGroups.forEach((ag) => {
       const name = ag.name.split("|")[1];
       if (name) this._animations.set(name, ag);
       ag.stop();
     });
-    const idleAnim = this._animations.get("Idle");
+    const idleAnim =
+      this._animations.get("Idle_Neutral") || this._animations.get("Idle");
     if (idleAnim) {
       this._currentPlayingAnim = idleAnim;
       idleAnim.play(true);
@@ -122,14 +118,13 @@ export class Player {
   private _updateMovement(): void {
     const speed = this._inputMap["shift"] ? this._sprintSpeed : this._walkSpeed;
 
-    const cameraForward = Vector3.Zero();
-    this.camera.getForwardRay().direction.normalizeToRef(cameraForward);
+    const cameraForward = this.camera
+      .getForwardRay()
+      .direction.normalizeToRef(Vector3.Zero());
     cameraForward.y = 0;
     cameraForward.normalize();
 
-    const cameraRight = Vector3.Zero();
-    Vector3.CrossToRef(Axis.Y, cameraForward, cameraRight);
-    cameraRight.normalize();
+    const cameraRight = Vector3.Cross(Axis.Y, cameraForward).normalize();
 
     const moveDirection = Vector3.Zero();
     if (this._inputMap["w"]) moveDirection.addInPlace(cameraForward);
@@ -142,41 +137,37 @@ export class Player {
       moveDirection.normalize();
       this._playRunAnimation();
 
-      const currentVelocity = this._physicsAggregate.body.getLinearVelocity();
       const targetVelocity = moveDirection.scale(speed);
-      const newVelocity = new Vector3(
-        Scalar.Lerp(
-          currentVelocity.x,
-          targetVelocity.x,
-          this._velocitySmoothing
-        ),
-        currentVelocity.y,
-        Scalar.Lerp(
-          currentVelocity.z,
-          targetVelocity.z,
-          this._velocitySmoothing
-        )
-      );
-      this._physicsAggregate.body.setLinearVelocity(newVelocity);
-
-      const targetRotation = Math.atan2(moveDirection.x, moveDirection.z);
-      this._heroRoot.rotation.y = targetRotation + this.camera.alpha + Math.PI;
-    } else {
-      this._playAnimation(this._animations.get("Idle"));
       const currentVelocity = this._physicsAggregate.body.getLinearVelocity();
-      const newVelocity = new Vector3(
-        currentVelocity.x * 0.9,
-        currentVelocity.y,
-        currentVelocity.z * 0.9
+      // Set velocity directly for immediate movement - NO TRANSITION
+      this._physicsAggregate.body.setLinearVelocity(
+        new Vector3(targetVelocity.x, currentVelocity.y, targetVelocity.z)
       );
-      this._physicsAggregate.body.setLinearVelocity(newVelocity);
+    } else {
+      this._playAnimation(
+        this._animations.get("Idle_Neutral") || this._animations.get("Idle")
+      );
+      const currentVelocity = this._physicsAggregate.body.getLinearVelocity();
+      // Set velocity to zero for immediate stop
+      this._physicsAggregate.body.setLinearVelocity(
+        new Vector3(0, currentVelocity.y, 0)
+      );
     }
   }
 
   private _playRunAnimation(): void {
-    let targetAnim = this._animations.get("Run");
-    if (this._inputMap["s"]) targetAnim = this._animations.get("Run_Back");
-    this._playAnimation(targetAnim);
+    let targetAnim: AnimationGroup | undefined;
+    // Prioritize backward/forward, then left/right for animation
+    if (this._inputMap["s"]) {
+      targetAnim = this._animations.get("Run_Back");
+    } else if (this._inputMap["w"]) {
+      targetAnim = this._animations.get("Run");
+    } else if (this._inputMap["a"]) {
+      targetAnim = this._animations.get("Run_Left");
+    } else if (this._inputMap["d"]) {
+      targetAnim = this._animations.get("Run_Right");
+    }
+    this._playAnimation(targetAnim || this._animations.get("Run")); // Fallback to forward run
   }
 
   private _playAnimation(anim: AnimationGroup | undefined): void {

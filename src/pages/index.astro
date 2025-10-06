@@ -4,7 +4,13 @@ import Layout from "../layouts/Layout.astro";
 
 <Layout>
   <canvas class="h-screen w-screen" id="renderCanvas"></canvas>
+  <!-- <div id="loading-screen" class="absolute top-0 left-0 w-full h-full bg-gray-900 flex flex-col justify-center items-center z-50 transition-opacity duration-1000 ease-in-out">
+    <svg class="w-16 h-16 mb-4 text-red-500 animate-pulse" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7.014A8.003 8.003 0 0112 2c1.398 0 2.743.57 3.714 1.572C18.5 5.572 19 8.5 19 11c2 1 2.657 1.657 2.657 2.657a8 8 0 01-14.314 5z" />
+    </svg>
+    <p id="loading-text" class="text-gray-300 text-lg tracking-widest uppercase animate-pulse">Loading...</p>
+  </div> -->
   <script>
-  import "../assets/scripts/main.ts";
-</script>
+    import "../assets/scripts/main.ts";
+  </script>
 </Layout>

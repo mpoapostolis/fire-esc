@@ -39,6 +39,7 @@ export class World {
     private async _createEnvironment(): Promise<void> {
         const result = await SceneLoader.ImportMeshAsync("", "/models/", "city.glb", this._scene);
         result.meshes.forEach(mesh => {
+            mesh.layerMask = 1; // Assign to layer 1 (World)
             if (mesh.name !== "__root__" && mesh instanceof Mesh) {
                 const body = new PhysicsBody(mesh, PhysicsMotionType.STATIC, false, this._scene);
                 body.shape = new PhysicsShapeMesh(mesh, this._scene);
@@ -47,6 +48,7 @@ export class World {
 
         const ground = CreateGround("ground", { width: 100, height: 100 }, this._scene);
         ground.isVisible = false;
+        ground.layerMask = 1; // Assign to layer 1 (World)
         const groundShape = new PhysicsShapeBox(Vector3.Zero(), Quaternion.Identity(), new Vector3(100, 0.1, 100), this._scene);
         const groundBody = new PhysicsBody(ground, PhysicsMotionType.STATIC, false, this._scene);
         groundBody.shape = groundShape;
