@@ -20,11 +20,16 @@ import {
   CubeTexture,
   MeshBuilder,
   Texture,
+  ParticleHelper,
 } from "@babylonjs/core";
+import type { IParticleSystem } from "@babylonjs/core/Particles/IParticleSystem";
+import { AdvancedDynamicTexture, TextBlock, Control } from "@babylonjs/gui";
 
 export class World {
   private _scene: Scene;
   public camera: ArcRotateCamera;
+  private _firePoints: Mesh[] = [];
+  private _fireParticleSystems: IParticleSystem[] = [];
 
   constructor(scene: Scene) {
     this._scene = scene;
@@ -37,8 +42,60 @@ export class World {
     this._createCamera();
   }
 
+  public createFirePoints(count: number): void {
+    const groundSize = 250;
+    for (let i = 1; i <= count; i++) {
+      const x = Math.random() * groundSize - groundSize / 2;
+      const z = Math.random() * groundSize - groundSize / 2;
+
+      const firePoint = MeshBuilder.CreateSphere(
+        `firePoint-${i}`,
+        { diameter: 5 },
+        this._scene
+      );
+      firePoint.position = new Vector3(x, 2, z);
+      firePoint.isVisible = false;
+      this._firePoints.push(firePoint);
+    }
+  }
+
+  public async showFireAtPoint(id: number): Promise<void> {
+    const firePoint = this._firePoints.find(
+      (fp) => fp.name === `firePoint-${id}`
+    );
+    if (firePoint) {
+      const set = await ParticleHelper.CreateAsync("fire", this._scene);
+      set.systems.forEach((s) => {
+        s.emitter = firePoint;
+        s.minSize = 1;
+        s.maxSize = 5;
+        s.emitRate = 500;
+        s.minEmitBox = new Vector3(-2, 0, -2);
+        s.maxEmitBox = new Vector3(2, 0, 2);
+        this._fireParticleSystems.push(s);
+      });
+      set.start();
+    }
+  }
+
+  public hideAllFires(): void {
+    this._fireParticleSystems.forEach((s) => s.dispose());
+    this._fireParticleSystems = [];
+  }
+
+  public getFirePointPosition(id: number): Vector3 | null {
+    const firePoint = this._firePoints.find(
+      (fp) => fp.name === `firePoint-${id}`
+    );
+    return firePoint ? firePoint.getAbsolutePosition() : null;
+  }
+
   private _createSkybox(): void {
-    const skybox = MeshBuilder.CreateBox("skyBox", { size: 1000.0 }, this._scene);
+    const skybox = MeshBuilder.CreateBox(
+      "skyBox",
+      { size: 1000.0 },
+      this._scene
+    );
     const skyboxMaterial = new StandardMaterial("skyBox", this._scene);
     skyboxMaterial.backFaceCulling = false;
     skyboxMaterial.disableLighting = true;
@@ -79,21 +136,12 @@ export class World {
           this._scene
         );
         body.shape = new PhysicsShapeMesh(mesh, this._scene);
+        if (mesh.material) {
+          mesh.material.freeze();
+        }
+        mesh.freezeWorldMatrix();
       }
     });
-
-    const ground = CreateGround(
-      "ground",
-      { width: 250, height: 250 },
-      this._scene
-    );
-    ground.isVisible = true;
-    ground.layerMask = 0x4; // Assign to layer 1 (World)
-    ground.position.y = -1;
-    const groundMaterial = new StandardMaterial("groundMat", this._scene);
-    groundMaterial.diffuseColor = new Color3(0, 0, 0); // Βασικό χρώμα: Μαύρο
-    groundMaterial.specularColor = new Color3(0, 0, 0); // Χρώμα αντανάκλασης: Μαύρο (για να μην γυαλίζει)
-    ground.material = groundMaterial;
   }
 
   private _createCamera(): void {

@@ -11,6 +11,8 @@ import {
   Scalar,
   Axis,
   KeyboardEventTypes,
+  Animation,
+  Ray,
 } from "@babylonjs/core";
 
 export class Player {
@@ -21,10 +23,19 @@ export class Player {
   private _physicsAggregate: PhysicsAggregate;
   private _animations = new Map<string, AnimationGroup>();
   private _currentPlayingAnim: AnimationGroup;
-  private _inputMap: { [key: string]: boolean } = {};
+  private _keyInputMap: { [key: string]: boolean } = {};
+  private _stickInput: { x: number; y: number } = { x: 0, y: 0 };
+  private _isJumping = false;
+  private _hasJumpedInAir = false;
 
-  private readonly _walkSpeed = 3;
+  private _cameraForward = new Vector3();
+  private _cameraRight = new Vector3();
+  private _moveDirection = new Vector3();
+  private _targetVelocity = new Vector3();
+
+  private readonly _walkSpeed = 20;
   private readonly _sprintSpeed = 5;
+  private readonly _jumpImpulse = 400;
 
   constructor(scene: Scene, camera: ArcRotateCamera) {
     this._scene = scene;
@@ -45,11 +56,6 @@ export class Player {
     this._heroRoot.position = startPosition;
     this._heroRoot.scaling = new Vector3(0.6, 0.6, 0.6);
 
-    result.meshes.forEach((mesh) => {
-      mesh.cullingStrategy = AbstractMesh.CULLINGSTRATEGY_BOUNDINGSPHERE_ONLY;
-      mesh.layerMask = 2; // Assign to layer 2 (Player)
-      if (mesh.material) mesh.material.freeze();
-    });
     this._createPhysicsCapsule(startPosition);
     this._setupAnimations(result.animationGroups);
 
@@ -83,10 +89,6 @@ export class Player {
   }
 
   private _setupAnimations(animationGroups: AnimationGroup[]): void {
-    console.log(
-      "Available animations:",
-      animationGroups.map((ag) => ag.name)
-    );
     animationGroups.forEach((ag) => {
       const name = ag.name.split("|")[1];
       if (name) this._animations.set(name, ag);
@@ -104,8 +106,12 @@ export class Player {
     this._scene.onKeyboardObservable.add((kbInfo) => {
       const key = kbInfo.event.key.toLowerCase();
       const isDown = kbInfo.type === KeyboardEventTypes.KEYDOWN;
-      this._inputMap[key] = isDown;
+      this._keyInputMap[key] = isDown;
     });
+  }
+
+  public setInputVector(input: { x: number; y: number }) {
+    this._stickInput = input;
   }
 
   public update(): void {
@@ -115,65 +121,112 @@ export class Player {
     this.camera.target.copyFrom(this.capsule.position);
   }
 
+  public teleport(position: Vector3): void {
+    this._scene;
+    this.capsule.position.copyFrom(position);
+  }
+
+  private _isGrounded(): boolean {
+    const ray = new Ray(this.capsule.position, Vector3.Down(), 0.95);
+    const predicate = (mesh: AbstractMesh) =>
+      mesh.isPickable && mesh.isEnabled() && mesh !== this.capsule;
+    const hit = this._scene.pickWithRay(ray, predicate);
+    return !!hit?.hit;
+  }
+
   private _updateMovement(): void {
-    const speed = this._inputMap["shift"] ? this._sprintSpeed : this._walkSpeed;
+    const speed = this?._keyInputMap["shift"]
+      ? this._sprintSpeed
+      : this._walkSpeed;
 
-    const cameraForward = this.camera
-      .getForwardRay()
-      .direction.normalizeToRef(Vector3.Zero());
-    cameraForward.y = 0;
-    cameraForward.normalize();
+    // Get camera directions and flatten them on the XZ plane
+    this.camera.getDirection(Axis.Z).normalizeToRef(this._cameraForward);
+    this._cameraForward.y = 0;
+    this._cameraForward.normalize();
 
-    const cameraRight = Vector3.Cross(Axis.Y, cameraForward).normalize();
+    this.camera.getDirection(Axis.X).normalizeToRef(this._cameraRight);
+    this._cameraRight.y = 0;
+    this._cameraRight.normalize();
 
-    const moveDirection = Vector3.Zero();
-    if (this._inputMap["w"]) moveDirection.addInPlace(cameraForward);
-    if (this._inputMap["s"]) moveDirection.subtractInPlace(cameraForward);
-    if (this._inputMap["a"]) moveDirection.subtractInPlace(cameraRight);
-    if (this._inputMap["d"]) moveDirection.addInPlace(cameraRight);
+    const isGrounded = this._isGrounded();
+    if (isGrounded) {
+      this._hasJumpedInAir = false;
+    }
 
-    const isMoving = moveDirection.lengthSquared() > 0;
-    if (isMoving) {
-      moveDirection.normalize();
-      this._playRunAnimation();
-
-      const targetVelocity = moveDirection.scale(speed);
-      const currentVelocity = this._physicsAggregate.body.getLinearVelocity();
-      // Set velocity directly for immediate movement - NO TRANSITION
-      this._physicsAggregate.body.setLinearVelocity(
-        new Vector3(targetVelocity.x, currentVelocity.y, targetVelocity.z)
+    // Jump
+    if (isGrounded && !this._hasJumpedInAir && this._keyInputMap[" "]) {
+      this._hasJumpedInAir = true;
+      this._physicsAggregate.body.applyImpulse(
+        new Vector3(0, this._jumpImpulse, 0),
+        this.capsule.getAbsolutePosition()
       );
+      // Assuming "Jump" animation exists, play it once.
+      const jumpAnim =
+        this._animations.get("Jump") ||
+        this._animations.get("Jump_Start") ||
+        this._animations.get("Jumping");
+      if (jumpAnim) {
+        this._isJumping = true;
+        jumpAnim.onAnimationEndObservable.addOnce(() => {
+          this._isJumping = false;
+        });
+        this._playAnimation(jumpAnim, false);
+      }
+    }
+
+    this._moveDirection.set(0, 0, 0);
+    if (this._keyInputMap["w"])
+      this._moveDirection.addInPlace(this._cameraForward);
+    if (this._keyInputMap["s"])
+      this._moveDirection.subtractInPlace(this._cameraForward);
+    if (this._keyInputMap["a"])
+      this._moveDirection.subtractInPlace(this._cameraRight);
+    if (this._keyInputMap["d"])
+      this._moveDirection.addInPlace(this._cameraRight);
+
+    const currentYVelocity =
+      this._physicsAggregate.body.getLinearVelocity()?.y || 0;
+
+    if (this._moveDirection.lengthSquared() > 0.001) {
+      this._moveDirection.normalize();
+      if (!this._isJumping) {
+        this._playRunAnimation();
+      }
+
+      this._moveDirection.scaleToRef(speed, this._targetVelocity);
+      this._targetVelocity.y = currentYVelocity;
+      this._physicsAggregate.body.setLinearVelocity(this._targetVelocity);
     } else {
-      this._playAnimation(
-        this._animations.get("Idle_Neutral") || this._animations.get("Idle")
-      );
-      const currentVelocity = this._physicsAggregate.body.getLinearVelocity();
-      // Set velocity to zero for immediate stop
-      this._physicsAggregate.body.setLinearVelocity(
-        new Vector3(0, currentVelocity.y, 0)
-      );
+      if (!this._isJumping) {
+        this._playAnimation(
+          this._animations.get("Idle_Neutral") || this._animations.get("Idle")
+        );
+      }
+
+      this._targetVelocity.set(0, currentYVelocity, 0);
+      this._physicsAggregate.body.setLinearVelocity(this._targetVelocity);
     }
   }
 
   private _playRunAnimation(): void {
     let targetAnim: AnimationGroup | undefined;
     // Prioritize backward/forward, then left/right for animation
-    if (this._inputMap["s"]) {
+    if (this._keyInputMap["s"]) {
       targetAnim = this._animations.get("Run_Back");
-    } else if (this._inputMap["w"]) {
+    } else if (this._keyInputMap["w"]) {
       targetAnim = this._animations.get("Run");
-    } else if (this._inputMap["a"]) {
+    } else if (this._keyInputMap["a"]) {
       targetAnim = this._animations.get("Run_Left");
-    } else if (this._inputMap["d"]) {
+    } else if (this._keyInputMap["d"]) {
       targetAnim = this._animations.get("Run_Right");
     }
     this._playAnimation(targetAnim || this._animations.get("Run")); // Fallback to forward run
   }
 
-  private _playAnimation(anim: AnimationGroup | undefined): void {
+  private _playAnimation(anim: AnimationGroup | undefined, loop = true): void {
     if (!anim || this._currentPlayingAnim === anim) return;
-    this._currentPlayingAnim.stop();
-    anim.play(true);
+    this._currentPlayingAnim?.stop();
+    anim.play(loop);
     this._currentPlayingAnim = anim;
   }
 }
