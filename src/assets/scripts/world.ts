@@ -17,6 +17,9 @@ import {
   PhysicsShapeMesh,
   StandardMaterial,
   Color3,
+  CubeTexture,
+  MeshBuilder,
+  Texture,
 } from "@babylonjs/core";
 
 export class World {
@@ -29,8 +32,25 @@ export class World {
 
   public async load(): Promise<void> {
     this._createLight();
+    this._createSkybox();
     await this._createEnvironment();
     this._createCamera();
+  }
+
+  private _createSkybox(): void {
+    const skybox = MeshBuilder.CreateBox("skyBox", { size: 1000.0 }, this._scene);
+    const skyboxMaterial = new StandardMaterial("skyBox", this._scene);
+    skyboxMaterial.backFaceCulling = false;
+    skyboxMaterial.disableLighting = true;
+    skyboxMaterial.reflectionTexture = new CubeTexture(
+      "https://www.babylonjs-playground.com/textures/skybox",
+      this._scene
+    );
+    skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
+    skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
+    skyboxMaterial.specularColor = new Color3(0, 0, 0);
+    skybox.material = skyboxMaterial;
+    skybox.infiniteDistance = true;
   }
 
   private _createLight(): void {
