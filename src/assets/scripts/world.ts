@@ -85,8 +85,8 @@ export class World {
       Vector3.Zero(),
       this._scene
     );
-    this.camera.lowerRadiusLimit = 8;
-    this.camera.upperRadiusLimit = 30;
+    this.camera.lowerRadiusLimit = 2;
+    this.camera.upperRadiusLimit = 5;
     this.camera.lowerBetaLimit = 0.1;
     this.camera.upperBetaLimit = Math.PI / 2.2;
     this.camera.angularSensibilityX = 2000;
