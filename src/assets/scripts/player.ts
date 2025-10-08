@@ -66,6 +66,7 @@ export class Player {
   private _isJumping = false;
   private _hasJumpedInAir = false;
   private _marker: AbstractMesh;
+  private _controlsEnabled = true;
 
   // Reusable vectors for performance
   private readonly _cameraForward = new Vector3();
@@ -175,12 +176,16 @@ export class Player {
   }
 
   public update(): void {
-    if (!this._physicsAggregate) return;
+    if (!this._physicsAggregate || !this._controlsEnabled) return;
     this._updateMovement();
   }
 
   public teleport(position: Vector3): void {
     this.capsule.position.copyFrom(position);
+    // Reset velocity when teleporting
+    if (this._physicsAggregate) {
+      this._physicsAggregate.body.setLinearVelocity(new Vector3(0, 0, 0));
+    }
   }
 
   public showMarker(): void {
@@ -192,6 +197,18 @@ export class Player {
   public hideMarker(): void {
     if (this._marker) {
       this._marker.isVisible = false;
+    }
+  }
+
+  public enableControls(): void {
+    this._controlsEnabled = true;
+  }
+
+  public disableControls(): void {
+    this._controlsEnabled = false;
+    // Stop movement when controls are disabled
+    if (this._physicsAggregate) {
+      this._physicsAggregate.body.setLinearVelocity(new Vector3(0, 0, 0));
     }
   }
 

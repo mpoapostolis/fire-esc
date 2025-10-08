@@ -196,9 +196,11 @@ export class Game {
     if (this._camera.isMapView) {
       this._camera.switchToNormalView();
       this._player.hideMarker();
+      this._player.enableControls();
     } else {
       this._camera.switchToTopDownView();
       this._player.showMarker();
+      this._player.disableControls();
     }
   };
 
