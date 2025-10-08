@@ -11,6 +11,8 @@ import {
   Axis,
   KeyboardEventTypes,
   Ray,
+  StandardMaterial,
+  Color3,
 } from "@babylonjs/core";
 
 interface PlayerConfig {
@@ -63,6 +65,7 @@ export class Player {
   private readonly _keyInputMap = new Map<string, boolean>();
   private _isJumping = false;
   private _hasJumpedInAir = false;
+  private _marker: AbstractMesh;
 
   // Reusable vectors for performance
   private readonly _cameraForward = new Vector3();
@@ -117,6 +120,23 @@ export class Player {
     this._heroRoot.parent = this.capsule;
     this._heroRoot.position.set(0, -this._config.capsuleHeight / 2, 0);
 
+    // Create red marker above player (plane with billboard mode)
+    this._marker = MeshBuilder.CreatePlane(
+      "playerMarker",
+      { size: 2 },
+      this._scene
+    );
+    this._marker.position.set(0, 10, 0);
+    this._marker.parent = this.capsule;
+    this._marker.billboardMode = 7; // Full billboard mode - always faces camera
+    this._marker.isVisible = false; // Hidden by default
+
+    const markerMaterial = new StandardMaterial("markerMat", this._scene);
+    markerMaterial.emissiveColor = new Color3(1, 0, 0);
+    markerMaterial.diffuseColor = new Color3(1, 0, 0);
+    markerMaterial.disableLighting = true;
+    this._marker.material = markerMaterial;
+
     this._physicsAggregate = new PhysicsAggregate(
       this.capsule,
       PhysicsShapeType.CAPSULE,
@@ -161,6 +181,18 @@ export class Player {
 
   public teleport(position: Vector3): void {
     this.capsule.position.copyFrom(position);
+  }
+
+  public showMarker(): void {
+    if (this._marker) {
+      this._marker.isVisible = true;
+    }
+  }
+
+  public hideMarker(): void {
+    if (this._marker) {
+      this._marker.isVisible = false;
+    }
   }
 
   private _isGrounded(): boolean {

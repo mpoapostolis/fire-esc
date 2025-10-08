@@ -195,8 +195,10 @@ export class Game {
   private _onMapPressed = (): void => {
     if (this._camera.isMapView) {
       this._camera.switchToNormalView();
+      this._player.hideMarker();
     } else {
       this._camera.switchToTopDownView();
+      this._player.showMarker();
     }
   };
 
