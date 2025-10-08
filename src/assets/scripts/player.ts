@@ -234,14 +234,19 @@ export class Player {
   private _calculateMoveDirection(): void {
     this._moveDirection.set(0, 0, 0);
 
-    if (this._isKeyPressed("w")) this._moveDirection.addInPlace(this._cameraForward);
-    if (this._isKeyPressed("s")) this._moveDirection.subtractInPlace(this._cameraForward);
-    if (this._isKeyPressed("a")) this._moveDirection.subtractInPlace(this._cameraRight);
-    if (this._isKeyPressed("d")) this._moveDirection.addInPlace(this._cameraRight);
+    if (this._isKeyPressed("w"))
+      this._moveDirection.addInPlace(this._cameraForward);
+    if (this._isKeyPressed("s"))
+      this._moveDirection.subtractInPlace(this._cameraForward);
+    if (this._isKeyPressed("a"))
+      this._moveDirection.subtractInPlace(this._cameraRight);
+    if (this._isKeyPressed("d"))
+      this._moveDirection.addInPlace(this._cameraRight);
   }
 
   private _applyMovement(speed: number, isGrounded: boolean): void {
-    const currentYVelocity = this._physicsAggregate.body.getLinearVelocity()?.y ?? 0;
+    const currentYVelocity =
+      this._physicsAggregate.body.getLinearVelocity()?.y ?? 0;
 
     if (this._moveDirection.lengthSquared() > 0.001) {
       this._moveDirection.normalize();

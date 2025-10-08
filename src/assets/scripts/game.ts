@@ -154,7 +154,7 @@ export class Game {
   private _setupUIAndListeners(): void {
     this._uiManager.setupListeners({
       onInfo: this._onInfoPressed,
-      onMap: () => alert("Map is coming soon!"),
+      onMap: this._onMapPressed,
       onInstructionModalClose: this._onInstructionModalClosed,
       onPhoneModalClose: this._onPhoneModalClosed,
       onAnswerCall: this._onAnswerCall,
@@ -189,6 +189,14 @@ export class Game {
         currentQuest.caller ?? "Current Objective",
         currentQuest.riddle
       );
+    }
+  };
+
+  private _onMapPressed = (): void => {
+    if (this._camera.isMapView) {
+      this._camera.switchToNormalView();
+    } else {
+      this._camera.switchToTopDownView();
     }
   };
 

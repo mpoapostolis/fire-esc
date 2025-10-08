@@ -187,7 +187,10 @@ export class World {
     this._setupCyclistCamera(cyclistRoot);
   }
 
-  public animateCyclistToPosition(targetPosition: Vector3, duration: number = 2000): void {
+  public animateCyclistToPosition(
+    targetPosition: Vector3,
+    duration: number = 2000
+  ): void {
     if (!this._cyclist) return;
 
     const startPosition = this._cyclist.position.clone();
@@ -205,7 +208,7 @@ export class World {
 
     const keys = [
       { frame: 0, value: startPosition },
-      { frame: 60 * (duration / 1000), value: targetPosition }
+      { frame: 60 * (duration / 1000), value: targetPosition },
     ];
 
     moveAnimation.setKeys(keys);
