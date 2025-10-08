@@ -27,19 +27,14 @@ import Layout from "../layouts/Layout.astro";
   </dialog>
 
   <dialog id="dialogue_modal" class="modal pointer-events-auto">
-    <div
-      class="modal-box ui-panel-modal border border-sky-500/30 shadow-2xl shadow-black/80 rounded-lg"
-    >
-      <h3
-        id="dialogue-speaker"
-        class="font-bold text-2xl text-sky-400 holographic-text"
-      >
-      </h3>
-      <div class="divider before:bg-gray-800 after:bg-gray-800 mt-2 mb-4"></div>
-      <p id="dialogue-text" class="py-4 text-gray-300 text-lg leading-relaxed">
-      </p>
+    <div class="modal-box rpg-dialog max-w-2xl">
+      <h3 id="dialogue-speaker" class="font-bold text-2xl text-amber-300 mb-4"></h3>
+      <div class="h-px bg-amber-800/50 mb-6"></div>
+      <p id="dialogue-text" class="text-gray-200 text-lg leading-relaxed mb-8"></p>
       <div class="modal-action">
-        <form method="dialog"><button class="btn">Continue...</button></form>
+        <form method="dialog">
+          <button class="rpg-btn">Continue</button>
+        </form>
       </div>
     </div>
     <form method="dialog" class="modal-backdrop"><button>close</button></form>
@@ -65,16 +60,10 @@ import Layout from "../layouts/Layout.astro";
       class="absolute bottom-4 right-4 pointer-events-auto animate-pop-in flex flex-col sm:flex-row gap-2"
       style="animation-delay: 200ms;"
     >
-      <button
-        id="info-button"
-        class="btn btn-circle ui-panel border border-gray-800/80 hover:border-sky-500/50 shadow-lg hover:shadow-sky-500/20 transition-all duration-300"
-      >
+      <button id="info-button" class="rpg-icon-btn">
         <img src="/quest.png" alt="Quests" class="w-8 h-8" />
       </button>
-      <button
-        id="map-button"
-        class="btn btn-circle ui-panel border border-gray-800/80 hover:border-sky-500/50 shadow-lg hover:shadow-sky-500/20 transition-all duration-300"
-      >
+      <button id="map-button" class="rpg-icon-btn">
         <span class="text-2xl">🗺️</span>
       </button>
     </div>
@@ -182,5 +171,48 @@ import Layout from "../layouts/Layout.astro";
   }
   .phone-call-pulse {
     animation: pulse-glow 2s infinite;
+  }
+
+  /* Clean RPG Styles */
+  .rpg-dialog {
+    background: linear-gradient(135deg, rgba(20, 15, 10, 0.98) 0%, rgba(30, 20, 10, 0.98) 100%);
+    border: 2px solid rgba(217, 119, 6, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(217, 119, 6, 0.2);
+  }
+
+  .rpg-btn {
+    background: linear-gradient(135deg, rgba(217, 119, 6, 0.3) 0%, rgba(180, 83, 9, 0.3) 100%);
+    border: 1px solid rgba(217, 119, 6, 0.6);
+    color: rgb(252, 211, 77);
+    padding: 0.75rem 2rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .rpg-btn:hover {
+    background: linear-gradient(135deg, rgba(217, 119, 6, 0.5) 0%, rgba(180, 83, 9, 0.5) 100%);
+    border-color: rgba(217, 119, 6, 0.8);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+  }
+
+  .rpg-icon-btn {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(20, 15, 10, 0.9) 0%, rgba(30, 20, 10, 0.9) 100%);
+    border: 2px solid rgba(217, 119, 6, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  }
+
+  .rpg-icon-btn:hover {
+    border-color: rgba(217, 119, 6, 0.8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(217, 119, 6, 0.4);
   }
 </style>
