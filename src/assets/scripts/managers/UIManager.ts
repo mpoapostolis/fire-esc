@@ -61,15 +61,8 @@ export class UIManager {
       callbacks.onMap();
     });
 
-    this._dialogueModal.addEventListener("close", () => {
-      this._audioManager?.playModalClose();
-      callbacks.onInstructionModalClose();
-    });
-
-    this._phoneCallModal.addEventListener("close", () => {
-      this._audioManager?.playModalClose();
-      callbacks.onPhoneModalClose();
-    });
+    this._dialogueModal.addEventListener("close", callbacks.onInstructionModalClose);
+    this._phoneCallModal.addEventListener("close", callbacks.onPhoneModalClose);
 
     this._answerCallBtn.addEventListener("click", () => {
       this._audioManager?.playButtonClick();
@@ -81,18 +74,15 @@ export class UIManager {
     this._dialogueSpeaker.innerText = speaker;
     this._dialogueText.innerText = text;
     this._dialogueModal.showModal();
-    this._audioManager?.playModalOpen();
   }
 
   public showPhoneCallModal(caller: string) {
     this._phoneCallerName.innerText = caller;
     this._phoneCallModal.showModal();
-    this._audioManager?.playModalOpen();
   }
 
   public hidePhoneCallModal() {
     this._phoneCallModal.close();
-    this._audioManager?.playModalClose();
   }
 
   public updateWaypoint(position: { x: number; y: number } | null) {
