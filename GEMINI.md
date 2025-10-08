@@ -11,7 +11,7 @@ This project is a 3D web-based game named "Fire Escape". The player takes on the
 -   **Physics:** Havok Physics via `@babylonjs/havok`
 -   **Audio:** Tone.js
 -   **Language:** TypeScript
--   **Styling:** Tailwind CSS
+-   **Styling:** Tailwind CSS daisyui
 
 **Architecture:**
 

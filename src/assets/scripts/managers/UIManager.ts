@@ -3,7 +3,6 @@ export class UIManager {
   private _hudDistance: HTMLElement;
   private _infoButton: HTMLElement;
   private _mapButton: HTMLElement;
-  private _phoneButton: HTMLElement;
 
   // Instruction Modal
   private _dialogueModal: any;
@@ -19,7 +18,6 @@ export class UIManager {
     this._hudDistance = this._getUIElement("hud-distance");
     this._infoButton = this._getUIElement("info-button");
     this._mapButton = this._getUIElement("map-button");
-    this._phoneButton = this._getUIElement("phone-button");
 
     this._dialogueModal = this._getUIElement("dialogue_modal");
     this._dialogueSpeaker = this._getUIElement("dialogue-speaker");
@@ -39,14 +37,12 @@ export class UIManager {
   public setupListeners(callbacks: {
     onInfo: () => void;
     onMap: () => void;
-    onPhone: () => void;
     onInstructionModalClose: () => void;
     onPhoneModalClose: () => void;
     onAnswerCall: () => void;
   }) {
     this._infoButton.addEventListener("click", callbacks.onInfo);
     this._mapButton.addEventListener("click", callbacks.onMap);
-    this._phoneButton.addEventListener("click", callbacks.onPhone);
     this._dialogueModal.addEventListener(
       "close",
       callbacks.onInstructionModalClose
@@ -72,7 +68,7 @@ export class UIManager {
 
   public updateDistance(distance: number | null) {
     if (distance === null) {
-      this._hudDistance.innerText = "";
+      this._hudDistance.innerText = "No objective";
     } else if (distance < 0) {
       this._hudDistance.innerText = "✓";
     } else {

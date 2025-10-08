@@ -14,6 +14,12 @@ import type { Quest } from "./quests/quests";
 import { UIManager } from "./managers/UIManager";
 import { AudioManager } from "./managers/AudioManager";
 
+type GameState =
+  | "AWAITING_QUEST"
+  | "PLAYING"
+  | "SHOWING_INSTRUCTIONS"
+  | "SHOWING_SUCCESS";
+
 export class Game {
   private _scene: Scene;
   private _engine: Engine;
@@ -26,7 +32,7 @@ export class Game {
 
   private _pendingQuest: Quest | null = null;
   private _missedCall: Quest | null = null;
-  private _gameState: "playing" | "in_modal" = "playing";
+  private _gameState: GameState = "AWAITING_QUEST";
 
   constructor(engine: Engine, canvas: HTMLCanvasElement) {
     this._engine = engine;
@@ -87,7 +93,6 @@ export class Game {
     this._uiManager.setupListeners({
       onInfo: this.onInfoPressed,
       onMap: () => alert("Map is coming soon!"),
-      onPhone: this.onPhonePressed,
       onInstructionModalClose: this.onInstructionModalClosed,
       onPhoneModalClose: this.onPhoneModalClosed,
       onAnswerCall: this.onAnswerCall,
@@ -105,7 +110,7 @@ export class Game {
 
   private startQuest(quest: Quest) {
     this._pendingQuest = quest;
-    this._gameState = "in_modal";
+    this._gameState = "SHOWING_INSTRUCTIONS";
 
     if (quest.trigger === "phonecall") {
       this._audioManager.playRingtone();
@@ -125,14 +130,7 @@ export class Game {
     }
   };
 
-  private onPhonePressed = () => {
-    if (this._missedCall) {
-      this.startQuest(this._missedCall);
-      this._missedCall = null;
-    } else {
-      this.onInfoPressed();
-    }
-  };
+
 
   private onAnswerCall = () => {
     this._audioManager.stopRingtone();
@@ -147,26 +145,42 @@ export class Game {
 
   private onPhoneModalClosed = () => {
     this._audioManager.stopRingtone();
-    if (this._pendingQuest) {
-      this._missedCall = this._pendingQuest;
+    // If the modal was closed while a quest was pending, just show the instructions for it.
+    if (this._gameState === "SHOWING_INSTRUCTIONS" && this._pendingQuest) {
+      this._uiManager.showInstructionModal(
+        this._pendingQuest.caller || "Objective",
+        this._pendingQuest.riddle
+      );
+    } else {
+      // If no quest was pending, just go back to playing.
+      this._gameState = "PLAYING";
     }
-    this._pendingQuest = null;
-    this._gameState = "playing";
   };
 
   private onInstructionModalClosed = () => {
-    if (this._gameState === "in_modal") {
+    if (this._gameState === "SHOWING_INSTRUCTIONS") {
       if (this._pendingQuest) {
         this._questManager.activateQuestById(this._pendingQuest.id);
         this.onQuestAdvanced(this._pendingQuest);
         this._pendingQuest = null;
       }
+      this._gameState = "PLAYING";
+    } else if (this._gameState === "SHOWING_SUCCESS") {
+      const nextQuest = this._questManager.completeCurrentQuestAndGetNext();
+      if (nextQuest) {
+        this.startQuest(nextQuest);
+      } else {
+        this._gameState = "AWAITING_QUEST"; // Game over
+        this._uiManager.showInstructionModal(
+          "Game Over",
+          "Congratulations! You have saved the city from the fire!"
+        );
+      }
     }
-    this._gameState = "playing";
   };
 
   private _updateQuestProgress = (): void => {
-    if (this._gameState !== "playing") return;
+    if (this._gameState !== "PLAYING") return;
 
     const currentQuest = this._questManager.getCurrentQuest();
     if (currentQuest) {
@@ -188,43 +202,9 @@ export class Game {
   };
 
   private completeActiveQuest = (quest: Quest): void => {
-    this._gameState = "in_modal";
+    this._gameState = "SHOWING_SUCCESS";
     this._audioManager.playQuestCompleteSound();
     this._uiManager.updateDistance(-1);
-
-    const nextQuest = this._questManager.completeCurrentQuestAndGetNext();
-
-    const originalCloseHandler = this.onInstructionModalClosed;
-
-    const successModalCloseHandler = () => {
-      this._uiManager.setupListeners({
-        onInfo: this.onInfoPressed,
-        onMap: () => alert("Map is coming soon!"),
-        onPhone: this.onPhonePressed,
-        onInstructionModalClose: originalCloseHandler, // Restore original handler
-        onPhoneModalClose: this.onPhoneModalClosed,
-        onAnswerCall: this.onAnswerCall,
-      });
-
-      if (nextQuest) {
-        this.startQuest(nextQuest);
-      } else {
-        this._uiManager.showInstructionModal(
-          "Game Over",
-          "Congratulations! You have saved the city from the fire!"
-        );
-      }
-    };
-
-    this._uiManager.setupListeners({
-      onInfo: this.onInfoPressed,
-      onMap: () => alert("Map is coming soon!"),
-      onPhone: this.onPhonePressed,
-      onInstructionModalClose: successModalCloseHandler,
-      onPhoneModalClose: this.onPhoneModalClosed,
-      onAnswerCall: this.onAnswerCall,
-    });
-
     this._uiManager.showInstructionModal(
       "Quest Complete!",
       quest.successMessage

@@ -67,8 +67,8 @@ export class World {
       const set = await ParticleHelper.CreateAsync("fire", this._scene);
       set.systems.forEach((s) => {
         s.emitter = firePoint;
-        s.minSize = 1;
-        s.maxSize = 5;
+        s.minSize = 2;
+        s.maxSize = 10;
         s.emitRate = 500;
         s.minEmitBox = new Vector3(-2, 0, -2);
         s.maxEmitBox = new Vector3(2, 0, 2);
