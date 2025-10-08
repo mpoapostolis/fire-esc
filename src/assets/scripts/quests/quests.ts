@@ -1,7 +1,10 @@
+import { Vector3 } from "@babylonjs/core";
+
 export interface Quest {
   id: number;
   title: string;
   point: { x: number; z: number };
+  cinematicTarget?: Vector3;
   riddle: string;
   successMessage: string;
   status: "locked" | "active" | "completed";
@@ -13,7 +16,8 @@ export const quests: Quest[] = [
   {
     id: 1,
     title: "The First Spark",
-    point: { x: 20, z: -15 },
+    point: { x: 5, z: -7 },
+    cinematicTarget: new Vector3(5, 2, 7),
     riddle:
       "Το βράδυ ανάψαμε φωτιά\nΚαι τραγουδούσαμε γύρω τριγύρω:\nΦωτιά ωραία φωτιά μη λυπηθείς τα κούτσουρα\nΦωτιά ωραία φωτιά μη φτάσεις ως τη στάχτη\nΦωτιά ωραία φωτιά καίγε μας\nλέγε μας τη ζωή.",
     successMessage:
