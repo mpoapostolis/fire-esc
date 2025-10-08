@@ -1,3 +1,5 @@
+import type { AudioManager } from "./AudioManager";
+
 export class UIManager {
   // --- UI Elements ---
   private _hudDistance: HTMLElement;
@@ -15,6 +17,8 @@ export class UIManager {
   private _phoneCallerName: HTMLElement;
   private _answerCallBtn: HTMLElement;
 
+  private _audioManager: AudioManager | null = null;
+
   constructor() {
     this._hudDistance = this._getUIElement("hud-distance");
     this._infoButton = this._getUIElement("info-button");
@@ -30,6 +34,10 @@ export class UIManager {
     this._answerCallBtn = this._getUIElement("answer-call-btn");
   }
 
+  public setAudioManager(audioManager: AudioManager): void {
+    this._audioManager = audioManager;
+  }
+
   private _getUIElement = <T extends HTMLElement>(id: string): T => {
     const element = document.getElementById(id);
     if (!element) throw new Error(`UI element with id "${id}" not found.`);
@@ -43,29 +51,48 @@ export class UIManager {
     onPhoneModalClose: () => void;
     onAnswerCall: () => void;
   }) {
-    this._infoButton.addEventListener("click", callbacks.onInfo);
-    this._mapButton.addEventListener("click", callbacks.onMap);
-    this._dialogueModal.addEventListener(
-      "close",
-      callbacks.onInstructionModalClose
-    );
-    this._phoneCallModal.addEventListener("close", callbacks.onPhoneModalClose);
-    this._answerCallBtn.addEventListener("click", callbacks.onAnswerCall);
+    this._infoButton.addEventListener("click", () => {
+      this._audioManager?.playButtonClick();
+      callbacks.onInfo();
+    });
+
+    this._mapButton.addEventListener("click", () => {
+      this._audioManager?.playButtonClick();
+      callbacks.onMap();
+    });
+
+    this._dialogueModal.addEventListener("close", () => {
+      this._audioManager?.playModalClose();
+      callbacks.onInstructionModalClose();
+    });
+
+    this._phoneCallModal.addEventListener("close", () => {
+      this._audioManager?.playModalClose();
+      callbacks.onPhoneModalClose();
+    });
+
+    this._answerCallBtn.addEventListener("click", () => {
+      this._audioManager?.playButtonClick();
+      callbacks.onAnswerCall();
+    });
   }
 
   public showInstructionModal(speaker: string, text: string) {
     this._dialogueSpeaker.innerText = speaker;
     this._dialogueText.innerText = text;
     this._dialogueModal.showModal();
+    this._audioManager?.playModalOpen();
   }
 
   public showPhoneCallModal(caller: string) {
     this._phoneCallerName.innerText = caller;
     this._phoneCallModal.showModal();
+    this._audioManager?.playModalOpen();
   }
 
   public hidePhoneCallModal() {
     this._phoneCallModal.close();
+    this._audioManager?.playModalClose();
   }
 
   public updateWaypoint(position: { x: number; y: number } | null) {

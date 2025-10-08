@@ -217,6 +217,7 @@ export class Player {
 
     this._calculateMoveDirection();
     this._applyMovement(speed);
+    this.capsule.rotation.y = this.camera.alpha;
   }
 
   private _updateCameraDirections(): void {

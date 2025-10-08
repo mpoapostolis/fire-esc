@@ -152,6 +152,7 @@ export class Game {
 
 
   private _setupUIAndListeners(): void {
+    this._uiManager.setAudioManager(this._audioManager);
     this._uiManager.setupListeners({
       onInfo: this._onInfoPressed,
       onMap: this._onMapPressed,
@@ -275,11 +276,15 @@ export class Game {
 
     const playerPos = this._player.capsule.position;
     const distanceSquared = Vector3.DistanceSquared(playerPos, objectivePos);
+    const distance = Math.sqrt(distanceSquared);
+
+    // Update fire sound volume based on distance
+    this._audioManager.updateFireVolume(distance);
 
     if (distanceSquared < 25) {
       this._completeActiveQuest(currentQuest);
     } else {
-      this._uiManager.updateDistance(Math.sqrt(distanceSquared));
+      this._uiManager.updateDistance(distance);
     }
   }
 
