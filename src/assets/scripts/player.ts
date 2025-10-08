@@ -13,6 +13,7 @@ import {
   Ray,
   StandardMaterial,
   Color3,
+  Quaternion,
 } from "@babylonjs/core";
 
 interface PlayerConfig {
@@ -34,7 +35,7 @@ const DEFAULT_PLAYER_CONFIG: PlayerConfig = {
   scaling: 0.6,
   walkSpeed: 5,
   sprintSpeed: 20,
-  jumpImpulse: 400,
+  jumpImpulse: 10,
   mass: 80,
   capsuleHeight: 1.7,
   capsuleRadius: 0.4,
@@ -42,15 +43,30 @@ const DEFAULT_PLAYER_CONFIG: PlayerConfig = {
 };
 
 type AnimationName =
-  | "Idle"
-  | "Idle_Neutral"
-  | "Run"
-  | "Run_Back"
-  | "Run_Left"
-  | "Run_Right"
-  | "Jump"
-  | "Jump_Start"
-  | "Jumping";
+  | "CharacterArmature|Death"
+  | "CharacterArmature|Gun_Shoot"
+  | "CharacterArmature|HitRecieve"
+  | "CharacterArmature|HitRecieve_2"
+  | "CharacterArmature|Idle"
+  | "CharacterArmature|Idle_Gun"
+  | "CharacterArmature|Idle_Gun_Pointing"
+  | "CharacterArmature|Idle_Gun_Shoot"
+  | "CharacterArmature|Idle_Neutral"
+  | "CharacterArmature|Idle_Sword"
+  | "CharacterArmature|Interact"
+  | "CharacterArmature|Kick_Left"
+  | "CharacterArmature|Kick_Right"
+  | "CharacterArmature|Punch_Left"
+  | "CharacterArmature|Punch_Right"
+  | "CharacterArmature|Roll"
+  | "CharacterArmature|Run"
+  | "CharacterArmature|Run_Back"
+  | "CharacterArmature|Run_Left"
+  | "CharacterArmature|Run_Right"
+  | "CharacterArmature|Run_Shoot"
+  | "CharacterArmature|Sword_Slash"
+  | "CharacterArmature|Walk"
+  | "CharacterArmature|Wave";
 
 export class Player {
   public readonly camera: ArcRotateCamera;
@@ -154,13 +170,15 @@ export class Player {
 
   private _setupAnimations(animationGroups: AnimationGroup[]): void {
     for (const ag of animationGroups) {
-      const name = ag.name.split("|")[1] as AnimationName;
-      if (name) this._animations.set(name, ag);
+      console.log(`"${ag.name}"`);
+      const name = ag.name as AnimationName;
+      this._animations.set(name, ag);
       ag.stop();
     }
 
     const idleAnim =
-      this._animations.get("Idle_Neutral") ?? this._animations.get("Idle");
+      this._animations.get("CharacterArmature|Idle_Neutral") ??
+      this._animations.get("CharacterArmature|Idle");
     if (idleAnim) {
       this._currentPlayingAnim = idleAnim;
       idleAnim.play(true);
@@ -172,12 +190,17 @@ export class Player {
       const key = kbInfo.event.key.toLowerCase();
       const isDown = kbInfo.type === KeyboardEventTypes.KEYDOWN;
       this._keyInputMap.set(key, isDown);
+
+      if (key === " " && isDown && !this._isJumping) {
+        this._jump();
+      }
     });
   }
 
   public update(): void {
     if (!this._physicsAggregate || !this._controlsEnabled) return;
     this._updateMovement();
+    this._checkGrounded();
   }
 
   public showMarker(): void {
@@ -217,7 +240,6 @@ export class Player {
 
     this._calculateMoveDirection();
     this._applyMovement(speed);
-    this.capsule.rotation.y = this.camera.alpha;
   }
 
   private _updateCameraDirections(): void {
@@ -263,17 +285,26 @@ export class Player {
 
   private _playIdleAnimation(): void {
     const idleAnim =
-      this._animations.get("Idle_Neutral") ?? this._animations.get("Idle");
+      this._animations.get("CharacterArmature|Idle_Neutral") ??
+      this._animations.get("CharacterArmature|Idle");
     if (idleAnim) this._playAnimation(idleAnim);
   }
 
   private _playRunAnimation(): void {
+    const isSprinting = this._isKeyPressed("shift");
+    const baseAnim = isSprinting
+      ? "CharacterArmature|Run"
+      : "CharacterArmature|Walk";
+
     const targetAnim =
-      (this._isKeyPressed("s") && this._animations.get("Run_Back")) ||
-      (this._isKeyPressed("w") && this._animations.get("Run")) ||
-      (this._isKeyPressed("a") && this._animations.get("Run_Left")) ||
-      (this._isKeyPressed("d") && this._animations.get("Run_Right")) ||
-      this._animations.get("Run");
+      (this._isKeyPressed("s") &&
+        this._animations.get("CharacterArmature|Run_Back")) ||
+      (this._isKeyPressed("w") && this._animations.get(baseAnim)) ||
+      (this._isKeyPressed("a") &&
+        this._animations.get("CharacterArmature|Run_Left")) ||
+      (this._isKeyPressed("d") &&
+        this._animations.get("CharacterArmature|Run_Right")) ||
+      this._animations.get(baseAnim);
 
     if (targetAnim) this._playAnimation(targetAnim);
   }
@@ -283,5 +314,40 @@ export class Player {
     this._currentPlayingAnim?.stop();
     anim.play(loop);
     this._currentPlayingAnim = anim;
+  }
+
+  private _jump(): void {
+    if (!this._isGrounded()) return;
+
+    this._isJumping = true;
+    const currentVelocity = this._physicsAggregate.body.getLinearVelocity();
+    const jumpVelocity = new Vector3(
+      currentVelocity.x,
+      this._config.jumpImpulse,
+      currentVelocity.z
+    );
+    this._physicsAggregate.body.setLinearVelocity(jumpVelocity);
+
+    const rollAnim = this._animations.get("CharacterArmature|Roll");
+    if (rollAnim) {
+      rollAnim.stop();
+      rollAnim.play(false);
+      rollAnim.onAnimationGroupEndObservable.addOnce(() => {
+        if (this._isJumping) {
+          this._playIdleAnimation();
+        }
+      });
+    }
+  }
+
+  private _isGrounded(): boolean {
+    const velocity = this._physicsAggregate.body.getLinearVelocity();
+    return Math.abs(velocity.y) < 0.1;
+  }
+
+  private _checkGrounded(): void {
+    if (this._isJumping && this._isGrounded()) {
+      this._isJumping = false;
+    }
   }
 }

@@ -23,7 +23,7 @@ export const quests: Quest[] = [
       "Τα πάρκα της πόλης θα πρέπει να είναι καθαρισμένα από πεσμένα κούτσουρα, κλαδιά και ξερά φύλλα! Ευτυχώς, έσβησες άμεσα την πρώτη φωτιά!",
     status: "locked",
     changeCameraTarget: "cyclist",
-    trigger: "phonecall",
+    trigger: "direct",
     caller: "Βαθιά Φωνή",
   },
   {

@@ -151,7 +151,6 @@ export class Game {
     window.addEventListener("resize", () => this._engine.resize());
   }
 
-
   private _setupUIAndListeners(): void {
     this._uiManager.setAudioManager(this._audioManager);
     this._uiManager.setupListeners({
@@ -311,7 +310,10 @@ export class Game {
     const playerPosition = this._player.capsule.position.clone();
 
     this._isInCutscene = true;
-    this._world.animateCyclistToPosition(playerPosition, this._config.questCompleteAnimationDelay);
+    this._world.animateCyclistToPosition(
+      playerPosition,
+      this._config.questCompleteAnimationDelay
+    );
     this._camera.camera.setTarget(cyclistMesh.position);
 
     setTimeout(() => {
