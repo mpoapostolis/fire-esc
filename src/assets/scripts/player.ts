@@ -10,10 +10,9 @@ import {
   PhysicsShapeType,
   Axis,
   KeyboardEventTypes,
-  Ray,
+  Scalar,
   StandardMaterial,
   Color3,
-  Quaternion,
 } from "@babylonjs/core";
 
 interface PlayerConfig {
@@ -33,9 +32,9 @@ const DEFAULT_PLAYER_CONFIG: PlayerConfig = {
   modelPath: "/models/",
   modelFile: "Worker.glb",
   scaling: 0.6,
-  walkSpeed: 5,
-  sprintSpeed: 20,
-  jumpImpulse: 10,
+  walkSpeed: 8,
+  sprintSpeed: 13,
+  jumpImpulse: 7,
   mass: 80,
   capsuleHeight: 1.7,
   capsuleRadius: 0.4,
@@ -89,6 +88,11 @@ export class Player {
   private readonly _cameraRight = new Vector3();
   private readonly _moveDirection = new Vector3();
   private readonly _targetVelocity = new Vector3();
+  private readonly _newVelocity = new Vector3();
+
+  // Movement constants
+  private static readonly VELOCITY_SMOOTHING = 0.2;
+  private static readonly DECELERATION = 0.8;
 
   constructor(
     scene: Scene,
@@ -163,9 +167,10 @@ export class Player {
 
     const body = this._physicsAggregate.body;
     body.setAngularDamping(1);
-    body.setLinearDamping(0.5);
+    body.setLinearDamping(0.95);
     body.setMassProperties({ inertia: Vector3.ZeroReadOnly });
     body.setGravityFactor(1);
+    body.disablePreStep = false;
   }
 
   private _setupAnimations(animationGroups: AnimationGroup[]): void {
@@ -188,11 +193,18 @@ export class Player {
   private _setupInput(): void {
     this._scene.onKeyboardObservable.add((kbInfo) => {
       const key = kbInfo.event.key.toLowerCase();
-      const isDown = kbInfo.type === KeyboardEventTypes.KEYDOWN;
-      this._keyInputMap.set(key, isDown);
 
-      if (key === " " && isDown && !this._isJumping) {
-        this._jump();
+      switch (kbInfo.type) {
+        case KeyboardEventTypes.KEYDOWN:
+          this._keyInputMap.set(key, true);
+          if (key === " " && !this._isJumping) {
+            this._jump();
+          }
+          break;
+
+        case KeyboardEventTypes.KEYUP:
+          this._keyInputMap.set(key, false);
+          break;
       }
     });
   }
@@ -200,7 +212,9 @@ export class Player {
   public update(): void {
     if (!this._physicsAggregate || !this._controlsEnabled) return;
     this._updateMovement();
-    this._checkGrounded();
+    if (this._isJumping) {
+      this._checkGrounded();
+    }
   }
 
   public showMarker(): void {
@@ -243,12 +257,11 @@ export class Player {
   }
 
   private _updateCameraDirections(): void {
-    this.camera.getDirection(Axis.Z).normalizeToRef(this._cameraForward);
+    this.camera.getForwardRay().direction.normalizeToRef(this._cameraForward);
     this._cameraForward.y = 0;
     this._cameraForward.normalize();
 
-    this.camera.getDirection(Axis.X).normalizeToRef(this._cameraRight);
-    this._cameraRight.y = 0;
+    Vector3.CrossToRef(Axis.Y, this._cameraForward, this._cameraRight);
     this._cameraRight.normalize();
   }
 
@@ -266,21 +279,49 @@ export class Player {
   }
 
   private _applyMovement(speed: number): void {
-    const currentYVelocity =
-      this._physicsAggregate.body.getLinearVelocity()?.y ?? 0;
+    const currentVelocity = this._physicsAggregate.body.getLinearVelocity();
+    const isMoving = this._moveDirection.lengthSquared() > 0.001;
 
-    if (this._moveDirection.lengthSquared() > 0.001) {
+    if (isMoving) {
       this._moveDirection.normalize();
       if (!this._isJumping) this._playRunAnimation();
 
       this._moveDirection.scaleToRef(speed, this._targetVelocity);
-      this._targetVelocity.y = currentYVelocity;
+
+      // Smooth velocity lerp for butter-smooth movement
+      this._newVelocity.set(
+        Scalar.Lerp(
+          currentVelocity.x,
+          this._targetVelocity.x,
+          Player.VELOCITY_SMOOTHING
+        ),
+        currentVelocity.y,
+        Scalar.Lerp(
+          currentVelocity.z,
+          this._targetVelocity.z,
+          Player.VELOCITY_SMOOTHING
+        )
+      );
+
+      this._physicsAggregate.body.setLinearVelocity(this._newVelocity);
+
+      // Rotate hero to face movement direction
+      this._heroRoot.setDirection(Axis.X, Math.PI - this.camera.alpha);
     } else {
       if (!this._isJumping) this._playIdleAnimation();
-      this._targetVelocity.set(0, currentYVelocity, 0);
-    }
 
-    this._physicsAggregate.body.setLinearVelocity(this._targetVelocity);
+      // Smooth deceleration
+      this._newVelocity.set(
+        currentVelocity.x * Player.DECELERATION,
+        currentVelocity.y,
+        currentVelocity.z * Player.DECELERATION
+      );
+
+      this._physicsAggregate.body.setLinearVelocity(this._newVelocity);
+
+      // Face camera direction when idle
+      this._heroRoot.rotation.y = this.camera.alpha;
+    }
   }
 
   private _playIdleAnimation(): void {
