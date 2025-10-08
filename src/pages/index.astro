@@ -78,6 +78,14 @@ import Layout from "../layouts/Layout.astro";
         <span class="text-2xl">🗺️</span>
       </button>
     </div>
+
+    <div
+      id="waypoint"
+      class="hidden absolute rounded-full pointer-events-none animate-pulse"
+      style="transform: translate(-50%, -50%); border-color: rgba(239, 68, 68, 0.8);"
+    >
+      <div class="w-10 h-10 border-4 rounded-full"></div>
+    </div>
   </div>
 
   <script>

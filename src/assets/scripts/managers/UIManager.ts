@@ -3,6 +3,7 @@ export class UIManager {
   private _hudDistance: HTMLElement;
   private _infoButton: HTMLElement;
   private _mapButton: HTMLElement;
+  private _waypoint: HTMLElement;
 
   // Instruction Modal
   private _dialogueModal: any;
@@ -18,6 +19,7 @@ export class UIManager {
     this._hudDistance = this._getUIElement("hud-distance");
     this._infoButton = this._getUIElement("info-button");
     this._mapButton = this._getUIElement("map-button");
+    this._waypoint = this._getUIElement("waypoint");
 
     this._dialogueModal = this._getUIElement("dialogue_modal");
     this._dialogueSpeaker = this._getUIElement("dialogue-speaker");
@@ -64,6 +66,16 @@ export class UIManager {
 
   public hidePhoneCallModal() {
     this._phoneCallModal.close();
+  }
+
+  public updateWaypoint(position: { x: number; y: number } | null) {
+    if (position) {
+      this._waypoint.classList.remove("hidden");
+      this._waypoint.style.left = `${position.x}px`;
+      this._waypoint.style.top = `${position.y}px`;
+    } else {
+      this._waypoint.classList.add("hidden");
+    }
   }
 
   public updateDistance(distance: number | null) {

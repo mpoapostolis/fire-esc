@@ -5,6 +5,7 @@ import {
   WebGPUEngine,
   type EngineOptions,
   type IWebGPUEngineOptions,
+  Matrix,
 } from "@babylonjs/core";
 import { getHavokPlugin } from "./physics";
 import { World } from "./world";
@@ -130,8 +131,6 @@ export class Game {
     }
   };
 
-
-
   private onAnswerCall = () => {
     this._audioManager.stopRingtone();
     this._uiManager.hidePhoneCallModal();
@@ -180,7 +179,10 @@ export class Game {
   };
 
   private _updateQuestProgress = (): void => {
-    if (this._gameState !== "PLAYING") return;
+    if (this._gameState !== "PLAYING") {
+      this._uiManager.updateWaypoint(null); // Hide waypoint if not playing
+      return;
+    }
 
     const currentQuest = this._questManager.getCurrentQuest();
     if (currentQuest) {
@@ -188,16 +190,64 @@ export class Game {
         currentQuest.correctAnswer
       );
       if (objectivePos) {
+        // --- Waypoint Logic ---
         const playerPos = this._player.capsule.position;
+        const camera = this._scene.activeCamera;
+        const canvas = this._engine.getRenderingCanvas();
+
+        if (camera && canvas) {
+          const projectedPos = Vector3.Project(
+            objectivePos,
+            Matrix.Identity(),
+            this._scene.getTransformMatrix(),
+            camera.viewport.toGlobal(canvas.width, canvas.height)
+          );
+
+          // If z < 1, the point is on screen or in front of the camera
+          if (projectedPos.z < 1) {
+            this._uiManager.updateWaypoint({ x: projectedPos.x, y: projectedPos.y });
+          } else {
+            // The point is behind the camera, clamp it to the screen edges
+            const screenCenterX = canvas.width / 2;
+            const screenCenterY = canvas.height / 2;
+
+            // Invert the coordinates because the point is behind
+            let screenX = screenCenterX + (screenCenterX - projectedPos.x);
+            let screenY = screenCenterY + (screenCenterY - projectedPos.y);
+
+            // Vector from center to the point
+            const vecX = screenX - screenCenterX;
+            const vecY = screenY - screenCenterY;
+
+            // Find the scaling factor to bring the point to the edge
+            const margin = 30;
+            const maxDistX = screenCenterX - margin;
+            const maxDistY = screenCenterY - margin;
+
+            const scaleX = maxDistX / Math.abs(vecX);
+            const scaleY = maxDistY / Math.abs(vecY);
+            const scale = Math.min(scaleX, scaleY);
+
+            screenX = screenCenterX + vecX * scale;
+            screenY = screenCenterY + vecY * scale;
+
+            this._uiManager.updateWaypoint({ x: screenX, y: screenY });
+          }
+        }
+        // --- End Waypoint Logic ---
+
         const distance = Vector3.DistanceSquared(playerPos, objectivePos);
         if (distance < 25) {
           this.completeActiveQuest(currentQuest);
         } else {
           this._uiManager.updateDistance(Math.sqrt(distance));
         }
+      } else {
+        this._uiManager.updateWaypoint(null); // Hide if no objective
       }
     } else {
       this._uiManager.updateDistance(null);
+      this._uiManager.updateWaypoint(null); // Hide if no quest
     }
   };
 
