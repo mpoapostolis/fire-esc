@@ -15,6 +15,8 @@ import {
   Texture,
   ParticleHelper,
   ArcRotateCamera,
+  Animation,
+  AnimationGroup,
 } from "@babylonjs/core";
 import type { IParticleSystem } from "@babylonjs/core/Particles/IParticleSystem";
 import type { Quest } from "./quests/quests";
@@ -45,6 +47,7 @@ export class World {
   private readonly _firePoints = new Map<number, Mesh>();
   private readonly _fireParticleSystems: IParticleSystem[] = [];
   private _cyclist?: AbstractMesh;
+  private _cyclistAnimations: AnimationGroup[] = [];
 
   constructor(scene: Scene, config: Partial<WorldConfig> = {}) {
     this._scene = scene;
@@ -180,7 +183,59 @@ export class World {
     }
 
     this._cyclist = cyclistRoot;
+    this._cyclistAnimations = result.animationGroups;
     this._setupCyclistCamera(cyclistRoot);
+  }
+
+  public animateCyclistToPosition(targetPosition: Vector3, duration: number = 2000): void {
+    if (!this._cyclist) return;
+
+    const startPosition = this._cyclist.position.clone();
+    const direction = targetPosition.subtract(startPosition);
+
+    this._cyclist.lookAt(targetPosition);
+
+    const moveAnimation = new Animation(
+      "cyclistMove",
+      "position",
+      60,
+      Animation.ANIMATIONTYPE_VECTOR3,
+      Animation.ANIMATIONLOOPMODE_CONSTANT
+    );
+
+    const keys = [
+      { frame: 0, value: startPosition },
+      { frame: 60 * (duration / 1000), value: targetPosition }
+    ];
+
+    moveAnimation.setKeys(keys);
+    this._cyclist.animations = [moveAnimation];
+
+    this._scene.beginAnimation(this._cyclist, 0, 60 * (duration / 1000), false);
+
+    for (const animGroup of this._cyclistAnimations) {
+      if (animGroup.name.includes("Ride") || animGroup.name.includes("Cycle")) {
+        animGroup.play(true);
+        break;
+      }
+    }
+  }
+
+  public disposeCyclist(): void {
+    if (!this._cyclist) return;
+
+    for (const animGroup of this._cyclistAnimations) {
+      animGroup.dispose();
+    }
+    this._cyclistAnimations = [];
+
+    this._cyclist.dispose();
+    this._cyclist = undefined;
+
+    if (this.cyclistCamera) {
+      this.cyclistCamera.dispose();
+      this.cyclistCamera = undefined;
+    }
   }
 
   private _setupCyclistCamera(target: AbstractMesh): void {

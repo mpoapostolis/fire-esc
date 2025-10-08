@@ -290,11 +290,15 @@ export class Game {
       return;
     }
 
+    const playerPosition = this._player.capsule.position.clone();
+
     this._isInCutscene = true;
+    this._world.animateCyclistToPosition(playerPosition, this._config.questCompleteAnimationDelay);
     this._camera.camera.setTarget(cyclistMesh.position);
 
     setTimeout(() => {
       this._showQuestCompleteModal(quest);
+      this._world.disposeCyclist();
       this._isInCutscene = false;
     }, this._config.questCompleteAnimationDelay);
   }
