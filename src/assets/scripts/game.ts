@@ -6,6 +6,8 @@ import {
   type EngineOptions,
   type IWebGPUEngineOptions,
   Matrix,
+  Camera,
+  KeyboardEventTypes,
 } from "@babylonjs/core";
 import { getHavokPlugin } from "./physics";
 import { World } from "./world";
@@ -30,6 +32,9 @@ export class Game {
   private _questManager: QuestManager;
   private _uiManager: UIManager;
   private _audioManager: AudioManager;
+
+  private _cameras: Camera[] = [];
+  private _activeCameraIndex: number = 0;
 
   private _pendingQuest: Quest | null = null;
   private _missedCall: Quest | null = null;
@@ -72,10 +77,13 @@ export class Game {
 
     this._world = new World(this._scene);
     await this._world.load();
+    await this._world.loadCyclist();
     this._world.createQuestFirePoints(this._questManager.getAllQuests());
 
     this._player = new Player(this._scene, this._world.camera);
     await this._player.load();
+
+    this._cameras = this._world.getCameras();
 
     this._setupUIAndListeners();
     this.initializeQuests();
@@ -88,6 +96,12 @@ export class Game {
       this._updateQuestProgress();
     });
     window.addEventListener("resize", () => this._engine.resize());
+  }
+
+  private _switchCamera() {
+    this._activeCameraIndex =
+      (this._activeCameraIndex + 1) % this._cameras.length;
+    this._scene.activeCamera = this._cameras[this._activeCameraIndex];
   }
 
   private _setupUIAndListeners = (): void => {
@@ -205,12 +219,20 @@ export class Game {
     this._audioManager.playQuestCompleteSound();
     this._uiManager.updateDistance(-1);
     const q = this._questManager.getCurrentQuest();
-    if (q?.cinematicTarget) {
-    }
-    this._uiManager.showInstructionModal(
-      "Quest Complete!",
-      quest.successMessage
-    );
+    if (q?.changeCameraTarget) {
+      this._switchCamera();
+      setTimeout(() => {
+        this._uiManager.showInstructionModal(
+          "Quest Complete!",
+          quest.successMessage
+        );
+        this._switchCamera();
+      }, 2_000);
+    } else
+      this._uiManager.showInstructionModal(
+        "Quest Complete!",
+        quest.successMessage
+      );
   };
 
   private onQuestAdvanced = (currentQuest: Quest | null): void => {

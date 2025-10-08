@@ -9,8 +9,10 @@ import {
   PhysicsMotionType,
   Quaternion,
   ArcRotateCamera,
-  Ray,
+  FollowCamera,
   AbstractMesh,
+  Camera,
+  Ray,
   Mesh,
   Material,
   MultiMaterial,
@@ -29,6 +31,8 @@ import { AdvancedDynamicTexture, TextBlock, Control } from "@babylonjs/gui";
 export class World {
   private _scene: Scene;
   public camera: ArcRotateCamera;
+  private _cyclist: AbstractMesh;
+  private _cyclistCamera: ArcRotateCamera;
   private _firePoints: Mesh[] = [];
   private _fireParticleSystems: IParticleSystem[] = [];
 
@@ -44,7 +48,7 @@ export class World {
   }
 
   public createQuestFirePoints(quests: Quest[]): void {
-    quests.forEach(quest => {
+    quests.forEach((quest) => {
       const firePoint = MeshBuilder.CreateSphere(
         `firePoint-${quest.id}`,
         { diameter: 5 },
@@ -162,79 +166,66 @@ export class World {
     );
   }
 
-  public setupCameraOcclusion(
-    getTarget: () => Vector3,
-    excludeMeshes: AbstractMesh[]
-  ): { update: () => void; dispose: () => void } {
-    // This map will store the original material state using the Material object itself as the key
-    const occludedMaterials = new Map<
-      Material,
-      { alpha: number; transparencyMode: number }
-    >();
-    const ray = new Ray(Vector3.Zero(), Vector3.Zero(), 1);
-    const excludeSet = new Set(excludeMeshes);
+  public async loadCyclist(): Promise<void> {
+    console.log("Loading cyclist...");
 
-    const update = () => {
-      // 1. Restore all previously occluded materials
-      occludedMaterials.forEach((originalState, material) => {
-        material.alpha = originalState.alpha;
-        material.transparencyMode = originalState.transparencyMode;
-      });
-      occludedMaterials.clear();
+    const result = await SceneLoader.ImportMeshAsync(
+      "",
 
-      // 2. Calculate new occlusions for this frame
-      const cameraPos = this.camera.position;
-      const target = getTarget();
-      const direction = target.subtract(cameraPos);
-      const distance = direction.length();
-      direction.normalize();
+      "/models/",
 
-      ray.origin.copyFrom(cameraPos);
-      ray.direction.copyFrom(direction);
-      ray.length = distance;
+      "cyclist.glb",
 
-      const hits = this._scene.multiPickWithRay(
-        ray,
-        (mesh) => !excludeSet.has(mesh) && mesh.isVisible
-      );
+      this._scene
+    );
 
-      // 3. Process all hits for the current frame
-      if (hits) {
-        for (const hit of hits) {
-          const mesh = hit.pickedMesh;
-          if (mesh && mesh.material) {
-            const processMaterial = (mat: Material) => {
-              if (!occludedMaterials.has(mat)) {
-                occludedMaterials.set(mat, {
-                  alpha: mat.alpha,
-                  transparencyMode:
-                    mat.transparencyMode ?? Material.MATERIAL_OPAQUE,
-                });
-                mat.alpha = 0.2;
-                mat.transparencyMode = Material.MATERIAL_ALPHABLEND;
-              }
-            };
+    console.log("Cyclist loaded, processing meshes...", result.meshes);
 
-            if (mesh.material instanceof MultiMaterial) {
-              mesh.material.subMaterials.forEach((subMat) => {
-                if (subMat) processMaterial(subMat);
-              });
-            } else {
-              processMaterial(mesh.material);
-            }
-          }
-        }
+    // Create a root node for the cyclist to handle positioning and scaling
+
+    const cyclistRoot = new Mesh("cyclistRoot", this._scene);
+
+    cyclistRoot.position = new Vector3(5, 0.5, 7);
+
+    result.meshes.forEach((mesh, index) => {
+      // Parent all loaded meshes to the root node
+
+      if (mesh.parent === null) {
+        // Only parent root meshes from the loaded file
+
+        mesh.parent = cyclistRoot;
       }
-    };
 
-    const dispose = () => {
-      occludedMaterials.forEach((originalState, material) => {
-        material.alpha = originalState.alpha;
-        material.transparencyMode = originalState.transparencyMode;
-      });
-      occludedMaterials.clear();
-    };
+      // Make sure all meshes are visible
 
-    return { update, dispose };
+      mesh.isVisible = true;
+
+      console.log(`Processing mesh ${index}: ${mesh.name}`);
+    });
+
+    this._cyclist = cyclistRoot; // The root node is now the main reference
+
+    console.log("Cyclist root mesh created:", this._cyclist);
+
+    console.log("Cyclist position:", this._cyclist.position);
+
+    this._cyclistCamera = new ArcRotateCamera(
+      "thirdPersonCamera",
+      -Math.PI / 2,
+      Math.PI / 2.5,
+      5,
+      Vector3.Zero(),
+      this._scene
+    );
+
+    this._cyclistCamera.lockedTarget = this._cyclist;
+
+    this._cyclistCamera.radius = 10; // Increase radius to see it better
+
+    this._cyclistCamera.setEnabled(true);
+  }
+
+  public getCameras(): Camera[] {
+    return [this.camera, this._cyclistCamera];
   }
 }
