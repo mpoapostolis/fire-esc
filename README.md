@@ -1,5 +1,7 @@
 # 🔥 Fire Escape: Save the City
 
+🎮 **[Play Live Demo](https://fire-esc.vercel.app/)** 🎮
+
 ## 🚒 Project Description
 
 In the heart of the city, an unseen threat flickers to life. A series of mysterious fires are breaking out, and only you, a CP Ranger, can stop the devastation. "Fire Escape: Save the City" is an immersive 3D action game that puts you in the boots of a modern-day hero.
