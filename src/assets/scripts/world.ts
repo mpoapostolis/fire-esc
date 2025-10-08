@@ -23,6 +23,7 @@ import {
   ParticleHelper,
 } from "@babylonjs/core";
 import type { IParticleSystem } from "@babylonjs/core/Particles/IParticleSystem";
+import type { Quest } from "./quests/quests";
 import { AdvancedDynamicTexture, TextBlock, Control } from "@babylonjs/gui";
 
 export class World {
@@ -42,21 +43,17 @@ export class World {
     this._createCamera();
   }
 
-  public createFirePoints(count: number): void {
-    const groundSize = 120;
-    for (let i = 1; i <= count; i++) {
-      const x = Math.random() * groundSize - groundSize / 2;
-      const z = Math.random() * groundSize - groundSize / 2;
-
+  public createQuestFirePoints(quests: Quest[]): void {
+    quests.forEach(quest => {
       const firePoint = MeshBuilder.CreateSphere(
-        `firePoint-${i}`,
+        `firePoint-${quest.id}`,
         { diameter: 5 },
         this._scene
       );
-      firePoint.position = new Vector3(x, 2, z);
+      firePoint.position = new Vector3(quest.point.x, 2, quest.point.z);
       firePoint.isVisible = false;
       this._firePoints.push(firePoint);
-    }
+    });
   }
 
   public async showFireAtPoint(id: number): Promise<void> {

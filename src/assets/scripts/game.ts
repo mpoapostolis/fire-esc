@@ -72,7 +72,7 @@ export class Game {
 
     this._world = new World(this._scene);
     await this._world.load();
-    this._world.createFirePoints(11);
+    this._world.createQuestFirePoints(this._questManager.getAllQuests());
 
     this._player = new Player(this._scene, this._world.camera);
     await this._player.load();
@@ -187,7 +187,7 @@ export class Game {
     const currentQuest = this._questManager.getCurrentQuest();
     if (currentQuest) {
       const objectivePos = this._world.getFirePointPosition(
-        currentQuest.correctAnswer
+        currentQuest.id
       );
       if (objectivePos) {
         // --- Waypoint Logic ---
@@ -264,7 +264,7 @@ export class Game {
   private onQuestAdvanced = (currentQuest: Quest | null): void => {
     this._world.hideAllFires();
     if (currentQuest) {
-      this._world.showFireAtPoint(currentQuest.correctAnswer);
+      this._world.showFireAtPoint(currentQuest.id);
     }
   };
 }
