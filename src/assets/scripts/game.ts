@@ -95,6 +95,7 @@ export class Game {
     await this._loadWorld();
     await this._setupPlayerAndCamera();
     this._setupCameras();
+    this._world.setupPostProcessing();
     this._setupUIAndListeners();
     this._initializeQuests();
     this._optimizeScene();

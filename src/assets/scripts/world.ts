@@ -17,6 +17,9 @@ import {
   ArcRotateCamera,
   Animation,
   AnimationGroup,
+  DirectionalLight,
+  ShadowGenerator,
+  DefaultRenderingPipeline,
 } from "@babylonjs/core";
 import type { IParticleSystem } from "@babylonjs/core/Particles/IParticleSystem";
 import type { Quest } from "./quests/quests";
@@ -48,6 +51,8 @@ export class World {
   private readonly _fireParticleSystems: IParticleSystem[] = [];
   private _cyclist?: AbstractMesh;
   private _cyclistAnimations: AnimationGroup[] = [];
+  private _shadowGenerator?: ShadowGenerator;
+  private _pipeline?: DefaultRenderingPipeline;
 
   constructor(scene: Scene, config: Partial<WorldConfig> = {}) {
     this._scene = scene;
@@ -58,6 +63,11 @@ export class World {
     this._createLight();
     this._createSkybox();
     await this._createEnvironment();
+    this._setupAtmosphere();
+  }
+
+  public setupPostProcessing(): void {
+    this._setupPostProcessing();
   }
 
   public createQuestFirePoints(quests: Quest[]): void {
@@ -80,9 +90,9 @@ export class World {
     const set = await ParticleHelper.CreateAsync("fire", this._scene);
     for (const system of set.systems) {
       system.emitter = firePoint;
-      system.minSize = 2;
+      system.minSize = 2.5;
       system.maxSize = 10;
-      system.emitRate = 500;
+      system.emitRate = 600;
       this._fireParticleSystems.push(system);
     }
     set.start();
@@ -125,12 +135,28 @@ export class World {
   }
 
   private _createLight(): void {
-    const light = new HemisphericLight(
+    const hemispheric = new HemisphericLight(
       "hemisphericLight",
       Vector3.UpReadOnly,
       this._scene
     );
-    light.intensity = this._config.lightIntensity;
+    hemispheric.intensity = 0.4;
+    hemispheric.groundColor = new Color3(0.2, 0.15, 0.1);
+    hemispheric.diffuse = new Color3(0.9, 0.85, 0.8);
+
+    const directional = new DirectionalLight(
+      "directionalLight",
+      new Vector3(-1, -2, -1),
+      this._scene
+    );
+    directional.position = new Vector3(50, 100, 50);
+    directional.intensity = 0.6;
+    directional.diffuse = new Color3(1.0, 0.95, 0.85);
+
+    this._shadowGenerator = new ShadowGenerator(1024, directional);
+    this._shadowGenerator.useBlurExponentialShadowMap = true;
+    this._shadowGenerator.blurKernel = 32;
+    this._shadowGenerator.darkness = 0.3;
   }
 
   private async _createEnvironment(): Promise<void> {
@@ -162,8 +188,51 @@ export class World {
   }
 
   private _optimizeMesh(mesh: Mesh): void {
+    mesh.receiveShadows = true;
     mesh.material?.freeze();
     mesh.freezeWorldMatrix();
+  }
+
+  private _setupPostProcessing(): void {
+    this._pipeline = new DefaultRenderingPipeline(
+      "cinematicPipeline",
+      true,
+      this._scene,
+      this._scene.cameras
+    );
+
+    this._pipeline.bloomEnabled = true;
+    this._pipeline.bloomThreshold = 0.7;
+    this._pipeline.bloomWeight = 0.3;
+    this._pipeline.bloomKernel = 64;
+    this._pipeline.bloomScale = 0.5;
+
+    this._pipeline.imageProcessingEnabled = true;
+    if (this._pipeline.imageProcessing) {
+      this._pipeline.imageProcessing.contrast = 1.15;
+      this._pipeline.imageProcessing.exposure = 1.0;
+      this._pipeline.imageProcessing.toneMappingEnabled = true;
+      this._pipeline.imageProcessing.vignetteEnabled = true;
+      this._pipeline.imageProcessing.vignetteWeight = 0.4;
+      this._pipeline.imageProcessing.vignetteColor = new Color3(0.1, 0.05, 0.0);
+    }
+
+    this._pipeline.fxaaEnabled = true;
+    this._pipeline.samples = 4;
+
+    this._pipeline.grainEnabled = true;
+    if (this._pipeline.grain) {
+      this._pipeline.grain.intensity = 5;
+      this._pipeline.grain.animated = true;
+    }
+  }
+
+  private _setupAtmosphere(): void {
+    this._scene.fogEnabled = true;
+    this._scene.fogMode = Scene.FOGMODE_EXP2;
+    this._scene.fogDensity = 0.001;
+    this._scene.fogColor = new Color3(0.12, 0.1, 0.08);
+    this._scene.clearColor = new Color3(0.08, 0.06, 0.05).toColor4(1);
   }
 
   public async loadCyclist(): Promise<void> {
@@ -180,6 +249,12 @@ export class World {
     for (const mesh of result.meshes) {
       if (mesh.parent === null) mesh.parent = cyclistRoot;
       mesh.isVisible = true;
+      if (mesh instanceof Mesh) {
+        mesh.receiveShadows = true;
+        if (this._shadowGenerator) {
+          this._shadowGenerator.addShadowCaster(mesh);
+        }
+      }
     }
 
     this._cyclist = cyclistRoot;
