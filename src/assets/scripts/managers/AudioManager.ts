@@ -40,28 +40,28 @@ export class AudioManager {
   };
 
   private _setupAudioComponents(): void {
-    // Soft melody
-    const leadReverb = new Tone.Reverb({ decay: 3, wet: 0.4 }).toDestination();
+    // Lead
+    const leadReverb = new Tone.Reverb({ decay: 2, wet: 0.3 }).toDestination();
     this._leadSynth = new Tone.Synth({
-      oscillator: { type: "sine" },
-      envelope: { attack: 0.4, decay: 0.6, sustain: 0.6, release: 1.2 },
+      oscillator: { type: "square" },
+      envelope: { attack: 0.05, decay: 0.2, sustain: 0.5, release: 0.3 },
     }).connect(leadReverb);
-    this._leadSynth.volume.value = -24;
+    this._leadSynth.volume.value = -18;
 
-    // Gentle bass
+    // Bass
     this._bassSynth = new Tone.Synth({
-      oscillator: { type: "sine" },
-      envelope: { attack: 0.3, decay: 1, sustain: 0.7, release: 1.5 },
+      oscillator: { type: "square" },
+      envelope: { attack: 0.05, decay: 0.3, sustain: 0.6, release: 0.5 },
     }).toDestination();
-    this._bassSynth.volume.value = -28;
+    this._bassSynth.volume.value = -20;
 
-    // Warm pads
-    const padReverb = new Tone.Reverb({ decay: 6, wet: 0.5 }).toDestination();
+    // Pads
+    const padReverb = new Tone.Reverb({ decay: 3, wet: 0.4 }).toDestination();
     this._padSynth = new Tone.PolySynth(Tone.Synth, {
-      oscillator: { type: "sine" },
-      envelope: { attack: 2, decay: 1, sustain: 0.8, release: 3 },
+      oscillator: { type: "square" },
+      envelope: { attack: 0.5, decay: 0.5, sustain: 0.7, release: 1 },
     }).connect(padReverb);
-    this._padSynth.volume.value = -26;
+    this._padSynth.volume.value = -22;
 
     // Subtle fire crackling
     this._fireVolume = new Tone.Volume(-50).toDestination();
