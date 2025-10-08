@@ -67,6 +67,10 @@ export class World {
   }
 
   public setupPostProcessing(): void {
+    if (this._pipeline) {
+      this._pipeline.dispose();
+      this._pipeline = undefined;
+    }
     this._setupPostProcessing();
   }
 
@@ -194,37 +198,30 @@ export class World {
   }
 
   private _setupPostProcessing(): void {
+    const camera = this._scene.activeCamera;
+    if (!camera) return;
+
     this._pipeline = new DefaultRenderingPipeline(
-      "cinematicPipeline",
-      true,
+      "pipeline",
+      false,
       this._scene,
-      this._scene.cameras
+      [camera]
     );
 
     this._pipeline.bloomEnabled = true;
-    this._pipeline.bloomThreshold = 0.7;
-    this._pipeline.bloomWeight = 0.3;
-    this._pipeline.bloomKernel = 64;
+    this._pipeline.bloomThreshold = 0.9;
+    this._pipeline.bloomWeight = 0.1;
+    this._pipeline.bloomKernel = 32;
     this._pipeline.bloomScale = 0.5;
 
     this._pipeline.imageProcessingEnabled = true;
     if (this._pipeline.imageProcessing) {
-      this._pipeline.imageProcessing.contrast = 1.15;
-      this._pipeline.imageProcessing.exposure = 1.0;
-      this._pipeline.imageProcessing.toneMappingEnabled = true;
-      this._pipeline.imageProcessing.vignetteEnabled = true;
-      this._pipeline.imageProcessing.vignetteWeight = 0.4;
-      this._pipeline.imageProcessing.vignetteColor = new Color3(0.1, 0.05, 0.0);
+      this._pipeline.imageProcessing.contrast = 1.05;
+      this._pipeline.imageProcessing.exposure = 1.1;
     }
 
     this._pipeline.fxaaEnabled = true;
-    this._pipeline.samples = 4;
-
-    this._pipeline.grainEnabled = true;
-    if (this._pipeline.grain) {
-      this._pipeline.grain.intensity = 5;
-      this._pipeline.grain.animated = true;
-    }
+    this._pipeline.samples = 1;
   }
 
   private _setupAtmosphere(): void {
