@@ -180,14 +180,6 @@ export class Player {
     this._updateMovement();
   }
 
-  public teleport(position: Vector3): void {
-    this.capsule.position.copyFrom(position);
-    // Reset velocity when teleporting
-    if (this._physicsAggregate) {
-      this._physicsAggregate.body.setLinearVelocity(new Vector3(0, 0, 0));
-    }
-  }
-
   public showMarker(): void {
     if (this._marker) {
       this._marker.isVisible = true;
@@ -212,19 +204,6 @@ export class Player {
     }
   }
 
-  private _isGrounded(): boolean {
-    const ray = new Ray(
-      this.capsule.position,
-      Vector3.DownReadOnly,
-      this._config.groundCheckDistance
-    );
-    const hit = this._scene.pickWithRay(
-      ray,
-      (mesh) => mesh.isPickable && mesh.isEnabled() && mesh !== this.capsule
-    );
-    return hit?.hit ?? false;
-  }
-
   private _isKeyPressed(key: string): boolean {
     return this._keyInputMap.get(key) ?? false;
   }
@@ -235,15 +214,9 @@ export class Player {
       : this._config.walkSpeed;
 
     this._updateCameraDirections();
-    const isGrounded = this._isGrounded();
-
-    if (isGrounded) {
-      this._hasJumpedInAir = false;
-      this._handleJump();
-    }
 
     this._calculateMoveDirection();
-    this._applyMovement(speed, isGrounded);
+    this._applyMovement(speed);
   }
 
   private _updateCameraDirections(): void {
@@ -254,30 +227,6 @@ export class Player {
     this.camera.getDirection(Axis.X).normalizeToRef(this._cameraRight);
     this._cameraRight.y = 0;
     this._cameraRight.normalize();
-  }
-
-  private _handleJump(): void {
-    if (!this._hasJumpedInAir && this._isKeyPressed(" ")) {
-      this._hasJumpedInAir = true;
-      this._isJumping = true;
-
-      this._physicsAggregate.body.applyImpulse(
-        new Vector3(0, this._config.jumpImpulse, 0),
-        this.capsule.getAbsolutePosition()
-      );
-
-      const jumpAnim =
-        this._animations.get("Jump") ??
-        this._animations.get("Jump_Start") ??
-        this._animations.get("Jumping");
-
-      if (jumpAnim) {
-        jumpAnim.onAnimationEndObservable.addOnce(() => {
-          this._isJumping = false;
-        });
-        this._playAnimation(jumpAnim, false);
-      }
-    }
   }
 
   private _calculateMoveDirection(): void {
@@ -293,7 +242,7 @@ export class Player {
       this._moveDirection.addInPlace(this._cameraRight);
   }
 
-  private _applyMovement(speed: number, isGrounded: boolean): void {
+  private _applyMovement(speed: number): void {
     const currentYVelocity =
       this._physicsAggregate.body.getLinearVelocity()?.y ?? 0;
 
