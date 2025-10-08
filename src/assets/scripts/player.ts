@@ -342,9 +342,9 @@ export class Player {
         this._animations.get("CharacterArmature|Run_Back")) ||
       (this._isKeyPressed("w") && this._animations.get(baseAnim)) ||
       (this._isKeyPressed("a") &&
-        this._animations.get("CharacterArmature|Run_Left")) ||
-      (this._isKeyPressed("d") &&
         this._animations.get("CharacterArmature|Run_Right")) ||
+      (this._isKeyPressed("d") &&
+        this._animations.get("CharacterArmature|Run_Left")) ||
       this._animations.get(baseAnim);
 
     if (targetAnim) this._playAnimation(targetAnim);
