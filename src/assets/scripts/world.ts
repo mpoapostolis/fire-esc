@@ -43,7 +43,7 @@ export class World {
   }
 
   public createFirePoints(count: number): void {
-    const groundSize = 250;
+    const groundSize = 120;
     for (let i = 1; i <= count; i++) {
       const x = Math.random() * groundSize - groundSize / 2;
       const z = Math.random() * groundSize - groundSize / 2;
