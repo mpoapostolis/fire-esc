@@ -26,12 +26,14 @@ interface GameConfig {
   readonly gravity: Vector3;
   readonly initialQuestDelay: number;
   readonly questCompleteAnimationDelay: number;
+  readonly questTimeLimit: number;
 }
 
 const DEFAULT_GAME_CONFIG: GameConfig = {
   gravity: new Vector3(0, -9.81, 0),
   initialQuestDelay: 3000,
   questCompleteAnimationDelay: 2000,
+  questTimeLimit: 120000, // 2 minutes per quest
 };
 
 export class Game {
@@ -49,6 +51,8 @@ export class Game {
   private _pendingQuest: Quest | null = null;
   private _gameState: GameState = "AWAITING_QUEST";
   private _isInCutscene = false;
+  private _questTimer: number | null = null;
+  private _questStartTime: number = 0;
 
   private constructor(
     engine: Engine,
@@ -160,6 +164,15 @@ export class Game {
       onPhoneModalClose: this._onPhoneModalClosed,
       onAnswerCall: this._onAnswerCall,
     });
+
+    // Setup click teleport for top-down view
+    this._scene.onPointerDown = (evt, pickInfo) => {
+      if (this._camera.isMapView && pickInfo.hit && pickInfo.pickedPoint) {
+        const targetPos = pickInfo.pickedPoint.clone();
+        targetPos.y = 3;
+        this._player.capsule.position.copyFrom(targetPos);
+      }
+    };
   }
 
   private _initializeQuests(): void {
@@ -241,11 +254,13 @@ export class Game {
       this._questManager.activateQuestById(this._pendingQuest.id);
       this._onQuestAdvanced(this._pendingQuest);
       this._pendingQuest = null;
+      this._startQuestTimer();
     }
     this._gameState = "PLAYING";
   }
 
   private _handleQuestSuccess(): void {
+    this._stopQuestTimer();
     const nextQuest = this._questManager.completeCurrentQuestAndGetNext();
     if (nextQuest) {
       this._startQuest(nextQuest);
@@ -264,6 +279,10 @@ export class Game {
 
   private _updateQuestProgress(): void {
     if (this._gameState !== "PLAYING") return;
+
+    // Update timer
+    const remainingTime = this._getRemainingTime();
+    this._uiManager.updateTimer(remainingTime);
 
     const currentQuest = this._questManager.getCurrentQuest();
     if (!currentQuest) {
@@ -333,5 +352,39 @@ export class Game {
   private _onQuestAdvanced(currentQuest: Quest): void {
     this._world.hideAllFires();
     this._world.showFireAtPoint(currentQuest.id);
+  }
+
+  private _startQuestTimer(): void {
+    this._stopQuestTimer();
+    this._questStartTime = Date.now();
+    this._questTimer = window.setTimeout(() => {
+      this._onQuestTimerExpired();
+    }, this._config.questTimeLimit);
+  }
+
+  private _stopQuestTimer(): void {
+    if (this._questTimer !== null) {
+      clearTimeout(this._questTimer);
+      this._questTimer = null;
+    }
+  }
+
+  private _onQuestTimerExpired(): void {
+    this._gameState = "AWAITING_QUEST";
+    this._uiManager.showInstructionModal(
+      "Time's Up!",
+      "You ran out of time! Click 'Try Again' to restart."
+    );
+
+    // Add try again button handler
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000);
+  }
+
+  private _getRemainingTime(): number {
+    if (this._questStartTime === 0) return this._config.questTimeLimit;
+    const elapsed = Date.now() - this._questStartTime;
+    return Math.max(0, this._config.questTimeLimit - elapsed);
   }
 }

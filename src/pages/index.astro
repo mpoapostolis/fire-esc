@@ -81,6 +81,26 @@ import Layout from "../layouts/Layout.astro";
       </div>
     </div>
 
+    <!-- Top Right Corner - Timer -->
+    <div class="absolute top-0 right-0 p-6 animate-fade-in-right">
+      <div class="relative">
+        <!-- Corner Decoration -->
+        <div class="absolute -top-2 -right-2 w-12 h-12 border-r-2 border-t-2 border-amber-600/40"></div>
+        <div class="absolute -top-1 -right-1 w-8 h-8 border-r border-t border-amber-400/60"></div>
+
+        <!-- Timer Panel -->
+        <div class="elden-panel pr-6 pt-6 pl-4 pb-4">
+          <div class="flex items-center gap-3 mb-2 justify-end">
+            <span class="text-xs text-amber-300/60 tracking-widest uppercase">Time</span>
+            <div class="w-1 h-1 bg-amber-400 rounded-full"></div>
+          </div>
+          <p id="hud-timer" class="text-2xl font-light text-amber-100 tracking-wide elden-text text-right">
+            --:--
+          </p>
+        </div>
+      </div>
+    </div>
+
     <!-- Bottom Right Corner - Action Buttons -->
     <div class="absolute bottom-0 right-0 p-6 pointer-events-auto animate-fade-in-right">
       <div class="relative">

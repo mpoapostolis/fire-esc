@@ -3,6 +3,7 @@ import type { AudioManager } from "./AudioManager";
 export class UIManager {
   // --- UI Elements ---
   private _hudDistance: HTMLElement;
+  private _hudTimer: HTMLElement;
   private _infoButton: HTMLElement;
   private _mapButton: HTMLElement;
   private _waypoint: HTMLElement;
@@ -21,6 +22,7 @@ export class UIManager {
 
   constructor() {
     this._hudDistance = this._getUIElement("hud-distance");
+    this._hudTimer = this._getUIElement("hud-timer");
     this._infoButton = this._getUIElement("info-button");
     this._mapButton = this._getUIElement("map-button");
     this._waypoint = this._getUIElement("waypoint");
@@ -102,6 +104,20 @@ export class UIManager {
       this._hudDistance.innerText = "✓";
     } else {
       this._hudDistance.innerText = `${distance.toFixed(0)}m`;
+    }
+  }
+
+  public updateTimer(milliseconds: number) {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    this._hudTimer.innerText = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+    // Change color when time is running out (less than 30 seconds)
+    if (totalSeconds < 30) {
+      this._hudTimer.classList.add('text-red-400');
+    } else {
+      this._hudTimer.classList.remove('text-red-400');
     }
   }
 }
