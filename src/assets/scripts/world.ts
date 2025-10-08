@@ -35,7 +35,7 @@ interface WorldConfig {
 
 const DEFAULT_WORLD_CONFIG: WorldConfig = {
   modelPath: "/models/",
-  cityModel: "city.glb",
+  cityModel: "city-2.glb",
   cyclistModel: "cyclist.glb",
   skyboxUrl: "https://www.babylonjs-playground.com/textures/skybox",
   lightIntensity: 0.7,
@@ -170,6 +170,8 @@ export class World {
       this._config.cityModel,
       this._scene
     );
+
+    result.meshes[0].scaling.set(1.5, 1.5, -1.5);
 
     for (const mesh of result.meshes) {
       mesh.layerMask = 1;

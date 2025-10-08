@@ -25,7 +25,7 @@ export class AudioManager {
   constructor() {
     this._synth = new Tone.Synth({
       oscillator: { type: "sine" },
-      envelope: { attack: 0.01, decay: 0.2, sustain: 0.3, release: 0.5 }
+      envelope: { attack: 0.01, decay: 0.2, sustain: 0.3, release: 0.5 },
     }).toDestination();
   }
 
@@ -40,47 +40,51 @@ export class AudioManager {
   };
 
   private _setupAudioComponents(): void {
-    // Beautiful lead melody with warmth
-    const leadReverb = new Tone.Reverb({ decay: 5, wet: 0.7 }).toDestination();
+    // Soft melody
+    const leadReverb = new Tone.Reverb({ decay: 3, wet: 0.4 }).toDestination();
     this._leadSynth = new Tone.Synth({
-      oscillator: { type: "triangle" },
-      envelope: { attack: 0.3, decay: 0.8, sustain: 0.7, release: 2.5 }
+      oscillator: { type: "sine" },
+      envelope: { attack: 0.4, decay: 0.6, sustain: 0.6, release: 1.2 },
     }).connect(leadReverb);
-    this._leadSynth.volume.value = -22;
+    this._leadSynth.volume.value = -24;
 
-    // Warm bass foundation
+    // Gentle bass
     this._bassSynth = new Tone.Synth({
-      oscillator: { type: "triangle" },
-      envelope: { attack: 0.15, decay: 1.2, sustain: 0.85, release: 2.5 }
+      oscillator: { type: "sine" },
+      envelope: { attack: 0.3, decay: 1, sustain: 0.7, release: 1.5 },
     }).toDestination();
-    this._bassSynth.volume.value = -26;
+    this._bassSynth.volume.value = -28;
 
-    // Lush ambient strings
-    const padReverb = new Tone.Reverb({ decay: 8, wet: 0.8 }).toDestination();
+    // Warm pads
+    const padReverb = new Tone.Reverb({ decay: 6, wet: 0.5 }).toDestination();
     this._padSynth = new Tone.PolySynth(Tone.Synth, {
-      oscillator: { type: "sawtooth4" },
-      envelope: { attack: 3, decay: 1.5, sustain: 0.95, release: 5 }
+      oscillator: { type: "sine" },
+      envelope: { attack: 2, decay: 1, sustain: 0.8, release: 3 },
     }).connect(padReverb);
-    this._padSynth.volume.value = -28;
+    this._padSynth.volume.value = -26;
 
     // Subtle fire crackling
     this._fireVolume = new Tone.Volume(-50).toDestination();
-    this._fireFilter = new Tone.Filter(600, "lowpass").connect(this._fireVolume);
-    const fireFilter2 = new Tone.Filter(200, "highpass").connect(this._fireFilter);
+    this._fireFilter = new Tone.Filter(600, "lowpass").connect(
+      this._fireVolume
+    );
+    const fireFilter2 = new Tone.Filter(200, "highpass").connect(
+      this._fireFilter
+    );
     this._fireNoise = new Tone.Noise("pink").connect(fireFilter2);
     this._fireNoise.start();
 
     // Soft UI click
     this._uiSynth = new Tone.Synth({
       oscillator: { type: "sine" },
-      envelope: { attack: 0.01, decay: 0.1, sustain: 0, release: 0.2 }
+      envelope: { attack: 0.01, decay: 0.1, sustain: 0, release: 0.2 },
     }).toDestination();
     this._uiSynth.volume.value = -18;
 
     // Gentle sound effects synth
     this._fxSynth = new Tone.Synth({
       oscillator: { type: "sine" },
-      envelope: { attack: 0.1, decay: 0.3, sustain: 0.5, release: 1 }
+      envelope: { attack: 0.1, decay: 0.3, sustain: 0.5, release: 1 },
     }).toDestination();
     this._fxSynth.volume.value = -20;
 
@@ -89,7 +93,7 @@ export class AudioManager {
       pitchDecay: 0.05,
       octaves: 2,
       oscillator: { type: "sine" },
-      envelope: { attack: 0.01, decay: 0.5, sustain: 0, release: 1 }
+      envelope: { attack: 0.01, decay: 0.5, sustain: 0, release: 1 },
     }).toDestination();
     this._impactSynth.volume.value = -18;
   }
@@ -97,33 +101,36 @@ export class AudioManager {
   private _startBackgroundMusic(): void {
     if (!this._leadSynth || !this._bassSynth || !this._padSynth) return;
 
-    // Classic RPG melody - memorable and peaceful
+    // Simple calm melody
     const melody = [
-      "D5", null, "E5", null, "G5", null, null, null,
-      "F#5", null, "E5", null, "D5", null, null, null,
-      "B4", null, "C5", null, "D5", null, null, null,
-      "A4", null, null, null, "B4", null, null, null,
-
-      "D5", null, "E5", null, "G5", null, null, null,
-      "A5", null, "G5", null, "F#5", null, null, null,
-      "E5", null, "D5", null, "C5", null, null, null,
-      "B4", null, null, null, "A4", null, null, null
+      "C5", null, null, "E5", null, null, "G5", null,
+      null, null, "E5", null, null, null, null, null,
+      "D5", null, null, "F5", null, null, "A5", null,
+      null, null, "F5", null, null, null, null, null,
+      "E5", null, null, "G5", null, null, "C6", null,
+      null, null, "G5", null, null, null, null, null,
+      "D5", null, null, "G5", null, null, "B4", null,
+      null, null, "C5", null, null, null, null, null
     ];
 
-    // Rich bass foundation
+    // Simple bass
     const bassLine = [
-      "G2", null, null, null, "D2", null, null, null,
-      "E2", null, null, null, "A2", null, null, null,
-      "G2", null, null, null, "D2", null, null, null,
-      "C2", null, null, null, "D2", null, null, null
+      "C2", null, null, null, null, null, null, null,
+      null, null, null, null, null, null, null, null,
+      "F2", null, null, null, null, null, null, null,
+      null, null, null, null, null, null, null, null,
+      "C2", null, null, null, null, null, null, null,
+      null, null, null, null, null, null, null, null,
+      "G2", null, null, null, null, null, null, null,
+      null, null, null, null, null, null, null, null
     ];
 
-    // Beautiful chord progression
+    // Simple chords
     const chords = [
-      ["G3", "B3", "D4", "F#4"],  // Gmaj7
-      ["E3", "G3", "B3", "D4"],   // Em7
-      ["C3", "E3", "G3", "B3"],   // Cmaj7
-      ["D3", "F#3", "A3", "C4"]   // D7
+      ["C3", "E3", "G3"],
+      ["F3", "A3", "C4"],
+      ["C3", "E3", "G3"],
+      ["G3", "B3", "D4"]
     ];
 
     let melodyIndex = 0;
@@ -131,21 +138,21 @@ export class AudioManager {
     let chordIndex = 0;
 
     this._backgroundMusicLoop = new Tone.Loop((time) => {
-      // Beautiful melody
+      // Calm melody
       const note = melody[melodyIndex];
       if (note) {
         this._leadSynth?.triggerAttackRelease(note, "4n", time);
       }
       melodyIndex = (melodyIndex + 1) % melody.length;
 
-      // Warm bass
+      // Gentle bass
       const bassNote = bassLine[bassIndex];
       if (bassNote) {
         this._bassSynth?.triggerAttackRelease(bassNote, "2n", time);
       }
       bassIndex = (bassIndex + 1) % bassLine.length;
 
-      // Lush pads
+      // Soft pads
       if (melodyIndex % 16 === 0) {
         this._padSynth?.triggerAttackRelease(chords[chordIndex], "4m", time);
         chordIndex = (chordIndex + 1) % chords.length;
@@ -153,7 +160,7 @@ export class AudioManager {
     }, "16n");
 
     this._backgroundMusicLoop.start(0);
-    Tone.Transport.bpm.value = 80; // Classic RPG tempo
+    Tone.Transport.bpm.value = 70; // Calm tempo
     Tone.Transport.start();
   }
 
@@ -208,9 +215,9 @@ export class AudioManager {
     } else {
       // Logarithmic falloff for realistic spatial audio
       const normalized = (distance - minDistance) / (maxDistance - minDistance);
-      this._fireVolume.volume.value = -10 - (normalized * 50);
+      this._fireVolume.volume.value = -10 - normalized * 50;
     }
-  };
+  }
 
   public playRingtone = (): void => {
     if (!this._audioInitialized) return;
@@ -223,7 +230,7 @@ export class AudioManager {
     // Modern ringtone sound with vibrato
     this._ringtoneSynth = new Tone.Synth({
       oscillator: { type: "sine" },
-      envelope: { attack: 0.02, decay: 0.1, sustain: 0.8, release: 0.2 }
+      envelope: { attack: 0.02, decay: 0.1, sustain: 0.8, release: 0.2 },
     }).toDestination();
     this._ringtoneSynth.volume.value = -10;
 
