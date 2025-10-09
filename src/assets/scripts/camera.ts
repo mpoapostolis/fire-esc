@@ -25,6 +25,9 @@ export class GameCamera {
   private _savedRadius: number = 0;
   private _isMapView: boolean = false;
 
+  // Animation settings for smooth transitions
+  private static readonly TRANSITION_SPEED = 0.1;
+
   constructor(
     private readonly _scene: Scene,
     config: Partial<CameraConfig> = {}
@@ -49,6 +52,13 @@ export class GameCamera {
     camera.upperBetaLimit = config.betaLimits.max;
     camera.angularSensibilityX = config.sensitivity;
     camera.angularSensibilityY = config.sensitivity;
+
+    // Performance optimizations
+    camera.useAutoRotationBehavior = false;
+    camera.useFramingBehavior = false;
+    camera.useBouncingBehavior = false;
+    camera.panningSensibility = 0; // Disable panning for better performance
+    camera.speed = 2; // Optimize camera speed
 
     const canvas = this._scene.getEngine().getRenderingCanvas();
     if (canvas) camera.attachControl(canvas, true);

@@ -83,16 +83,18 @@ export class Player {
   private _marker: AbstractMesh;
   private _controlsEnabled = true;
 
-  // Reusable vectors for performance
-  private readonly _cameraForward = new Vector3();
-  private readonly _cameraRight = new Vector3();
-  private readonly _moveDirection = new Vector3();
-  private readonly _targetVelocity = new Vector3();
-  private readonly _newVelocity = new Vector3();
+  // Reusable vectors for performance (pre-allocated to avoid GC)
+  private readonly _cameraForward = Vector3.Zero();
+  private readonly _cameraRight = Vector3.Zero();
+  private readonly _moveDirection = Vector3.Zero();
+  private readonly _targetVelocity = Vector3.Zero();
+  private readonly _newVelocity = Vector3.Zero();
+  private readonly _tempVec = Vector3.Zero();
 
   // Movement constants
   private static readonly VELOCITY_SMOOTHING = 0.2;
   private static readonly DECELERATION = 0.8;
+  private static readonly GROUND_CHECK_EPSILON = 0.1;
 
   constructor(
     scene: Scene,
@@ -175,7 +177,6 @@ export class Player {
 
   private _setupAnimations(animationGroups: AnimationGroup[]): void {
     for (const ag of animationGroups) {
-      console.log(`"${ag.name}"`);
       const name = ag.name as AnimationName;
       this._animations.set(name, ag);
       ag.stop();
@@ -235,9 +236,10 @@ export class Player {
 
   public disableControls(): void {
     this._controlsEnabled = false;
-    // Stop movement when controls are disabled
+    // Stop movement when controls are disabled (reuse temp vector)
     if (this._physicsAggregate) {
-      this._physicsAggregate.body.setLinearVelocity(new Vector3(0, 0, 0));
+      this._tempVec.set(0, 0, 0);
+      this._physicsAggregate.body.setLinearVelocity(this._tempVec);
     }
   }
 
@@ -362,12 +364,13 @@ export class Player {
 
     this._isJumping = true;
     const currentVelocity = this._physicsAggregate.body.getLinearVelocity();
-    const jumpVelocity = new Vector3(
+    // Reuse temp vector to avoid allocation
+    this._tempVec.set(
       currentVelocity.x,
       this._config.jumpImpulse,
       currentVelocity.z
     );
-    this._physicsAggregate.body.setLinearVelocity(jumpVelocity);
+    this._physicsAggregate.body.setLinearVelocity(this._tempVec);
 
     const rollAnim = this._animations.get("CharacterArmature|Roll");
     if (rollAnim) {
@@ -383,7 +386,7 @@ export class Player {
 
   private _isGrounded(): boolean {
     const velocity = this._physicsAggregate.body.getLinearVelocity();
-    return Math.abs(velocity.y) < 0.1;
+    return Math.abs(velocity.y) < Player.GROUND_CHECK_EPSILON;
   }
 
   private _checkGrounded(): void {

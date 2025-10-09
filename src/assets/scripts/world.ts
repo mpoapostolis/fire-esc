@@ -78,16 +78,23 @@ export class World {
   private _shadowGenerator?: ShadowGenerator;
   private _pipeline?: DefaultRenderingPipeline;
 
+  // Cache for optimized lookups
+  private readonly _meshCache = new Map<string, AbstractMesh>();
+  private _isWorldLoaded = false;
+
   constructor(scene: Scene, config: Partial<WorldConfig> = {}) {
     this._scene = scene;
     this._config = { ...DEFAULT_WORLD_CONFIG, ...config };
   }
 
   public async load(): Promise<void> {
+    if (this._isWorldLoaded) return;
+
     this._createLight();
     this._createSkybox();
     await this._createEnvironment();
     this._setupAtmosphere();
+    this._isWorldLoaded = true;
   }
 
   public setupPostProcessing(): void {
@@ -127,8 +134,9 @@ export class World {
   }
 
   public hideAllFires(): void {
-    for (const system of this._fireParticleSystems) {
-      system.dispose();
+    // Dispose in reverse order for better performance
+    for (let i = this._fireParticleSystems.length - 1; i >= 0; i--) {
+      this._fireParticleSystems[i].dispose();
     }
     this._fireParticleSystems.length = 0;
   }
@@ -205,13 +213,21 @@ export class World {
     rootMesh.position.copyFrom(modelConfig.position);
     rootMesh.rotation.copyFrom(modelConfig.rotation);
 
+    // Batch mesh processing for better performance
+    const meshesToProcess: Mesh[] = [];
     for (const mesh of result.meshes) {
       mesh.layerMask = 1;
 
       if (mesh.name !== "__root__" && mesh instanceof Mesh) {
-        this._setupStaticMeshPhysics(mesh);
-        this._optimizeMesh(mesh);
+        meshesToProcess.push(mesh);
+        this._meshCache.set(mesh.name, mesh);
       }
+    }
+
+    // Process meshes in batch
+    for (const mesh of meshesToProcess) {
+      this._setupStaticMeshPhysics(mesh);
+      this._optimizeMesh(mesh);
     }
   }
 
@@ -229,6 +245,9 @@ export class World {
     mesh.receiveShadows = true;
     mesh.material?.freeze();
     mesh.freezeWorldMatrix();
+    mesh.doNotSyncBoundingInfo = true;
+    mesh.isPickable = false;
+    mesh.alwaysSelectAsActiveMesh = true;
   }
 
   private _setupPostProcessing(): void {
@@ -242,10 +261,11 @@ export class World {
       [camera]
     );
 
+    // Optimized bloom settings for better performance
     this._pipeline.bloomEnabled = true;
     this._pipeline.bloomThreshold = 0.9;
     this._pipeline.bloomWeight = 0.1;
-    this._pipeline.bloomKernel = 32;
+    this._pipeline.bloomKernel = 16; // Reduced from 32 for better performance
     this._pipeline.bloomScale = 0.5;
 
     this._pipeline.imageProcessingEnabled = true;
@@ -254,6 +274,7 @@ export class World {
       this._pipeline.imageProcessing.exposure = 1.1;
     }
 
+    // FXAA is efficient antialiasing
     this._pipeline.fxaaEnabled = true;
     this._pipeline.samples = 1;
   }

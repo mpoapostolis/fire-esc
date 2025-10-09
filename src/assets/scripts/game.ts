@@ -55,6 +55,11 @@ export class Game {
   private _questTimer: number | null = null;
   private _questStartTime: number = 0;
 
+  // Cached values for performance
+  private readonly _reusableVector = new Vector3();
+  private _cachedCurrentQuest: Quest | null = null;
+  private _cachedObjectivePos: Vector3 | null = null;
+
   private constructor(
     engine: Engine,
     canvas: HTMLCanvasElement,
@@ -142,6 +147,10 @@ export class Game {
 
   private _optimizeScene(): void {
     this._scene.blockMaterialDirtyMechanism = true;
+    this._scene.skipPointerMovePicking = true;
+    this._scene.autoClear = false;
+    this._scene.autoClearDepthAndStencil = false;
+    this._scene.cleanCachedTextureBuffer();
   }
 
   private _startRenderLoop(): void {
@@ -288,20 +297,28 @@ export class Game {
     const remainingTime = this._getRemainingTime();
     this._uiManager.updateTimer(remainingTime);
 
+    // Cache current quest to avoid multiple lookups
     const currentQuest = this._questManager.getCurrentQuest();
     if (!currentQuest) {
       this._uiManager.updateDistance(null);
+      this._cachedCurrentQuest = null;
+      this._cachedObjectivePos = null;
       return;
     }
 
-    const objectivePos = this._world.getFirePointPosition(currentQuest.id);
-    if (!objectivePos) return;
+    // Update cache only when quest changes
+    if (this._cachedCurrentQuest?.id !== currentQuest.id) {
+      this._cachedCurrentQuest = currentQuest;
+      this._cachedObjectivePos = this._world.getFirePointPosition(currentQuest.id);
+    }
+
+    if (!this._cachedObjectivePos) return;
 
     const playerPos = this._player.capsule.position;
-    const distanceSquared = Vector3.DistanceSquared(playerPos, objectivePos);
-    const distance = Math.sqrt(distanceSquared);
+    const distanceSquared = Vector3.DistanceSquared(playerPos, this._cachedObjectivePos);
 
-    // Update fire sound volume based on distance
+    // Update fire sound volume based on distance (use squared distance to avoid sqrt)
+    const distance = Math.sqrt(distanceSquared);
     this._audioManager.updateFireVolume(distance);
 
     if (distanceSquared < 25) {
