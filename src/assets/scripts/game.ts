@@ -27,6 +27,7 @@ interface GameConfig {
   readonly initialQuestDelay: number;
   readonly questCompleteAnimationDelay: number;
   readonly questTimeLimit: number;
+  readonly cityModel?: string;
 }
 
 const DEFAULT_GAME_CONFIG: GameConfig = {
@@ -120,7 +121,10 @@ export class Game {
   }
 
   private async _loadWorld(): Promise<void> {
-    this._world = new World(this._scene);
+    const worldConfig = this._config.cityModel
+      ? { cityModel: this._config.cityModel }
+      : {};
+    this._world = new World(this._scene, worldConfig);
     await this._world.load();
     await this._world.loadCyclist();
     this._world.createQuestFirePoints(this._questManager.getAllQuests());

@@ -24,6 +24,12 @@ import {
 import type { IParticleSystem } from "@babylonjs/core/Particles/IParticleSystem";
 import type { Quest } from "./quests/quests";
 
+interface ModelConfig {
+  readonly scale: Vector3;
+  readonly position: Vector3;
+  readonly rotation: Vector3;
+}
+
 interface WorldConfig {
   readonly modelPath: string;
   readonly cityModel: string;
@@ -32,6 +38,24 @@ interface WorldConfig {
   readonly lightIntensity: number;
   readonly skyboxSize: number;
 }
+
+const MODEL_CONFIGS: Record<string, ModelConfig> = {
+  "city-2.glb": {
+    scale: new Vector3(1.2, 1.2, -1.2),
+    position: new Vector3(0, -2, 0),
+    rotation: new Vector3(0, 0, 0),
+  },
+  "city.glb": {
+    scale: new Vector3(1, 1, 1),
+    position: new Vector3(0, 0, 0),
+    rotation: new Vector3(0, 0, 0),
+  },
+  "city-white.glb": {
+    scale: new Vector3(1.2, 1.2, -1.2),
+    position: new Vector3(0, -2, 0),
+    rotation: new Vector3(0, 0, 0),
+  },
+};
 
 const DEFAULT_WORLD_CONFIG: WorldConfig = {
   modelPath: "/models/",
@@ -171,7 +195,15 @@ export class World {
       this._scene
     );
 
-    result.meshes[0].scaling.set(1.5, 1.5, -1.5);
+    // Get model-specific configuration
+    const modelConfig =
+      MODEL_CONFIGS[this._config.cityModel] || MODEL_CONFIGS["city-2.glb"];
+
+    // Apply model configuration to root mesh
+    const rootMesh = result.meshes[0];
+    rootMesh.scaling.copyFrom(modelConfig.scale);
+    rootMesh.position.copyFrom(modelConfig.position);
+    rootMesh.rotation.copyFrom(modelConfig.rotation);
 
     for (const mesh of result.meshes) {
       mesh.layerMask = 1;
