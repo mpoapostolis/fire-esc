@@ -81,6 +81,9 @@ export class GameCamera {
     this.camera.lowerRadiusLimit = 50;
     this.camera.upperRadiusLimit = 120;
 
+    // Set fixed target position at center of city (0, 0, 0)
+    this.camera.target = new Vector3(0, 0, 0);
+
     // Keep controls attached for rotation
     // Camera stays attached so user can rotate and zoom
 

@@ -16,7 +16,7 @@ export const quests: Quest[] = [
   {
     id: 1,
     title: "The First Spark",
-    point: { x: 5, z: -7 },
+    point: { x: 5, z: -5 },
     riddle:
       "Το βράδυ ανάψαμε φωτιά\nΚαι τραγουδούσαμε γύρω τριγύρω:\nΦωτιά ωραία φωτιά μη λυπηθείς τα κούτσουρα\nΦωτιά ωραία φωτιά μη φτάσεις ως τη στάχτη\nΦωτιά ωραία φωτιά καίγε μας\nλέγε μας τη ζωή.",
     successMessage:
@@ -29,7 +29,7 @@ export const quests: Quest[] = [
   {
     id: 2,
     title: "The Red Herring",
-    point: { x: 50, z: 40 },
+    point: { x: 20, z: 15 },
     riddle:
       "Υπάρχουν πολλά κόκκινα που κινούνται παντού, αλλά εσύ ψάχνεις αυτό που βρίσκεται πιο ανατολικά από τα υπόλοιπα.",
     successMessage:
@@ -40,7 +40,7 @@ export const quests: Quest[] = [
   {
     id: 3,
     title: "A Burning Problem",
-    point: { x: -30, z: -30 },
+    point: { x: -15, z: -12 },
     riddle:
       "Κάνει ζημιά στην υγεία του ανθρώπου και όχι μόνο. Αν το πετάξει κάποιος εκεί μέσα, μπορεί να κάψει ολόκληρη την πόλη!",
     successMessage:
@@ -51,7 +51,7 @@ export const quests: Quest[] = [
   {
     id: 4,
     title: "Unlucky Number",
-    point: { x: -10, z: 50 },
+    point: { x: 12, z: 20 },
     riddle:
       "Μην ποντάρεις ποτέ στο νούμερο 15! Θα φέρει την καταστροφή στην πόλη!",
     successMessage:
@@ -62,7 +62,7 @@ export const quests: Quest[] = [
   {
     id: 5,
     title: "Race Against Time",
-    point: { x: 0, z: 0 },
+    point: { x: -8, z: 8 },
     riddle:
       "Η ώρα πήγε 5… Μήπως άργησες να προλάβεις την τελευταία εστία φωτιάς; Τρέξε για να δραπετεύσεις από τη φωτιά!",
     successMessage:

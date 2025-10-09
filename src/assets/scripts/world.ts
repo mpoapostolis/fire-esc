@@ -193,29 +193,36 @@ export class World {
       // Clear with transparent background
       ctx.clearRect(0, 0, textureSize, textureSize);
 
-      // Draw cartoon circle background
-      ctx.fillStyle = "#FFFFFF";
+      // Draw thick black outline (outer)
+      ctx.fillStyle = "#000000";
       ctx.beginPath();
       ctx.arc(
         textureSize / 2,
         textureSize / 2,
-        textureSize / 2 - 20,
+        textureSize / 2 - 10,
         0,
         2 * Math.PI
       );
       ctx.fill();
 
-      // Draw black outline
-      ctx.strokeStyle = "#000000";
-      ctx.lineWidth = 16;
-      ctx.stroke();
+      // Draw white circle background (inner)
+      ctx.fillStyle = "#FFFFFF";
+      ctx.beginPath();
+      ctx.arc(
+        textureSize / 2,
+        textureSize / 2,
+        textureSize / 2 - 30,
+        0,
+        2 * Math.PI
+      );
+      ctx.fill();
 
-      // Draw number with cartoon style
+      // Draw number with cartoon style - bigger and bolder
       ctx.fillStyle = "#000000";
-      ctx.font = "bold 320px Arial";
+      ctx.font = "bold 340px Arial";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(number.toString(), textureSize / 2, textureSize / 2);
+      ctx.fillText(number.toString(), textureSize / 2, textureSize / 2 + 10);
 
       dynamicTexture.update();
 
@@ -224,7 +231,7 @@ export class World {
         this._scene
       );
       numberMat.diffuseTexture = dynamicTexture;
-      numberMat.emissiveTexture = dynamicTexture;
+      numberMat.emissiveColor = new Color3(0.8, 0.8, 0.8); // Much less glow
       numberMat.opacityTexture = dynamicTexture;
       numberMat.disableLighting = true;
       numberMat.backFaceCulling = false;
