@@ -74,15 +74,15 @@ export class GameCamera {
     this._savedBeta = this.camera.beta;
     this._savedRadius = this.camera.radius;
 
-    // Detach controls
-    this.camera.detachControl();
-
-    // Switch to top-down view
-    this.camera.alpha = 0;
-    this.camera.beta = 0.01; // Almost straight down
-    this.camera.radius = 120;
-    this.camera.lowerRadiusLimit = 120;
+    // Switch to 45-degree angled city view with rotation enabled
+    this.camera.alpha = -Math.PI / 2; // Face north
+    this.camera.beta = Math.PI / 4; // 45 degrees angle
+    this.camera.radius = 80; // Closer to see details
+    this.camera.lowerRadiusLimit = 50;
     this.camera.upperRadiusLimit = 120;
+
+    // Keep controls attached for rotation
+    // Camera stays attached so user can rotate and zoom
 
     this._isMapView = true;
   }

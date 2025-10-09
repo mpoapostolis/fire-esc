@@ -133,6 +133,7 @@ export class Game {
     await this._world.load();
     await this._world.loadCyclist();
     this._world.createQuestFirePoints(this._questManager.getAllQuests());
+    this._world.createTeleportButtons(this._questManager.getAllQuests());
   }
 
   private async _setupPlayerAndCamera(): Promise<void> {
@@ -179,12 +180,22 @@ export class Game {
       onAnswerCall: this._onAnswerCall,
     });
 
-    // Setup click teleport for top-down view
+    // Setup click teleport for map view
     this._scene.onPointerDown = (evt, pickInfo) => {
-      if (this._camera.isMapView && pickInfo.hit && pickInfo.pickedPoint) {
-        const targetPos = pickInfo.pickedPoint.clone();
-        targetPos.y = 3;
-        this._player.capsule.position.copyFrom(targetPos);
+      if (this._camera.isMapView && pickInfo.hit && pickInfo.pickedMesh) {
+        // Check if clicked on a teleport button
+        const meshName = pickInfo.pickedMesh.name;
+        if (meshName.startsWith('teleportButton-') || meshName.startsWith('numberLabel-')) {
+          // Extract quest ID from mesh name
+          const questId = parseInt(meshName.split('-')[1]);
+          const firePos = this._world.getFirePointPosition(questId);
+          if (firePos) {
+            const targetPos = firePos.clone();
+            targetPos.y = 3;
+            this._player.capsule.position.copyFrom(targetPos);
+            this._audioManager.playButtonClick();
+          }
+        }
       }
     };
   }
@@ -222,13 +233,19 @@ export class Game {
 
   private _onMapPressed = (): void => {
     if (this._camera.isMapView) {
+      // Exit map view
       this._camera.switchToNormalView();
       this._player.hideMarker();
       this._player.enableControls();
+      this._world.setFiresVisible(true);
+      this._world.setTeleportButtonsVisible(false);
     } else {
+      // Enter map view
       this._camera.switchToTopDownView();
       this._player.showMarker();
       this._player.disableControls();
+      this._world.setFiresVisible(false);
+      this._world.setTeleportButtonsVisible(true);
     }
   };
 

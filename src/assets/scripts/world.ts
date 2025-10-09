@@ -20,6 +20,7 @@ import {
   DirectionalLight,
   ShadowGenerator,
   DefaultRenderingPipeline,
+  DynamicTexture,
 } from "@babylonjs/core";
 import type { IParticleSystem } from "@babylonjs/core/Particles/IParticleSystem";
 import type { Quest } from "./quests/quests";
@@ -73,6 +74,7 @@ export class World {
   private readonly _config: WorldConfig;
   private readonly _firePoints = new Map<number, Mesh>();
   private readonly _fireParticleSystems: IParticleSystem[] = [];
+  private readonly _teleportButtons = new Map<number, Mesh>();
   private _cyclist?: AbstractMesh;
   private _cyclistAnimations: AnimationGroup[] = [];
   private _shadowGenerator?: ShadowGenerator;
@@ -141,6 +143,113 @@ export class World {
     this._fireParticleSystems.length = 0;
   }
 
+  public setFiresVisible(visible: boolean): void {
+    for (const system of this._fireParticleSystems) {
+      if (visible) {
+        system.start();
+      } else {
+        system.stop();
+      }
+    }
+  }
+
+  public createTeleportButtons(quests: Quest[]): void {
+    quests.forEach((quest, index) => {
+      const number = index + 1;
+
+      // Create invisible parent mesh for positioning
+      const button = MeshBuilder.CreateBox(
+        `teleportButton-${quest.id}`,
+        { size: 0.1 },
+        this._scene
+      );
+      button.position.set(quest.point.x, 5, quest.point.z);
+      button.isVisible = true; // Always invisible
+      button.isPickable = false; // Not pickable itself
+
+      // Create number label plane with text texture - this is the actual button
+      const numberPlane = MeshBuilder.CreatePlane(
+        `numberLabel-${quest.id}`,
+        { width: 6, height: 6 },
+        this._scene
+      );
+      numberPlane.position.y = 0;
+      numberPlane.parent = button;
+      numberPlane.billboardMode = 7; // Always face camera
+      numberPlane.isVisible = false; // Hidden by default
+      numberPlane.isPickable = true; // This is the clickable button
+
+      // Create dynamic texture with cartoon number
+      const textureSize = 512;
+      const dynamicTexture = new DynamicTexture(
+        `numberTexture-${quest.id}`,
+        textureSize,
+        this._scene,
+        false
+      );
+
+      const ctx = dynamicTexture.getContext();
+
+      // Clear with transparent background
+      ctx.clearRect(0, 0, textureSize, textureSize);
+
+      // Draw cartoon circle background
+      ctx.fillStyle = "#FFFFFF";
+      ctx.beginPath();
+      ctx.arc(
+        textureSize / 2,
+        textureSize / 2,
+        textureSize / 2 - 20,
+        0,
+        2 * Math.PI
+      );
+      ctx.fill();
+
+      // Draw black outline
+      ctx.strokeStyle = "#000000";
+      ctx.lineWidth = 16;
+      ctx.stroke();
+
+      // Draw number with cartoon style
+      ctx.fillStyle = "#000000";
+      ctx.font = "bold 320px Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(number.toString(), textureSize / 2, textureSize / 2);
+
+      dynamicTexture.update();
+
+      const numberMat = new StandardMaterial(
+        `numberMat-${quest.id}`,
+        this._scene
+      );
+      numberMat.diffuseTexture = dynamicTexture;
+      numberMat.emissiveTexture = dynamicTexture;
+      numberMat.opacityTexture = dynamicTexture;
+      numberMat.disableLighting = true;
+      numberMat.backFaceCulling = false;
+      numberPlane.material = numberMat;
+
+      // Store button reference
+      this._teleportButtons.set(quest.id, button);
+    });
+  }
+
+  public setTeleportButtonsVisible(visible: boolean): void {
+    for (const button of this._teleportButtons.values()) {
+      button.isVisible = visible;
+      button.isPickable = visible;
+      // Also hide/show all children (number labels)
+      button.getChildMeshes().forEach((child) => {
+        child.isVisible = visible;
+      });
+    }
+  }
+
+  public getTeleportButtonMesh(questId: number): Mesh | null {
+    return this._teleportButtons.get(questId) ?? null;
+  }
+
   public getFirePointPosition(id: number): Vector3 | null {
     const firePoint = this._firePoints.get(id);
     return firePoint?.getAbsolutePosition() ?? null;
@@ -162,17 +271,7 @@ export class World {
 
     const reflectionTexture = new CubeTexture(
       this._config.skyboxUrl,
-      this._scene,
-      {
-        extensions: [
-          "nx.png",
-          "ny.png",
-          "nz.png",
-          "px.png",
-          "py.png",
-          "pz.png",
-        ],
-      }
+      this._scene
     );
     reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
     material.reflectionTexture = reflectionTexture;
