@@ -157,7 +157,8 @@ export class Game {
     this._engine.runRenderLoop(() => {
       this._player.update();
 
-      if (!this._isInCutscene) {
+      // Only follow player in normal view, not in map view
+      if (!this._isInCutscene && !this._camera.isMapView) {
         this._camera.camera.target.copyFrom(this._player.capsule.position);
       }
 

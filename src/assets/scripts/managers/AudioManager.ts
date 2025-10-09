@@ -40,97 +40,101 @@ export class AudioManager {
   };
 
   private _setupAudioComponents(): void {
-    // Soft melody
-    const leadReverb = new Tone.Reverb({ decay: 3, wet: 0.4 }).toDestination();
+    // Dreamy indie lead - square wave for that retro/chiptune feel
+    const leadReverb = new Tone.Reverb({ decay: 4, wet: 0.6 }).toDestination();
+    const leadDelay = new Tone.FeedbackDelay("8n", 0.3).connect(leadReverb);
     this._leadSynth = new Tone.Synth({
-      oscillator: { type: "sine" },
-      envelope: { attack: 0.4, decay: 0.6, sustain: 0.6, release: 1.2 },
-    }).connect(leadReverb);
-    this._leadSynth.volume.value = -24;
+      oscillator: { type: "square" },
+      envelope: { attack: 0.05, decay: 0.3, sustain: 0.7, release: 0.8 },
+    }).connect(leadDelay);
+    this._leadSynth.volume.value = -28;
 
-    // Gentle bass
+    // Punchy bass - triangle wave for warmth
+    const bassFilter = new Tone.Filter(800, "lowpass").toDestination();
     this._bassSynth = new Tone.Synth({
-      oscillator: { type: "sine" },
-      envelope: { attack: 0.3, decay: 1, sustain: 0.7, release: 1.5 },
-    }).toDestination();
-    this._bassSynth.volume.value = -28;
+      oscillator: { type: "triangle" },
+      envelope: { attack: 0.01, decay: 0.4, sustain: 0.8, release: 0.6 },
+    }).connect(bassFilter);
+    this._bassSynth.volume.value = -30;
 
-    // Warm pads
-    const padReverb = new Tone.Reverb({ decay: 6, wet: 0.5 }).toDestination();
+    // Lush pads - sawtooth for richness
+    const padReverb = new Tone.Reverb({ decay: 8, wet: 0.7 }).toDestination();
+    const padChorus = new Tone.Chorus(2, 2.5, 0.5).connect(padReverb);
     this._padSynth = new Tone.PolySynth(Tone.Synth, {
-      oscillator: { type: "sine" },
-      envelope: { attack: 2, decay: 1, sustain: 0.8, release: 3 },
-    }).connect(padReverb);
-    this._padSynth.volume.value = -26;
+      oscillator: { type: "sawtooth" },
+      envelope: { attack: 1.5, decay: 0.5, sustain: 0.9, release: 2.5 },
+    }).connect(padChorus);
+    this._padSynth.volume.value = -32;
 
-    // Subtle fire crackling
-    this._fireVolume = new Tone.Volume(-50).toDestination();
-    this._fireFilter = new Tone.Filter(600, "lowpass").connect(
+    // Crackling fire with character
+    this._fireVolume = new Tone.Volume(-35).toDestination();
+    this._fireFilter = new Tone.Filter(800, "lowpass").connect(
       this._fireVolume
     );
-    const fireFilter2 = new Tone.Filter(200, "highpass").connect(
+    const fireFilter2 = new Tone.Filter(150, "highpass").connect(
       this._fireFilter
     );
-    this._fireNoise = new Tone.Noise("pink").connect(fireFilter2);
+    this._fireNoise = new Tone.Noise("brown").connect(fireFilter2);
     this._fireNoise.start();
 
-    // Soft UI click
+    // Crisp UI sounds - triangle for softer clicks
     this._uiSynth = new Tone.Synth({
-      oscillator: { type: "sine" },
-      envelope: { attack: 0.01, decay: 0.1, sustain: 0, release: 0.2 },
+      oscillator: { type: "triangle" },
+      envelope: { attack: 0.005, decay: 0.08, sustain: 0, release: 0.15 },
     }).toDestination();
-    this._uiSynth.volume.value = -18;
+    this._uiSynth.volume.value = -12;
 
-    // Gentle sound effects synth
+    // Bright FX synth - pulse wave for character
+    const fxReverb = new Tone.Reverb({ decay: 2, wet: 0.4 }).toDestination();
     this._fxSynth = new Tone.Synth({
-      oscillator: { type: "sine" },
-      envelope: { attack: 0.1, decay: 0.3, sustain: 0.5, release: 1 },
-    }).toDestination();
-    this._fxSynth.volume.value = -20;
+      oscillator: { type: "pulse", width: 0.4 },
+      envelope: { attack: 0.01, decay: 0.2, sustain: 0.4, release: 0.6 },
+    }).connect(fxReverb);
+    this._fxSynth.volume.value = -14;
 
-    // Soft impact synth
+    // Punchy impact - for satisfying game feel
     this._impactSynth = new Tone.MembraneSynth({
-      pitchDecay: 0.05,
-      octaves: 2,
-      oscillator: { type: "sine" },
-      envelope: { attack: 0.01, decay: 0.5, sustain: 0, release: 1 },
+      pitchDecay: 0.08,
+      octaves: 3,
+      oscillator: { type: "square" },
+      envelope: { attack: 0.001, decay: 0.4, sustain: 0, release: 0.8 },
     }).toDestination();
-    this._impactSynth.volume.value = -18;
+    this._impactSynth.volume.value = -12;
   }
 
   private _startBackgroundMusic(): void {
     if (!this._leadSynth || !this._bassSynth || !this._padSynth) return;
 
-    // Simple calm melody
+    // Catchy indie game melody - more memorable and upbeat
     const melody = [
-      "C5", null, null, "E5", null, null, "G5", null,
-      null, null, "E5", null, null, null, null, null,
-      "D5", null, null, "F5", null, null, "A5", null,
-      null, null, "F5", null, null, null, null, null,
-      "E5", null, null, "G5", null, null, "C6", null,
-      null, null, "G5", null, null, null, null, null,
-      "D5", null, null, "G5", null, null, "B4", null,
-      null, null, "C5", null, null, null, null, null
+      "E5", null, "G5", null, "A5", null, "G5", "E5",
+      null, "D5", null, "E5", null, null, null, null,
+      "E5", null, "G5", null, "B5", null, "A5", "G5",
+      null, "E5", null, "G5", null, null, null, null,
+      "C5", null, "E5", null, "G5", null, "E5", "C5",
+      null, "D5", null, "E5", null, null, null, null,
+      "G5", null, "A5", null, "B5", null, "C6", "B5",
+      "A5", null, "G5", null, "E5", null, null, null
     ];
 
-    // Simple bass
+    // Groovy bass line with movement
     const bassLine = [
-      "C2", null, null, null, null, null, null, null,
-      null, null, null, null, null, null, null, null,
-      "F2", null, null, null, null, null, null, null,
-      null, null, null, null, null, null, null, null,
-      "C2", null, null, null, null, null, null, null,
-      null, null, null, null, null, null, null, null,
-      "G2", null, null, null, null, null, null, null,
-      null, null, null, null, null, null, null, null
+      "C2", null, null, "C3", null, "C2", null, null,
+      "C2", null, null, "G2", null, null, null, null,
+      "A1", null, null, "A2", null, "A1", null, null,
+      "A1", null, null, "E2", null, null, null, null,
+      "F2", null, null, "F2", null, "F2", null, null,
+      "G2", null, null, "G2", null, null, null, null,
+      "C2", null, null, "C3", null, "C2", null, "G2",
+      null, null, "C2", null, null, null, null, null
     ];
 
-    // Simple chords
+    // Rich indie chords
     const chords = [
-      ["C3", "E3", "G3"],
-      ["F3", "A3", "C4"],
-      ["C3", "E3", "G3"],
-      ["G3", "B3", "D4"]
+      ["C3", "E3", "G3", "B3"],
+      ["A2", "C3", "E3", "A3"],
+      ["F2", "A2", "C3", "F3"],
+      ["G2", "B2", "D3", "G3"]
     ];
 
     let melodyIndex = 0;
@@ -138,29 +142,29 @@ export class AudioManager {
     let chordIndex = 0;
 
     this._backgroundMusicLoop = new Tone.Loop((time) => {
-      // Calm melody
+      // Catchy melody with character
       const note = melody[melodyIndex];
       if (note) {
-        this._leadSynth?.triggerAttackRelease(note, "4n", time);
+        this._leadSynth?.triggerAttackRelease(note, "8n", time);
       }
       melodyIndex = (melodyIndex + 1) % melody.length;
 
-      // Gentle bass
+      // Groovy bass
       const bassNote = bassLine[bassIndex];
       if (bassNote) {
-        this._bassSynth?.triggerAttackRelease(bassNote, "2n", time);
+        this._bassSynth?.triggerAttackRelease(bassNote, "8n", time);
       }
       bassIndex = (bassIndex + 1) % bassLine.length;
 
-      // Soft pads
+      // Lush pads for atmosphere
       if (melodyIndex % 16 === 0) {
-        this._padSynth?.triggerAttackRelease(chords[chordIndex], "4m", time);
+        this._padSynth?.triggerAttackRelease(chords[chordIndex], "2m", time);
         chordIndex = (chordIndex + 1) % chords.length;
       }
     }, "16n");
 
     this._backgroundMusicLoop.start(0);
-    Tone.Transport.bpm.value = 70; // Calm tempo
+    Tone.Transport.bpm.value = 95; // Upbeat indie tempo
     Tone.Transport.start();
   }
 
@@ -169,36 +173,40 @@ export class AudioManager {
 
     const now = Tone.now();
 
-    // Victory fanfare with ascending notes
-    const melody = ["C4", "E4", "G4", "C5"];
-    melody.forEach((note, i) => {
-      this._fxSynth?.triggerAttackRelease(note, "16n", now + i * 0.15);
+    // Satisfying indie game victory jingle
+    const victoryMelody = ["E5", "G5", "C6", "E6", "G6"];
+    victoryMelody.forEach((note, i) => {
+      this._fxSynth?.triggerAttackRelease(note, "16n", now + i * 0.12);
     });
 
-    // Bass hit for impact
-    this._impactSynth.triggerAttackRelease("C2", "8n", now);
-
-    // Final high note
-    this._fxSynth?.triggerAttackRelease("E5", "4n", now + 0.6);
+    // Punchy bass hits for impact
+    this._impactSynth?.triggerAttackRelease("C2", "8n", now);
+    this._impactSynth?.triggerAttackRelease("C2", "16n", now + 0.24);
+    this._impactSynth?.triggerAttackRelease("C1", "8n", now + 0.48);
   };
 
   public playButtonClick = (): void => {
     if (!this._audioInitialized || !this._uiSynth) return;
-    this._uiSynth.triggerAttackRelease("C5", "32n");
+    // Satisfying click sound
+    this._uiSynth.triggerAttackRelease("E5", "32n");
   };
 
   public playModalOpen = (): void => {
     if (!this._audioInitialized || !this._uiSynth) return;
     const now = Tone.now();
-    this._uiSynth.triggerAttackRelease("E5", "64n", now);
-    this._uiSynth.triggerAttackRelease("G5", "64n", now + 0.05);
+    // Upward swoop
+    this._uiSynth.triggerAttackRelease("C5", "64n", now);
+    this._uiSynth.triggerAttackRelease("E5", "64n", now + 0.04);
+    this._uiSynth.triggerAttackRelease("G5", "64n", now + 0.08);
   };
 
   public playModalClose = (): void => {
     if (!this._audioInitialized || !this._uiSynth) return;
     const now = Tone.now();
+    // Downward swoop
     this._uiSynth.triggerAttackRelease("G5", "64n", now);
-    this._uiSynth.triggerAttackRelease("E5", "64n", now + 0.05);
+    this._uiSynth.triggerAttackRelease("E5", "64n", now + 0.04);
+    this._uiSynth.triggerAttackRelease("C5", "64n", now + 0.08);
   };
 
   public updateFireVolume(distance: number): void {
@@ -227,19 +235,21 @@ export class AudioManager {
       return;
     }
 
-    // Modern ringtone sound with vibrato
+    // Catchy indie game ringtone - square wave for character
     this._ringtoneSynth = new Tone.Synth({
-      oscillator: { type: "sine" },
-      envelope: { attack: 0.02, decay: 0.1, sustain: 0.8, release: 0.2 },
+      oscillator: { type: "square" },
+      envelope: { attack: 0.01, decay: 0.15, sustain: 0.6, release: 0.2 },
     }).toDestination();
-    this._ringtoneSynth.volume.value = -10;
+    this._ringtoneSynth.volume.value = -8;
 
     this._ringtoneLoop = new Tone.Loop((time) => {
-      // Classic ringtone pattern
-      this._ringtoneSynth?.triggerAttackRelease("A5", "16n", time);
-      this._ringtoneSynth?.triggerAttackRelease("E5", "16n", time + 0.1);
-      this._ringtoneSynth?.triggerAttackRelease("A5", "16n", time + 0.3);
-      this._ringtoneSynth?.triggerAttackRelease("E5", "16n", time + 0.4);
+      // Fun melodic ringtone pattern
+      this._ringtoneSynth?.triggerAttackRelease("E6", "16n", time);
+      this._ringtoneSynth?.triggerAttackRelease("G6", "16n", time + 0.12);
+      this._ringtoneSynth?.triggerAttackRelease("E6", "16n", time + 0.24);
+      this._ringtoneSynth?.triggerAttackRelease("C6", "8n", time + 0.36);
+      this._ringtoneSynth?.triggerAttackRelease("D6", "16n", time + 0.6);
+      this._ringtoneSynth?.triggerAttackRelease("E6", "8n", time + 0.72);
     }, "2s");
 
     this._ringtoneLoop.start(0);

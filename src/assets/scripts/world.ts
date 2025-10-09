@@ -165,12 +165,12 @@ export class World {
       this._scene,
       {
         extensions: [
-          "_nx.png",
-          "_ny.png",
-          "_nz.png",
-          "_px.png",
-          "_py.png",
-          "_pz.png",
+          "nx.png",
+          "ny.png",
+          "nz.png",
+          "px.png",
+          "py.png",
+          "pz.png",
         ],
       }
     );
