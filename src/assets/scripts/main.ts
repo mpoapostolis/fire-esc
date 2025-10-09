@@ -8,7 +8,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     if (canvas) {
         // Get model from URL query params or default
         const urlParams = new URLSearchParams(window.location.search);
-        const modelFromUrl = urlParams.get("model") || "city-2.glb";
+        const modelFromUrl = urlParams.get("model") || "city-white.glb";
 
         // Set select value to match URL
         if (modelSelect) {

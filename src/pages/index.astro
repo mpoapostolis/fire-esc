@@ -214,31 +214,6 @@ import Layout from "../layouts/Layout.astro";
       </div>
     </div>
 
-    <!-- Top Center - Model Selector -->
-    <div
-      class="absolute top-0 left-1/2 -translate-x-1/2 p-6 pointer-events-auto animate-fade-in-down"
-    >
-      <div class="relative">
-        <div class="elden-panel px-6 py-4">
-          <div class="flex items-center gap-3">
-            <div class="w-1 h-1 bg-amber-400 rounded-full"></div>
-            <label
-              for="model-select"
-              class="text-xs text-amber-300/60 tracking-widest uppercase"
-              >City Model</label
-            >
-          </div>
-          <select
-            id="model-select"
-            class="model-select mt-2 bg-black/60 text-amber-100 border border-amber-600/40 px-4 py-2 rounded tracking-wide font-light cursor-pointer hover:border-amber-400/60 transition-colors"
-          >
-            <option value="city-2.glb">City 2</option>
-            <option value="city-white.glb">City White</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
     <!-- Waypoint Marker -->
     <div
       id="waypoint"
@@ -247,14 +222,14 @@ import Layout from "../layouts/Layout.astro";
     >
       <div class="relative flex items-center justify-center">
         <div
-          class="absolute w-16 h-16 border border-amber-400/30 rounded-full animate-ping"
+          class="absolute w-12 h-12 border-2 border-cyan-400/40 rounded-full animate-ping"
         >
         </div>
         <div
-          class="w-12 h-12 border-2 border-amber-400/60 rounded-full flex items-center justify-center bg-black/40"
+          class="w-8 h-8 border-2 border-cyan-400 rounded-full flex items-center justify-center bg-slate-900/60 backdrop-blur-sm indie-waypoint-glow"
         >
           <div
-            class="w-2 h-2 bg-amber-400 rounded-full shadow-lg shadow-amber-400/50"
+            class="w-2 h-2 bg-cyan-400 rounded-full"
           >
           </div>
         </div>
@@ -561,5 +536,91 @@ import Layout from "../layouts/Layout.astro";
   .model-select option {
     background: rgba(10, 8, 5, 0.98);
     color: rgb(252, 211, 77);
+  }
+
+  /* Indie Game Style HUD */
+  .indie-panel {
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(8px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
+  }
+
+  .indie-panel:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow:
+      0 6px 20px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  .indie-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(8px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+  }
+
+  .indie-btn:hover {
+    background: rgba(15, 23, 42, 0.9);
+    border-color: rgba(96, 165, 250, 0.5);
+    transform: translateY(-2px);
+    box-shadow:
+      0 6px 16px rgba(96, 165, 250, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .indie-btn:active {
+    transform: translateY(0);
+  }
+
+  .indie-text-shadow {
+    text-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.8),
+      0 0 20px rgba(96, 165, 250, 0.3);
+  }
+
+  .indie-select {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .indie-select option {
+    background: rgba(15, 23, 42, 0.98);
+    color: white;
+  }
+
+  @keyframes indie-pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.6;
+      transform: scale(0.9);
+    }
+  }
+
+  .indie-pulse {
+    animation: indie-pulse 2s ease-in-out infinite;
+  }
+
+  .indie-waypoint-glow {
+    box-shadow:
+      0 0 20px rgba(34, 211, 238, 0.6),
+      inset 0 0 10px rgba(34, 211, 238, 0.2);
   }
 </style>

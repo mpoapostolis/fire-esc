@@ -59,9 +59,9 @@ const MODEL_CONFIGS: Record<string, ModelConfig> = {
 
 const DEFAULT_WORLD_CONFIG: WorldConfig = {
   modelPath: "/models/",
-  cityModel: "city-2.glb",
+  cityModel: "city-white.glb",
   cyclistModel: "cyclist.glb",
-  skyboxUrl: "https://www.babylonjs-playground.com/textures/skybox",
+  skyboxUrl: "/skybox/",
   lightIntensity: 0.7,
   skyboxSize: 1000,
 };
@@ -162,7 +162,17 @@ export class World {
 
     const reflectionTexture = new CubeTexture(
       this._config.skyboxUrl,
-      this._scene
+      this._scene,
+      {
+        extensions: [
+          "_nx.png",
+          "_ny.png",
+          "_nz.png",
+          "_px.png",
+          "_py.png",
+          "_pz.png",
+        ],
+      }
     );
     reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
     material.reflectionTexture = reflectionTexture;
@@ -171,28 +181,31 @@ export class World {
   }
 
   private _createLight(): void {
+    // Indie game warm lighting
     const hemispheric = new HemisphericLight(
       "hemisphericLight",
       Vector3.UpReadOnly,
       this._scene
     );
-    hemispheric.intensity = 0.4;
-    hemispheric.groundColor = new Color3(0.2, 0.15, 0.1);
-    hemispheric.diffuse = new Color3(0.9, 0.85, 0.8);
+    hemispheric.intensity = 0.65;
+    hemispheric.groundColor = new Color3(0.4, 0.3, 0.2);
+    hemispheric.diffuse = new Color3(1.0, 0.8, 0.6);
 
+    // Warm sun
     const directional = new DirectionalLight(
       "directionalLight",
       new Vector3(-1, -2, -1),
       this._scene
     );
     directional.position = new Vector3(50, 100, 50);
-    directional.intensity = 0.6;
-    directional.diffuse = new Color3(1.0, 0.95, 0.85);
+    directional.intensity = 0.9;
+    directional.diffuse = new Color3(1.0, 0.75, 0.5);
 
+    // Optimized shadows - 1024 is enough
     this._shadowGenerator = new ShadowGenerator(1024, directional);
     this._shadowGenerator.useBlurExponentialShadowMap = true;
-    this._shadowGenerator.blurKernel = 32;
-    this._shadowGenerator.darkness = 0.3;
+    this._shadowGenerator.blurKernel = 16; // Optimized blur
+    this._shadowGenerator.darkness = 0.4;
   }
 
   private async _createEnvironment(): Promise<void> {
@@ -256,35 +269,48 @@ export class World {
 
     this._pipeline = new DefaultRenderingPipeline(
       "pipeline",
-      false,
+      true, // HDR for indie colors
       this._scene,
       [camera]
     );
 
-    // Optimized bloom settings for better performance
+    // Optimized bloom - still looks good
     this._pipeline.bloomEnabled = true;
-    this._pipeline.bloomThreshold = 0.9;
-    this._pipeline.bloomWeight = 0.1;
-    this._pipeline.bloomKernel = 16; // Reduced from 32 for better performance
+    this._pipeline.bloomThreshold = 0.75;
+    this._pipeline.bloomWeight = 0.25;
+    this._pipeline.bloomKernel = 32; // Reduced from 64 for performance
     this._pipeline.bloomScale = 0.5;
 
+    // Indie game color grading - optimized
     this._pipeline.imageProcessingEnabled = true;
     if (this._pipeline.imageProcessing) {
-      this._pipeline.imageProcessing.contrast = 1.05;
-      this._pipeline.imageProcessing.exposure = 1.1;
+      this._pipeline.imageProcessing.contrast = 1.15;
+      this._pipeline.imageProcessing.exposure = 1.25;
+      this._pipeline.imageProcessing.toneMappingEnabled = true;
+      this._pipeline.imageProcessing.toneMappingType = 1; // ACES
+
+      // Warm colors
+      this._pipeline.imageProcessing.colorCurvesEnabled = true;
+      if (this._pipeline.imageProcessing.colorCurves) {
+        this._pipeline.imageProcessing.colorCurves.globalHue = 10;
+        this._pipeline.imageProcessing.colorCurves.globalSaturation = 25;
+      }
+
+      // Light vignette
+      this._pipeline.imageProcessing.vignetteEnabled = true;
+      this._pipeline.imageProcessing.vignetteWeight = 0.3;
+      this._pipeline.imageProcessing.vignetteStretch = 0.5;
     }
 
-    // FXAA is efficient antialiasing
+    // Efficient antialiasing
     this._pipeline.fxaaEnabled = true;
-    this._pipeline.samples = 1;
+    this._pipeline.samples = 2; // Reduced from 4, still looks clean
   }
 
   private _setupAtmosphere(): void {
-    this._scene.fogEnabled = true;
-    this._scene.fogMode = Scene.FOGMODE_EXP2;
-    this._scene.fogDensity = 0.001;
-    this._scene.fogColor = new Color3(0.12, 0.1, 0.08);
-    this._scene.clearColor = new Color3(0.08, 0.06, 0.05).toColor4(1);
+    // No fog - clean view
+    this._scene.fogEnabled = false;
+    this._scene.clearColor = new Color3(0.7, 0.8, 0.95).toColor4(1); // Light blue sky
   }
 
   public async loadCyclist(): Promise<void> {

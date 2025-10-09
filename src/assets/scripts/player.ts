@@ -82,6 +82,8 @@ export class Player {
   private _hasJumpedInAir = false;
   private _marker: AbstractMesh;
   private _controlsEnabled = true;
+  private _spawnPosition: Vector3;
+  private readonly _deathPlaneY = -10; // Fall death threshold
 
   // Reusable vectors for performance (pre-allocated to avoid GC)
   private readonly _cameraForward = Vector3.Zero();
@@ -121,6 +123,9 @@ export class Player {
     this._heroRoot.position = startPosition;
     const scale = this._config.scaling;
     this._heroRoot.scaling.set(scale, scale, scale);
+
+    // Save spawn position for respawn
+    this._spawnPosition = startPosition.clone();
 
     this._createPhysicsCapsule(startPosition);
     this._setupAnimations(result.animationGroups);
@@ -212,10 +217,35 @@ export class Player {
 
   public update(): void {
     if (!this._physicsAggregate || !this._controlsEnabled) return;
+
+    // Check if player fell below death plane
+    this._checkDeathPlane();
+
     this._updateMovement();
     if (this._isJumping) {
       this._checkGrounded();
     }
+  }
+
+  private _checkDeathPlane(): void {
+    if (this.capsule.position.y < this._deathPlaneY) {
+      this._respawn();
+    }
+  }
+
+  private _respawn(): void {
+    // Reset position to spawn
+    this.capsule.position.copyFrom(this._spawnPosition);
+
+    // Reset velocity
+    this._physicsAggregate.body.setLinearVelocity(Vector3.Zero());
+    this._physicsAggregate.body.setAngularVelocity(Vector3.Zero());
+
+    // Reset jumping state
+    this._isJumping = false;
+
+    // Play idle animation
+    this._playIdleAnimation();
   }
 
   public showMarker(): void {
