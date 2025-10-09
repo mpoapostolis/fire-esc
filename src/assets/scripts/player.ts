@@ -31,9 +31,9 @@ interface PlayerConfig {
 const DEFAULT_PLAYER_CONFIG: PlayerConfig = {
   modelPath: "/models/",
   modelFile: "Worker.glb",
-  scaling: 0.6,
-  walkSpeed: 4,
-  sprintSpeed: 7,
+  scaling: 0.8,
+  walkSpeed: 8,
+  sprintSpeed: 10,
   jumpImpulse: 7,
   mass: 80,
   capsuleHeight: 1.7,
