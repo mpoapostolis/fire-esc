@@ -194,6 +194,13 @@ export class Game {
             targetPos.y = 3;
             this._player.capsule.position.copyFrom(targetPos);
             this._audioManager.playButtonClick();
+
+            // Exit map view and return to normal world view
+            this._camera.switchToNormalView();
+            this._player.hideMarker();
+            this._player.enableControls();
+            this._world.setFiresVisible(true);
+            this._world.setTeleportButtonsVisible(false);
           }
         }
       }

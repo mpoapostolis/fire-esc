@@ -164,7 +164,7 @@ export class World {
         this._scene
       );
       button.position.set(quest.point.x, 5, quest.point.z);
-      button.isVisible = true; // Always invisible
+      button.isVisible = false; // Always invisible
       button.isPickable = false; // Not pickable itself
 
       // Create number label plane with text texture - this is the actual button
@@ -228,7 +228,11 @@ export class World {
       numberMat.opacityTexture = dynamicTexture;
       numberMat.disableLighting = true;
       numberMat.backFaceCulling = false;
+      numberMat.disableDepthWrite = false;
       numberPlane.material = numberMat;
+
+      // Render on top of everything
+      numberPlane.renderingGroupId = 1; // Higher rendering group = renders last (on top)
 
       // Store button reference
       this._teleportButtons.set(quest.id, button);
