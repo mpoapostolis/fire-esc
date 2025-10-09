@@ -7,22 +7,23 @@ import Layout from "../layouts/Layout.astro";
 
   <dialog
     id="phone_call_modal"
-    class="modal pointer-events-auto bg-black/80 backdrop-blur-md"
+    class="modal pointer-events-auto bg-black/80"
   >
     <div
-      class="modal-box bg-transparent shadow-none w-full max-w-md text-center text-white font-sans"
+      class="modal-box cartoon-modal w-full max-w-md text-center text-white font-sans"
     >
-      <div class="flex flex-col items-center gap-4">
+      <div class="flex flex-col items-center gap-6">
         <div
-          class="w-24 h-24 bg-gray-700 rounded-full flex items-center justify-center ring-4 ring-gray-500"
+          class="w-32 h-32 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center border-4 border-purple-900"
+          style="box-shadow: 4px 4px 0px #000, 0 0 0 2px #a78bfa;"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
+            stroke-width="2.5"
             stroke="currentColor"
-            class="w-12 h-12 text-gray-400"
+            class="w-16 h-16 text-white"
           >
             <path
               stroke-linecap="round"
@@ -31,21 +32,23 @@ import Layout from "../layouts/Layout.astro";
             ></path>
           </svg>
         </div>
-        <p id="phone-caller-name" class="text-4xl font-light"></p>
-        <p class="text-gray-400">Incoming Call...</p>
+        <div>
+          <p id="phone-caller-name" class="text-4xl font-black mb-2" style="text-shadow: 3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;"></p>
+          <p class="text-lg font-bold text-green-300">INCOMING CALL!</p>
+        </div>
       </div>
-      <div class="mt-16 flex justify-center">
+      <div class="mt-12 flex justify-center">
         <button
           id="answer-call-btn"
-          class="w-20 h-20 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center phone-call-pulse"
+          class="cartoon-btn-green"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
+            stroke-width="3"
             stroke="currentColor"
-            class="w-10 h-10"
+            class="w-12 h-12"
           >
             <path
               stroke-linecap="round"
@@ -59,54 +62,28 @@ import Layout from "../layouts/Layout.astro";
   </dialog>
 
   <dialog id="dialogue_modal" class="modal pointer-events-auto">
-    <div class="modal-box elden-dialog max-w-2xl relative">
-      <!-- Corner Decorations -->
-      <div
-        class="absolute -top-3 -left-3 w-16 h-16 border-l-2 border-t-2 border-amber-600/40"
-      >
-      </div>
-      <div
-        class="absolute -top-2 -left-2 w-10 h-10 border-l border-t border-amber-400/60"
-      >
-      </div>
-      <div
-        class="absolute -bottom-3 -right-3 w-16 h-16 border-r-2 border-b-2 border-amber-600/40"
-      >
-      </div>
-      <div
-        class="absolute -bottom-2 -right-2 w-10 h-10 border-r border-b border-amber-400/60"
-      >
-      </div>
-
-      <!-- Content -->
+    <div class="modal-box cartoon-modal max-w-2xl">
       <div class="p-8">
-        <div class="flex items-center gap-3 mb-6">
-          <div class="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>
+        <div class="mb-6">
           <h3
             id="dialogue-speaker"
-            class="text-2xl font-light text-amber-200 tracking-wide elden-text uppercase"
+            class="text-4xl font-black text-yellow-300 mb-2"
+            style="text-shadow: 3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;"
           >
           </h3>
-        </div>
-
-        <div
-          class="h-px bg-gradient-to-r from-transparent via-amber-700/40 to-transparent mb-8"
-        >
+          <div class="h-2 w-24 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full" style="box-shadow: 2px 2px 0px #000;"></div>
         </div>
 
         <p
           id="dialogue-text"
-          class="text-lg text-gray-300 leading-relaxed mb-10 font-light"
+          class="text-2xl text-white leading-relaxed mb-8 font-bold"
         >
         </p>
 
         <div class="modal-action justify-end m-0">
           <form method="dialog">
-            <button class="elden-btn-large group">
-              <span
-                class="text-amber-200 tracking-widest uppercase text-sm opacity-70 group-hover:opacity-100 transition-opacity"
-                >Continue</span
-              >
+            <button class="cartoon-btn-blue">
+              <span class="font-black uppercase text-sm tracking-wider">CONTINUE</span>
             </button>
           </form>
         </div>
@@ -119,32 +96,34 @@ import Layout from "../layouts/Layout.astro";
     id="game-hud"
     class="absolute inset-0 pointer-events-none text-white font-sans select-none"
   >
-    <!-- Top Left Corner - Objective -->
-    <div class="absolute top-4 left-4 animate-fade-in-left">
-      <div class="cartoon-hud-panel">
-        <div class="text-[10px] text-yellow-300 uppercase font-black tracking-wide mb-1">
+    <!-- Center Top - Objective and Timer -->
+    <div class="absolute top-6 left-1/2 -translate-x-1/2 flex gap-8 animate-fade-in-down">
+      <!-- Objective -->
+      <div class="text-center">
+        <div class="text-xs text-yellow-300 uppercase font-black tracking-widest mb-1">
           OBJECTIVE
         </div>
         <p
           id="hud-distance"
-          class="text-3xl font-black text-white"
-          style="text-shadow: 3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;"
+          class="text-4xl font-black text-white"
+          style="text-shadow: 4px 4px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000;"
         >
           ...
         </p>
       </div>
-    </div>
 
-    <!-- Top Right Corner - Timer -->
-    <div class="absolute top-4 right-4 animate-fade-in-right">
-      <div class="cartoon-hud-panel text-right">
-        <div class="text-[10px] text-pink-300 uppercase font-black tracking-wide mb-1">
+      <!-- Divider -->
+      <div class="w-1 bg-white/30"></div>
+
+      <!-- Timer -->
+      <div class="text-center">
+        <div class="text-xs text-pink-300 uppercase font-black tracking-widest mb-1">
           TIME
         </div>
         <p
           id="hud-timer"
-          class="text-3xl font-black text-white"
-          style="text-shadow: 3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;"
+          class="text-4xl font-black text-white"
+          style="text-shadow: 4px 4px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000;"
         >
           --:--
         </p>
@@ -619,5 +598,74 @@ import Layout from "../layouts/Layout.astro";
     box-shadow:
       3px 3px 0px #000,
       0 0 0 2px #fbbf24;
+  }
+
+  /* Cartoonish Modal Styles */
+  .cartoon-modal {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border: 5px solid #475569;
+    border-radius: 20px;
+    box-shadow:
+      6px 6px 0px #000,
+      0 0 0 3px #94a3b8;
+  }
+
+  .cartoon-btn-green {
+    width: 90px;
+    height: 90px;
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    border: 5px solid #15803d;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow:
+      5px 5px 0px #000,
+      0 0 0 3px #4ade80;
+  }
+
+  .cartoon-btn-green:hover {
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+    transform: translateY(-3px);
+    box-shadow:
+      7px 7px 0px #000,
+      0 0 0 3px #4ade80;
+  }
+
+  .cartoon-btn-green:active {
+    transform: translateY(0);
+    box-shadow:
+      3px 3px 0px #000,
+      0 0 0 3px #4ade80;
+  }
+
+  .cartoon-btn-blue {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border: 4px solid #1e40af;
+    border-radius: 12px;
+    padding: 14px 36px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow:
+      4px 4px 0px #000,
+      0 0 0 2px #60a5fa;
+  }
+
+  .cartoon-btn-blue:hover {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+    transform: translateY(-2px);
+    box-shadow:
+      6px 6px 0px #000,
+      0 0 0 2px #60a5fa;
+  }
+
+  .cartoon-btn-blue:active {
+    transform: translateY(0);
+    box-shadow:
+      3px 3px 0px #000,
+      0 0 0 2px #60a5fa;
   }
 </style>
