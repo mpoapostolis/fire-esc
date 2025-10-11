@@ -14,6 +14,7 @@ import {
   StandardMaterial,
   Color3,
 } from "@babylonjs/core";
+import type { JoystickController } from "./joystick";
 
 interface PlayerConfig {
   readonly modelPath: string;
@@ -84,6 +85,8 @@ export class Player {
   private _controlsEnabled = true;
   private _spawnPosition: Vector3;
   private readonly _deathPlaneY = -10; // Fall death threshold
+  private _movementJoystick: JoystickController | null = null;
+  private _cameraJoystick: JoystickController | null = null;
 
   // Reusable vectors for performance (pre-allocated to avoid GC)
   private readonly _cameraForward = Vector3.Zero();
@@ -92,6 +95,7 @@ export class Player {
   private readonly _targetVelocity = Vector3.Zero();
   private readonly _newVelocity = Vector3.Zero();
   private readonly _tempVec = Vector3.Zero();
+  private readonly _tempVec2 = Vector3.Zero();
 
   // Movement constants
   private static readonly VELOCITY_SMOOTHING = 0.2;
@@ -256,6 +260,14 @@ export class Player {
     }
   }
 
+  public setJoysticks(
+    movementJoystick: JoystickController | null,
+    cameraJoystick: JoystickController | null
+  ): void {
+    this._movementJoystick = movementJoystick;
+    this._cameraJoystick = cameraJoystick;
+  }
+
   private _isKeyPressed(key: string): boolean {
     return this._keyInputMap.get(key) ?? false;
   }
@@ -283,6 +295,7 @@ export class Player {
   private _calculateMoveDirection(): void {
     this._moveDirection.set(0, 0, 0);
 
+    // Keyboard input
     if (this._isKeyPressed("w"))
       this._moveDirection.addInPlace(this._cameraForward);
     if (this._isKeyPressed("s"))
@@ -291,6 +304,16 @@ export class Player {
       this._moveDirection.subtractInPlace(this._cameraRight);
     if (this._isKeyPressed("d"))
       this._moveDirection.addInPlace(this._cameraRight);
+
+    // Joystick input (mobile)
+    if (this._movementJoystick?.isPressed()) {
+      const movement = this._movementJoystick.getMovement();
+      // x: left/right, y: forward/back (inverted because touch Y is inverted)
+      this._cameraForward.scaleToRef(-movement.y, this._tempVec);
+      this._cameraRight.scaleToRef(movement.x, this._tempVec2);
+      this._tempVec.addInPlace(this._tempVec2);
+      this._moveDirection.addInPlace(this._tempVec);
+    }
   }
 
   private _applyMovement(speed: number): void {
@@ -347,20 +370,56 @@ export class Player {
   }
 
   private _playRunAnimation(): void {
-    const isSprinting = this._isKeyPressed("shift");
+    // Determine speed (sprint vs walk) - for joystick, check magnitude
+    let isSprinting = this._isKeyPressed("shift");
+
+    // For joystick users: if joystick is pushed far, consider it sprinting
+    if (this._movementJoystick?.isPressed()) {
+      const movement = this._movementJoystick.getMovement();
+      const magnitude = Math.sqrt(movement.x * movement.x + movement.y * movement.y);
+      isSprinting = magnitude > 0.7;
+    }
+
     const baseAnim = isSprinting
       ? "CharacterArmature|Run"
       : "CharacterArmature|Walk";
 
-    const targetAnim =
-      (this._isKeyPressed("s") &&
-        this._animations.get("CharacterArmature|Run_Back")) ||
-      (this._isKeyPressed("w") && this._animations.get(baseAnim)) ||
-      (this._isKeyPressed("a") &&
-        this._animations.get("CharacterArmature|Run_Right")) ||
-      (this._isKeyPressed("d") &&
-        this._animations.get("CharacterArmature|Run_Left")) ||
-      this._animations.get(baseAnim);
+    // Determine direction based on movement vector relative to camera
+    // Normalize the movement direction (already done in applyMovement but let's be safe)
+    const moveLen = this._moveDirection.length();
+    if (moveLen < 0.001) {
+      this._playAnimation(this._animations.get(baseAnim)!);
+      return;
+    }
+
+    // Calculate dot products to determine direction
+    const forwardDot = Vector3.Dot(this._moveDirection, this._cameraForward) / moveLen;
+    const rightDot = Vector3.Dot(this._moveDirection, this._cameraRight) / moveLen;
+
+    // Determine which animation to play based on direction
+    let targetAnim: AnimationGroup | undefined;
+
+    // Backward
+    if (forwardDot < -0.5) {
+      targetAnim = this._animations.get("CharacterArmature|Run_Back");
+    }
+    // Forward
+    else if (forwardDot > 0.5) {
+      targetAnim = this._animations.get(baseAnim);
+    }
+    // Strafe right
+    else if (rightDot > 0.5) {
+      targetAnim = this._animations.get("CharacterArmature|Run_Left");
+    }
+    // Strafe left
+    else if (rightDot < -0.5) {
+      targetAnim = this._animations.get("CharacterArmature|Run_Right");
+    }
+
+    // Fallback to base animation
+    if (!targetAnim) {
+      targetAnim = this._animations.get(baseAnim);
+    }
 
     if (targetAnim) this._playAnimation(targetAnim);
   }

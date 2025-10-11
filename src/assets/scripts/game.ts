@@ -17,7 +17,6 @@ import { AudioManager } from "./managers/AudioManager";
 import { GameCamera } from "./camera";
 import {
   createJoystick,
-  createCameraJoystick,
   type JoystickController,
 } from "./joystick";
 
@@ -55,7 +54,6 @@ export class Game {
   private _player: Player;
   private _camera: GameCamera;
   private _movementJoystick: JoystickController | null = null;
-  private _cameraJoystick: JoystickController | null = null;
   private _pendingQuest: Quest | null = null;
   private _gameState: GameState = "AWAITING_QUEST";
   private _isInCutscene = false;
@@ -186,6 +184,10 @@ export class Game {
       onPhoneModalClose: this._onPhoneModalClosed,
       onAnswerCall: this._onAnswerCall,
     });
+
+    // Initialize mobile joystick for character movement
+    this._movementJoystick = createJoystick();
+    this._player.setJoysticks(this._movementJoystick, null);
 
     // Setup click teleport for map view
     this._scene.onPointerDown = (evt, pickInfo) => {
