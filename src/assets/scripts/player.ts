@@ -33,7 +33,7 @@ const DEFAULT_PLAYER_CONFIG: PlayerConfig = {
   modelFile: "Worker.glb",
   scaling: 0.8,
   walkSpeed: 8,
-  sprintSpeed: 10,
+  sprintSpeed: 13,
   jumpImpulse: 7,
   mass: 80,
   capsuleHeight: 1.7,
