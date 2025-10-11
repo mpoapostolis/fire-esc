@@ -60,7 +60,7 @@ const MODEL_CONFIGS: Record<string, ModelConfig> = {
 
 const DEFAULT_WORLD_CONFIG: WorldConfig = {
   modelPath: "/models/",
-  cityModel: "city-white.glb",
+  cityModel: "xx.glb",
   cyclistModel: "cyclist.glb",
   skyboxUrl: "/skybox/",
   lightIntensity: 0.7,
@@ -95,7 +95,7 @@ export class World {
     this._createLight();
     this._createSkybox();
     await this._createEnvironment();
-    this._setupAtmosphere();
+    // this._setupAtmosphere();
     this._isWorldLoaded = true;
   }
 
@@ -394,16 +394,16 @@ export class World {
     // Indie game color grading - optimized
     this._pipeline.imageProcessingEnabled = true;
     if (this._pipeline.imageProcessing) {
-      this._pipeline.imageProcessing.contrast = 1.15;
-      this._pipeline.imageProcessing.exposure = 1.25;
-      this._pipeline.imageProcessing.toneMappingEnabled = true;
-      this._pipeline.imageProcessing.toneMappingType = 1; // ACES
+      // this._pipeline.imageProcessing.contrast = 1.15;
+      // this._pipeline.imageProcessing.exposure = 1.25;
+      // this._pipeline.imageProcessing.toneMappingEnabled = true;
+      // this._pipeline.imageProcessing.toneMappingType = 1; // ACES
 
       // Warm colors
       this._pipeline.imageProcessing.colorCurvesEnabled = true;
       if (this._pipeline.imageProcessing.colorCurves) {
-        this._pipeline.imageProcessing.colorCurves.globalHue = 10;
-        this._pipeline.imageProcessing.colorCurves.globalSaturation = 25;
+        // this._pipeline.imageProcessing.colorCurves.globalHue = 10;
+        // this._pipeline.imageProcessing.colorCurves.globalSaturation = 25;
       }
 
       // Light vignette
@@ -432,7 +432,7 @@ export class World {
     );
 
     const cyclistRoot = new Mesh("cyclistRoot", this._scene);
-    cyclistRoot.position.set(5, 0.5, 7);
+    cyclistRoot.position.set(5, 2, 7);
 
     for (const mesh of result.meshes) {
       if (mesh.parent === null) mesh.parent = cyclistRoot;

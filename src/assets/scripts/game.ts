@@ -15,6 +15,11 @@ import type { Quest } from "./quests/quests";
 import { UIManager } from "./managers/UIManager";
 import { AudioManager } from "./managers/AudioManager";
 import { GameCamera } from "./camera";
+import {
+  createJoystick,
+  createCameraJoystick,
+  type JoystickController,
+} from "./joystick";
 
 type GameState =
   | "AWAITING_QUEST"
@@ -49,6 +54,8 @@ export class Game {
   private _world: World;
   private _player: Player;
   private _camera: GameCamera;
+  private _movementJoystick: JoystickController | null = null;
+  private _cameraJoystick: JoystickController | null = null;
   private _pendingQuest: Quest | null = null;
   private _gameState: GameState = "AWAITING_QUEST";
   private _isInCutscene = false;
@@ -185,9 +192,12 @@ export class Game {
       if (this._camera.isMapView && pickInfo.hit && pickInfo.pickedMesh) {
         // Check if clicked on a teleport button
         const meshName = pickInfo.pickedMesh.name;
-        if (meshName.startsWith('teleportButton-') || meshName.startsWith('numberLabel-')) {
+        if (
+          meshName.startsWith("teleportButton-") ||
+          meshName.startsWith("numberLabel-")
+        ) {
           // Extract quest ID from mesh name
-          const questId = parseInt(meshName.split('-')[1]);
+          const questId = parseInt(meshName.split("-")[1]);
           const firePos = this._world.getFirePointPosition(questId);
           if (firePos) {
             const targetPos = firePos.clone();
@@ -334,13 +344,18 @@ export class Game {
     // Update cache only when quest changes
     if (this._cachedCurrentQuest?.id !== currentQuest.id) {
       this._cachedCurrentQuest = currentQuest;
-      this._cachedObjectivePos = this._world.getFirePointPosition(currentQuest.id);
+      this._cachedObjectivePos = this._world.getFirePointPosition(
+        currentQuest.id
+      );
     }
 
     if (!this._cachedObjectivePos) return;
 
     const playerPos = this._player.capsule.position;
-    const distanceSquared = Vector3.DistanceSquared(playerPos, this._cachedObjectivePos);
+    const distanceSquared = Vector3.DistanceSquared(
+      playerPos,
+      this._cachedObjectivePos
+    );
 
     // Update fire sound volume based on distance (use squared distance to avoid sqrt)
     const distance = Math.sqrt(distanceSquared);

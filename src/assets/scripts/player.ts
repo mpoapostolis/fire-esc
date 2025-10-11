@@ -32,8 +32,8 @@ const DEFAULT_PLAYER_CONFIG: PlayerConfig = {
   modelPath: "/models/",
   modelFile: "Worker.glb",
   scaling: 0.8,
-  walkSpeed: 8,
-  sprintSpeed: 10,
+  walkSpeed: 5,
+  sprintSpeed: 12,
   jumpImpulse: 7,
   mass: 80,
   capsuleHeight: 1.7,
@@ -95,7 +95,7 @@ export class Player {
 
   // Movement constants
   private static readonly VELOCITY_SMOOTHING = 0.2;
-  private static readonly DECELERATION = 0.8;
+  private static readonly DECELERATION = 0.85;
   private static readonly GROUND_CHECK_EPSILON = 0.1;
 
   constructor(
