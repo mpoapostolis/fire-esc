@@ -114,7 +114,11 @@ export class Player {
   }
 
   public async load(
-    startPosition: Vector3 = new Vector3(0, 5, 0)
+    startPosition: Vector3 = new Vector3(
+      -44.742218017578125,
+      1.8362194299697876,
+      -28.74200439453125
+    )
   ): Promise<AbstractMesh[]> {
     const result = await SceneLoader.ImportMeshAsync(
       "",
@@ -192,6 +196,9 @@ export class Player {
           this._keyInputMap.set(key, true);
           if (key === " " && !this._isJumping) {
             this._jump();
+          }
+          if (key === "p") {
+            console.log(this.capsule.position);
           }
           break;
 
@@ -376,7 +383,9 @@ export class Player {
     // For joystick users: if joystick is pushed far, consider it sprinting
     if (this._movementJoystick?.isPressed()) {
       const movement = this._movementJoystick.getMovement();
-      const magnitude = Math.sqrt(movement.x * movement.x + movement.y * movement.y);
+      const magnitude = Math.sqrt(
+        movement.x * movement.x + movement.y * movement.y
+      );
       isSprinting = magnitude > 0.7;
     }
 
@@ -393,8 +402,10 @@ export class Player {
     }
 
     // Calculate dot products to determine direction
-    const forwardDot = Vector3.Dot(this._moveDirection, this._cameraForward) / moveLen;
-    const rightDot = Vector3.Dot(this._moveDirection, this._cameraRight) / moveLen;
+    const forwardDot =
+      Vector3.Dot(this._moveDirection, this._cameraForward) / moveLen;
+    const rightDot =
+      Vector3.Dot(this._moveDirection, this._cameraRight) / moveLen;
 
     // Determine which animation to play based on direction
     let targetAnim: AnimationGroup | undefined;
