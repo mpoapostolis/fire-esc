@@ -73,15 +73,39 @@ export class GameCamera {
     this._savedAlpha = this.camera.alpha;
     this._savedBeta = this.camera.beta;
     this._savedRadius = this.camera.radius;
-    this.camera.position.set(50, 40, 50);
+
+    // Calculate responsive camera distance based on device width
+    const screenWidth = window.innerWidth;
+    let radius: number;
+    let lowerLimit: number;
+    let upperLimit: number;
+
+    if (screenWidth < 768) {
+      // Mobile: Need to zoom out more to see whole city
+      radius = 120;
+      lowerLimit = 80;
+      upperLimit = 200;
+    } else if (screenWidth < 1024) {
+      // Tablet
+      radius = 100;
+      lowerLimit = 70;
+      upperLimit = 150;
+    } else {
+      // Desktop: Can be closer
+      radius = 80;
+      lowerLimit = 50;
+      upperLimit = 120;
+    }
+
+    this.camera.position.set(radius, radius * 0.75, radius);
     this.camera.detachControl();
 
     // Switch to 45-degree angled city view with rotation enabled
     this.camera.alpha = -Math.PI / 2; // Face north
     this.camera.beta = Math.PI / 4; // 45 degrees angle
-    this.camera.radius = 80; // Closer to see details
-    this.camera.lowerRadiusLimit = 50;
-    this.camera.upperRadiusLimit = 120;
+    this.camera.radius = radius;
+    this.camera.lowerRadiusLimit = lowerLimit;
+    this.camera.upperRadiusLimit = upperLimit;
 
     // Set fixed target position at center of city (0, 0, 0)
     this.camera.target = new Vector3(0, 0, 0);
