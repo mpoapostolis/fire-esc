@@ -6,7 +6,7 @@ export interface Quest {
   point: { x: number; z: number };
   riddle: string;
   successMessage: string;
-  changeCameraTarget?: string;
+  changeCameraTarget?: "cyclist" | { x: number; y: number; z: number };
   status: "locked" | "active" | "completed";
   trigger?: "phonecall" | "direct";
   caller?: string;
@@ -22,15 +22,19 @@ export const quests: Quest[] = [
     successMessage:
       "Τα πάρκα της πόλης θα πρέπει να είναι καθαρισμένα από πεσμένα κούτσουρα, κλαδιά και ξερά φύλλα! Ευτυχώς, έσβησες άμεσα την πρώτη φωτιά!",
     status: "locked",
-    changeCameraTarget: "cyclist",
-    trigger: "phonecall",
-    caller: "Βαθιά Φωνή",
+    trigger: "direct",
+    changeCameraTarget: {
+      x: -36.5,
+      y: 13,
+      z: 0,
+    },
+    caller: "112",
   },
   {
     id: 2,
     title: "The Red Herring",
     point: { x: 17.750883102416992, z: -38.93326950073242 },
-
+    changeCameraTarget: "cyclist",
     riddle:
       "Υπάρχουν πολλά κόκκινα που κινούνται παντού, αλλά εσύ ψάχνεις αυτό που βρίσκεται πιο ανατολικά από τα υπόλοιπα.",
     successMessage:
@@ -53,7 +57,11 @@ export const quests: Quest[] = [
     id: 4,
     title: "Unlucky Number",
     point: { x: -7.04922342300415, z: 46.925575256347656 },
-
+    changeCameraTarget: {
+      x: -36.5,
+      y: 13,
+      z: 0,
+    },
     riddle:
       "Μην ποντάρεις ποτέ στο νούμερο 15! Θα φέρει την καταστροφή στην πόλη!",
     successMessage:

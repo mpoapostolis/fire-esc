@@ -163,6 +163,12 @@ export class AudioManager {
     }
   }
 
+  public stopFireSound(): void {
+    if (this._fireVolume) {
+      this._fireVolume.volume.value = -60; // Silent
+    }
+  }
+
   public playRingtone = (): void => {
     if (!this._audioInitialized) return;
 

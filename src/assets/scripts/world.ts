@@ -91,6 +91,9 @@ export class World {
 
   public async load(): Promise<void> {
     if (this._isWorldLoaded) return;
+    this._scene.onPointerDown = (evt, pickInfo) => {
+      console.log(pickInfo);
+    };
 
     this._createLight();
     this._createSkybox();
@@ -136,8 +139,9 @@ export class World {
   }
 
   public hideAllFires(): void {
-    // Dispose in reverse order for better performance
+    // Stop and dispose in reverse order for better performance
     for (let i = this._fireParticleSystems.length - 1; i >= 0; i--) {
+      this._fireParticleSystems[i].stop(); // STOP IMMEDIATELY
       this._fireParticleSystems[i].dispose();
     }
     this._fireParticleSystems.length = 0;
@@ -417,12 +421,6 @@ export class World {
     this._pipeline.samples = 2; // Reduced from 4, still looks clean
   }
 
-  private _setupAtmosphere(): void {
-    // No fog - clean view
-    this._scene.fogEnabled = false;
-    this._scene.clearColor = new Color3(0.7, 0.8, 0.95).toColor4(1); // Light blue sky
-  }
-
   public async loadCyclist(): Promise<void> {
     const result = await SceneLoader.ImportMeshAsync(
       "",
@@ -432,7 +430,7 @@ export class World {
     );
 
     const cyclistRoot = new Mesh("cyclistRoot", this._scene);
-    cyclistRoot.position.set(5, 2, 7);
+    cyclistRoot.position.set(5, 1.5, 7);
 
     for (const mesh of result.meshes) {
       if (mesh.parent === null) mesh.parent = cyclistRoot;
