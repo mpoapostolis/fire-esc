@@ -516,7 +516,11 @@ export class Game {
   }
 
   private _onQuestAdvanced(currentQuest: Quest): void {
-    // Show the new fire (previous fire already hidden on completion)
+    this._camera.switchToMapView();
+    this._player.showMarker();
+    this._player.disableControls();
+    this._world.setFiresVisible(false);
+    this._world.setTeleportButtonsVisible(true); // Show the new fire (previous fire already hidden on completion)
     this._world.showFireAtPoint(currentQuest.id);
   }
 
