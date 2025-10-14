@@ -205,9 +205,11 @@ export class Game {
         ) {
           // Extract quest ID from mesh name
           const questId = parseInt(meshName.split("-")[1]);
-          const firePos = this._world.getFirePointPosition(questId);
-          if (firePos) {
-            const targetPos = firePos.clone();
+          const quests = this._questManager.getAllQuests();
+          const { spawn_point } = quests.find((q) => q.id === questId) ?? {};
+          if (spawn_point) {
+            const pos = new Vector3(spawn_point?.x, 5, spawn_point?.z);
+            const targetPos = pos.clone();
             targetPos.y = 3;
             this._player.capsule.position.copyFrom(targetPos);
             this._audioManager.playButtonClick();

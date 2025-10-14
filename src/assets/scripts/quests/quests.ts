@@ -5,6 +5,7 @@ export interface Quest {
   id: number;
   title: string;
   point: { x: number; z: number };
+  spawn_point: { x: number; z: number };
   riddle: string;
   successMessage: string;
   changeCameraTarget?: string;
@@ -17,7 +18,11 @@ export const quests: Quest[] = [
   {
     id: 1,
     title: "The First Spark",
-    point: { x: 3.093818426132202, z: 7.950387954711914 },
+    point: { x: 2.5884740352630615, z: 6.506937026977539 },
+    spawn_point: {
+      x: -3.9238533973693848,
+      z: -13.887053489685059,
+    },
     riddle:
       "Το βράδυ ανάψαμε φωτιά\nΚαι τραγουδούσαμε γύρω τριγύρω:\nΦωτιά ωραία φωτιά μη λυπηθείς τα κούτσουρα\nΦωτιά ωραία φωτιά μη φτάσεις ως τη στάχτη\nΦωτιά ωραία φωτιά καίγε μας\nλέγε μας τη ζωή.",
     successMessage:
@@ -29,7 +34,8 @@ export const quests: Quest[] = [
   {
     id: 2,
     title: "The Red Herring",
-    point: { x: 17.750883102416992, z: -38.93326950073242 },
+    point: { x: 17.186840057373047, z: -39.10923385620117 },
+    spawn_point: { x: 49.48175811767578, z: -40.56913375854492 },
     changeCameraTarget: "cyclist",
     riddle:
       "Υπάρχουν πολλά κόκκινα που κινούνται παντού, αλλά εσύ ψάχνεις αυτό που βρίσκεται πιο ανατολικά από τα υπόλοιπα.",
@@ -41,7 +47,8 @@ export const quests: Quest[] = [
   {
     id: 3,
     title: "A Burning Problem",
-    point: { x: -15, z: -12 },
+    spawn_point: { x: -44.017337799072266, z: 37.83137512207031 },
+    point: { x: -49.462501525878906, z: 17.996505737304688 },
     riddle:
       "Κάνει ζημιά στην υγεία του ανθρώπου και όχι μόνο. Αν το πετάξει κάποιος εκεί μέσα, μπορεί να κάψει ολόκληρη την πόλη!",
     successMessage:
@@ -52,8 +59,9 @@ export const quests: Quest[] = [
   {
     id: 4,
     title: "Unlucky Number",
-    point: { x: -7.04922342300415, z: 46.925575256347656 },
+    point: { x: 13.289116859436035, z: 32.81192398071289 },
     changeCameraTarget: "billboard",
+    spawn_point: { x: 34.50505447387695, z: 21.381330490112305 },
     riddle:
       "Μην ποντάρεις ποτέ στο νούμερο 15! Θα φέρει την καταστροφή στην πόλη!",
     successMessage:
@@ -64,7 +72,8 @@ export const quests: Quest[] = [
   {
     id: 5,
     title: "Race Against Time",
-    point: { x: -8, z: 8 },
+    spawn_point: { x: 25.51080894470215, z: -8.761184692382812 },
+    point: { x: 3.4120869636535645, z: -27.783315658569336 },
     riddle:
       "Η ώρα πήγε 5… Μήπως άργησες να προλάβεις την τελευταία εστία φωτιάς; Τρέξε για να δραπετεύσεις από τη φωτιά!",
     successMessage:

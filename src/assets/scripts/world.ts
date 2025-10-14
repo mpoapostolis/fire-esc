@@ -167,7 +167,7 @@ export class World {
         { size: 0.1 },
         this._scene
       );
-      button.position.set(quest.point.x, 5, quest.point.z);
+      button.position.set(quest.spawn_point.x, 15, quest.spawn_point.z);
       button.isVisible = false; // Always invisible
       button.isPickable = false; // Not pickable itself
 
@@ -430,7 +430,8 @@ export class World {
     );
 
     const cyclistRoot = new Mesh("cyclistRoot", this._scene);
-    cyclistRoot.position.set(5, 1.5, 7);
+    cyclistRoot.scaling.set(1.5, 1.5, 1.5);
+    cyclistRoot.position.set(-6.6, 1.5, -17.5);
 
     for (const mesh of result.meshes) {
       if (mesh.parent === null) mesh.parent = cyclistRoot;
@@ -455,7 +456,7 @@ export class World {
     if (!this._cyclist) return;
 
     const startPosition = this._cyclist.position.clone();
-    const direction = targetPosition.subtract(startPosition);
+    startPosition.y = 2;
 
     this._cyclist.lookAt(targetPosition);
 

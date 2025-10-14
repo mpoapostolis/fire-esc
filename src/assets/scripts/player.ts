@@ -198,7 +198,10 @@ export class Player {
             this._jump();
           }
           if (key === "p") {
-            console.log(this.capsule.position);
+            console.log({
+              x: this.capsule.position._x,
+              z: this.capsule.position._z,
+            });
           }
           break;
 
