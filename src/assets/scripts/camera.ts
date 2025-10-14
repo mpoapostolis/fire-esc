@@ -97,8 +97,8 @@ export class GameCamera {
       upperLimit = 120;
     }
 
-    this.camera.position.set(radius, radius * 0.75, radius);
-    this.camera.detachControl();
+    this.camera.position.set(-radius, radius, -radius);
+    // this.camera.detachControl();
 
     // Switch to 45-degree angled city view with rotation enabled
     this.camera.alpha = -Math.PI / 2; // Face north

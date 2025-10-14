@@ -102,71 +102,7 @@ export class AudioManager {
     this._impactSynth.volume.value = -12;
   }
 
-  private _startBackgroundMusic(): void {
-    if (!this._leadSynth || !this._bassSynth || !this._padSynth) return;
-
-    // Catchy indie game melody - more memorable and upbeat
-    const melody = [
-      "E5", null, "G5", null, "A5", null, "G5", "E5",
-      null, "D5", null, "E5", null, null, null, null,
-      "E5", null, "G5", null, "B5", null, "A5", "G5",
-      null, "E5", null, "G5", null, null, null, null,
-      "C5", null, "E5", null, "G5", null, "E5", "C5",
-      null, "D5", null, "E5", null, null, null, null,
-      "G5", null, "A5", null, "B5", null, "C6", "B5",
-      "A5", null, "G5", null, "E5", null, null, null
-    ];
-
-    // Groovy bass line with movement
-    const bassLine = [
-      "C2", null, null, "C3", null, "C2", null, null,
-      "C2", null, null, "G2", null, null, null, null,
-      "A1", null, null, "A2", null, "A1", null, null,
-      "A1", null, null, "E2", null, null, null, null,
-      "F2", null, null, "F2", null, "F2", null, null,
-      "G2", null, null, "G2", null, null, null, null,
-      "C2", null, null, "C3", null, "C2", null, "G2",
-      null, null, "C2", null, null, null, null, null
-    ];
-
-    // Rich indie chords
-    const chords = [
-      ["C3", "E3", "G3", "B3"],
-      ["A2", "C3", "E3", "A3"],
-      ["F2", "A2", "C3", "F3"],
-      ["G2", "B2", "D3", "G3"]
-    ];
-
-    let melodyIndex = 0;
-    let bassIndex = 0;
-    let chordIndex = 0;
-
-    this._backgroundMusicLoop = new Tone.Loop((time) => {
-      // Catchy melody with character
-      const note = melody[melodyIndex];
-      if (note) {
-        this._leadSynth?.triggerAttackRelease(note, "8n", time);
-      }
-      melodyIndex = (melodyIndex + 1) % melody.length;
-
-      // Groovy bass
-      const bassNote = bassLine[bassIndex];
-      if (bassNote) {
-        this._bassSynth?.triggerAttackRelease(bassNote, "8n", time);
-      }
-      bassIndex = (bassIndex + 1) % bassLine.length;
-
-      // Lush pads for atmosphere
-      if (melodyIndex % 16 === 0) {
-        this._padSynth?.triggerAttackRelease(chords[chordIndex], "2m", time);
-        chordIndex = (chordIndex + 1) % chords.length;
-      }
-    }, "16n");
-
-    this._backgroundMusicLoop.start(0);
-    Tone.Transport.bpm.value = 95; // Upbeat indie tempo
-    Tone.Transport.start();
-  }
+  private _startBackgroundMusic(): void {}
 
   public playQuestCompleteSound = (): void => {
     if (!this._audioInitialized || !this._fxSynth || !this._impactSynth) return;
