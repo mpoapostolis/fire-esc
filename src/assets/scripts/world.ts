@@ -91,9 +91,9 @@ export class World {
 
   public async load(): Promise<void> {
     if (this._isWorldLoaded) return;
-    this._scene.onPointerDown = (evt, pickInfo) => {
-      console.log(pickInfo);
-    };
+    // this._scene.onPointerDown = (evt, pickInfo) => {
+    //   console.log(pickInfo);
+    // };
 
     this._createLight();
     this._createSkybox();
@@ -373,7 +373,7 @@ export class World {
     mesh.material?.freeze();
     mesh.freezeWorldMatrix();
     mesh.doNotSyncBoundingInfo = true;
-    mesh.isPickable = false;
+    // mesh.isPickable = false;
     mesh.alwaysSelectAsActiveMesh = true;
   }
 

@@ -14,7 +14,7 @@ import { QuestManager } from "./managers/QuestManager";
 import type { Quest } from "./quests/quests";
 import { UIManager } from "./managers/UIManager";
 import { AudioManager } from "./managers/AudioManager";
-import { GameCamera } from "./camera";
+import { GameCamera, type idsOfObjects } from "./camera";
 import { createJoystick, type JoystickController } from "./joystick";
 
 type GameState =
@@ -162,9 +162,10 @@ export class Game {
   private _startRenderLoop(): void {
     this._engine.runRenderLoop(() => {
       this._player.update();
+      const view = this._camera.getView;
 
       // Follow player in normal view, but FIXED in map view or cutscene
-      if (!this._isInCutscene && !this._camera.isMapView) {
+      if (!this._isInCutscene && view === "word_view") {
         this._camera.camera.target.copyFrom(this._player.capsule.position);
       }
 
@@ -190,33 +191,37 @@ export class Game {
     this._player.setJoysticks(this._movementJoystick, null);
 
     // Setup click teleport for map view
-    // this._scene.onPointerDown = (evt, pickInfo) => {
-    //   if (this._camera.isMapView && pickInfo.hit && pickInfo.pickedMesh) {
-    //     // Check if clicked on a teleport button
-    //     const meshName = pickInfo.pickedMesh.name;
-    //     if (
-    //       meshName.startsWith("teleportButton-") ||
-    //       meshName.startsWith("numberLabel-")
-    //     ) {
-    //       // Extract quest ID from mesh name
-    //       const questId = parseInt(meshName.split("-")[1]);
-    //       const firePos = this._world.getFirePointPosition(questId);
-    //       if (firePos) {
-    //         const targetPos = firePos.clone();
-    //         targetPos.y = 3;
-    //         this._player.capsule.position.copyFrom(targetPos);
-    //         this._audioManager.playButtonClick();
+    this._scene.onPointerDown = (evt, pickInfo) => {
+      if (
+        this._camera.getView === "map_view" &&
+        pickInfo.hit &&
+        pickInfo.pickedMesh
+      ) {
+        // Check if clicked on a teleport button
+        const meshName = pickInfo.pickedMesh.name;
+        if (
+          meshName.startsWith("teleportButton-") ||
+          meshName.startsWith("numberLabel-")
+        ) {
+          // Extract quest ID from mesh name
+          const questId = parseInt(meshName.split("-")[1]);
+          const firePos = this._world.getFirePointPosition(questId);
+          if (firePos) {
+            const targetPos = firePos.clone();
+            targetPos.y = 3;
+            this._player.capsule.position.copyFrom(targetPos);
+            this._audioManager.playButtonClick();
 
-    //         // Exit map view and return to normal world view
-    //         this._camera.switchToNormalView();
-    //         this._player.hideMarker();
-    //         this._player.enableControls();
-    //         this._world.setFiresVisible(true);
-    //         this._world.setTeleportButtonsVisible(false);
-    //       }
-    //     }
-    //   }
-    // };
+            // Exit map view and return to normal world view
+            this._camera.switchToNormalView();
+            this._player.hideMarker();
+            this._player.enableControls();
+            this._world.setFiresVisible(true);
+            this._world.setTeleportButtonsVisible(false);
+          }
+        }
+      }
+    };
   }
 
   private _initializeQuests(): void {
@@ -268,26 +273,15 @@ export class Game {
       });
     }
     // If quest starts with camera position target
-    else if (
-      quest.changeCameraTarget &&
-      typeof quest.changeCameraTarget === "object" &&
-      quest.trigger !== "phonecall"
-    ) {
-      const targetPos = new Vector3(
-        quest.changeCameraTarget.x,
-        quest.changeCameraTarget.y,
-        quest.changeCameraTarget.z
-      );
-
+    else if (quest.changeCameraTarget && quest.trigger !== "phonecall") {
       this._isInCutscene = true;
       this._player.disableControls();
+      this._camera.switchToObjectView(quest.changeCameraTarget as idsOfObjects);
 
-      // Switch to map view and position camera at changeCameraTarget
-      this._camera.switchToTopDownView();
-      this._camera.camera.position.copyFrom(targetPos);
-      this._camera.camera.setTarget(targetPos);
+      // Disable camera controls during cutscene
+      this._camera.camera.detachControl();
 
-      // After 3 seconds, return camera and show riddle
+      // // After 3 seconds, return camera and show riddle
       setTimeout(() => {
         this._isInCutscene = false;
         this._camera.switchToNormalView();
@@ -331,30 +325,20 @@ export class Game {
       });
     }
     // If quest has camera position target
-    else if (
-      currentQuest.changeCameraTarget &&
-      typeof currentQuest.changeCameraTarget === "object"
-    ) {
-      const targetPos = new Vector3(
-        currentQuest.changeCameraTarget.x,
-        currentQuest.changeCameraTarget.y,
-        currentQuest.changeCameraTarget.z
-      );
-
+    else if (currentQuest.changeCameraTarget) {
+      const id = currentQuest.changeCameraTarget as idsOfObjects;
       this._isInCutscene = true;
       this._player.disableControls();
 
-      // Switch to map view and position camera at changeCameraTarget
-      this._camera.switchToTopDownView();
-      this._camera.camera.position.copyFrom(targetPos);
-      this._camera.camera.setTarget(
-        new Vector3(currentQuest.point.x, 0, currentQuest.point.z)
-      );
+      // Switch to map view and position camera MUCH closer
+      this._camera.switchToObjectView(id);
+      this._camera.camera.detachControl();
 
       // After 3 seconds, return camera and show riddle
       setTimeout(() => {
         this._isInCutscene = false;
         this._camera.switchToNormalView();
+        this._camera.camera.attachControl(this._canvas, true);
         this._player.enableControls();
         this._uiManager.showInstructionModal(
           currentQuest.caller ?? "Current Objective",
@@ -371,7 +355,7 @@ export class Game {
   };
 
   private _onMapPressed = (): void => {
-    if (this._camera.isMapView) {
+    if (this._camera.getView === "map_view") {
       // Exit map view
       this._camera.switchToNormalView();
       this._player.hideMarker();
@@ -380,7 +364,7 @@ export class Game {
       this._world.setTeleportButtonsVisible(false);
     } else {
       // Enter map view
-      this._camera.switchToTopDownView();
+      this._camera.switchToMapView();
       this._player.showMarker();
       this._player.disableControls();
       this._world.setFiresVisible(false);

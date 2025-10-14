@@ -1,4 +1,5 @@
 import { Vector3 } from "@babylonjs/core";
+import type { idsOfObjects } from "../camera";
 
 export interface Quest {
   id: number;
@@ -6,7 +7,7 @@ export interface Quest {
   point: { x: number; z: number };
   riddle: string;
   successMessage: string;
-  changeCameraTarget?: "cyclist" | { x: number; y: number; z: number };
+  changeCameraTarget?: string;
   status: "locked" | "active" | "completed";
   trigger?: "phonecall" | "direct";
   caller?: string;
@@ -22,12 +23,7 @@ export const quests: Quest[] = [
     successMessage:
       "Τα πάρκα της πόλης θα πρέπει να είναι καθαρισμένα από πεσμένα κούτσουρα, κλαδιά και ξερά φύλλα! Ευτυχώς, έσβησες άμεσα την πρώτη φωτιά!",
     status: "locked",
-    trigger: "direct",
-    changeCameraTarget: {
-      x: -36.5,
-      y: 13,
-      z: 0,
-    },
+    trigger: "phonecall",
     caller: "112",
   },
   {
@@ -57,11 +53,7 @@ export const quests: Quest[] = [
     id: 4,
     title: "Unlucky Number",
     point: { x: -7.04922342300415, z: 46.925575256347656 },
-    changeCameraTarget: {
-      x: -36.5,
-      y: 13,
-      z: 0,
-    },
+    changeCameraTarget: "billboard",
     riddle:
       "Μην ποντάρεις ποτέ στο νούμερο 15! Θα φέρει την καταστροφή στην πόλη!",
     successMessage:

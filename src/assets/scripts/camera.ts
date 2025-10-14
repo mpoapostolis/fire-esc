@@ -1,4 +1,4 @@
-import { Scene, Vector3, ArcRotateCamera } from "@babylonjs/core";
+import { Scene, Vector3, ArcRotateCamera, type Vector } from "@babylonjs/core";
 
 interface CameraConfig {
   readonly alpha: number;
@@ -18,12 +18,18 @@ const DEFAULT_CAMERA_CONFIG: CameraConfig = {
   sensitivity: 2000,
 };
 
+export type idsOfObjects = "billboard";
+const idToV3: Record<idsOfObjects, Vector3> = {
+  billboard: new Vector3(-35.5, 13, 3),
+};
+
+export type View = "word_view" | "map_view" | "object_view";
 export class GameCamera {
   public readonly camera: ArcRotateCamera;
   private _savedAlpha: number = 0;
   private _savedBeta: number = 0;
   private _savedRadius: number = 0;
-  private _isMapView: boolean = false;
+  private view: View = "word_view";
 
   // Animation settings for smooth transitions
   private static readonly TRANSITION_SPEED = 0.1;
@@ -66,8 +72,8 @@ export class GameCamera {
     return camera;
   }
 
-  public switchToTopDownView(): void {
-    if (this._isMapView) return;
+  public switchToMapView(): void {
+    if (this.view === "map_view") return;
 
     // Save current camera position
     this._savedAlpha = this.camera.alpha;
@@ -113,11 +119,29 @@ export class GameCamera {
     // Keep controls attached for rotation
     // Camera stays attached so user can rotate and zoom
 
-    this._isMapView = true;
+    this.view = "map_view";
+  }
+
+  public switchToObjectView(id: idsOfObjects): void {
+    if (this.view === "object_view") return;
+    // Save current camera state for smooth return
+    this._savedAlpha = this.camera.alpha;
+    this._savedBeta = this.camera.beta;
+    this._savedRadius = this.camera.radius;
+
+    this.camera.alpha = -Math.PI / 2; // Always view from the 'north'
+    this.camera.beta = Math.PI; // 60 degrees from vertical
+    this.camera.upperRadiusLimit = 13;
+    this.camera.lowerRadiusLimit = 13;
+
+    const v3 = idToV3[id];
+    this.camera.target.copyFrom(v3);
+
+    this.view = "object_view";
   }
 
   public switchToNormalView(): void {
-    if (!this._isMapView) return;
+    if (this.view === "word_view") return;
 
     // Restore camera position
     this.camera.alpha = this._savedAlpha;
@@ -130,10 +154,10 @@ export class GameCamera {
     const canvas = this._scene.getEngine().getRenderingCanvas();
     if (canvas) this.camera.attachControl(canvas, true);
 
-    this._isMapView = false;
+    this.view = "word_view";
   }
 
-  public get isMapView(): boolean {
-    return this._isMapView;
+  public get getView(): View {
+    return this.view;
   }
 }
