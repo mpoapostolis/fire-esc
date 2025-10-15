@@ -167,7 +167,7 @@ export class World {
         { size: 0.1 },
         this._scene
       );
-      button.position.set(quest.spawn_point.x, 15, quest.spawn_point.z);
+      button.position.set(quest.spawn_point.x, 2, quest.spawn_point.z);
       button.isVisible = false; // Always invisible
       button.isPickable = false; // Not pickable itself
 
@@ -198,19 +198,8 @@ export class World {
       ctx.clearRect(0, 0, textureSize, textureSize);
 
       // Draw thick black outline (outer)
-      ctx.fillStyle = "#000000";
-      ctx.beginPath();
-      ctx.arc(
-        textureSize / 2,
-        textureSize / 2,
-        textureSize / 2 - 10,
-        0,
-        2 * Math.PI
-      );
-      ctx.fill();
 
       // Draw white circle background (inner)
-      ctx.fillStyle = "#FFFFFF";
       ctx.beginPath();
       ctx.arc(
         textureSize / 2,
@@ -226,7 +215,7 @@ export class World {
       ctx.font = "bold 340px Arial";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(number.toString(), textureSize / 2, textureSize / 2 + 10);
+      ctx.fillText("🔥", textureSize / 2, textureSize / 2 + 10);
 
       dynamicTexture.update();
 
