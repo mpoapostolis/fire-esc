@@ -180,6 +180,7 @@ export class Game {
     this._uiManager.setAudioManager(this._audioManager);
     this._uiManager.setupListeners({
       onInfo: this._onInfoPressed,
+      onHelp: this._onHelpPressed,
       onMap: this._onMapPressed,
       onInstructionModalClose: this._onInstructionModalClosed,
       onPhoneModalClose: this._onPhoneModalClosed,
@@ -357,6 +358,10 @@ export class Game {
         currentQuest.riddle
       );
     }
+  };
+
+  private _onHelpPressed = (): void => {
+    this._uiManager.showInfoModal();
   };
 
   private _onMapPressed = (): void => {

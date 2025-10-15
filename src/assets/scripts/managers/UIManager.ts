@@ -5,10 +5,12 @@ export class UIManager {
   private _hudDistance: HTMLElement;
   private _hudTimer: HTMLElement;
   private _infoButton: HTMLElement;
+  private _helpButton: HTMLElement;
   private _mapButton: HTMLElement;
   private _waypoint: HTMLElement;
 
   // Instruction Modal
+  private _infoModal: any;
   private _dialogueModal: any;
   private _dialogueSpeaker: HTMLElement;
   private _dialogueText: HTMLElement;
@@ -24,9 +26,11 @@ export class UIManager {
     this._hudDistance = this._getUIElement("hud-distance");
     this._hudTimer = this._getUIElement("hud-timer");
     this._infoButton = this._getUIElement("info-button");
+    this._helpButton = this._getUIElement("help-button");
     this._mapButton = this._getUIElement("map-button");
     this._waypoint = this._getUIElement("waypoint");
 
+    this._infoModal = this._getUIElement("info-modal");
     this._dialogueModal = this._getUIElement("dialogue_modal");
     this._dialogueSpeaker = this._getUIElement("dialogue-speaker");
     this._dialogueText = this._getUIElement("dialogue-text");
@@ -48,6 +52,7 @@ export class UIManager {
 
   public setupListeners(callbacks: {
     onInfo: () => void;
+    onHelp: () => void;
     onMap: () => void;
     onInstructionModalClose: () => void;
     onPhoneModalClose: () => void;
@@ -56,6 +61,11 @@ export class UIManager {
     this._infoButton.addEventListener("click", () => {
       this._audioManager?.playButtonClick();
       callbacks.onInfo();
+    });
+
+    this._helpButton.addEventListener("click", () => {
+      this._audioManager?.playButtonClick();
+      callbacks.onHelp();
     });
 
     this._mapButton.addEventListener("click", () => {
@@ -76,6 +86,10 @@ export class UIManager {
     this._dialogueSpeaker.innerText = speaker;
     this._dialogueText.innerText = text;
     this._dialogueModal.showModal();
+  }
+
+  public showInfoModal() {
+    this._infoModal.showModal();
   }
 
   public showPhoneCallModal(caller: string) {
