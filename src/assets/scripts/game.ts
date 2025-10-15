@@ -241,7 +241,10 @@ export class Game {
     this._gameState = "SHOWING_WELCOME";
     this._uiManager.showInstructionModal(
       "CP Ranger",
-      "CP Ranger, η πόλη σου σε χρειάζεται! Η Πυροσβεστική Υπηρεσία δέχεται απανωτές κλήσεις για διαφορετικές εστίες φωτιάς μέσα στην πόλη. Είναι ένας εφιάλτης!\n\nΔες τον χάρτη της πόλης. Λύσε τους γρίφους για να βρεις τις τοποθεσίες όπου ξέσπασαν φωτιές και τρέξε να τις σβήσεις πριν εξαπλωθούν!\n\nΔεν έχεις πολύ χρόνο… βιάσου!"
+      `Η πόλη σου σε χρειάζεται! Η Πυροσβεστική Υπηρεσία δέχεται απανωτές κλήσεις για διαφορετικές εστίες φωτιάς μέσα στην πόλη. Είναι ένας εφιάλτης!
+      Δες τον χάρτη της πόλης. Λύσε τους γρίφους για να βρεις τις τοποθεσίες όπου ξέσπασαν φωτιές και τρέξε να τις σβήσεις πριν εξαπλωθούν! 
+      Δεν έχεις πολύ χρόνο… βιάσου! (Να μας πείτε αν μπορεί να υπάρχει χρόνος)
+      `
     );
   }
 
@@ -269,7 +272,7 @@ export class Game {
             this._isInCutscene = false;
             // Reset camera target back to player
             this._camera.camera.setTarget(this._player.capsule.position);
-            this._uiManager.showInstructionModal("New Objective", quest.riddle);
+            this._uiManager.showInstructionModal("ΜΗΝΥΜΑ", quest.riddle);
           }, 3000);
         }
       });
@@ -288,13 +291,13 @@ export class Game {
         this._isInCutscene = false;
         this._camera.switchToNormalView();
         this._player.enableControls();
-        this._uiManager.showInstructionModal("New Objective", quest.riddle);
+        this._uiManager.showInstructionModal("ΕΠΙΓΡΑΦΗ", quest.riddle);
       }, 3000);
     } else if (quest.trigger === "phonecall") {
       this._audioManager.playRingtone();
       this._uiManager.showPhoneCallModal(quest.caller ?? "Unknown");
     } else {
-      this._uiManager.showInstructionModal("New Objective", quest.riddle);
+      this._uiManager.showInstructionModal("ΕΠΟΜΕΝΗ ΑΠΟΣΤΟΛΗ", quest.riddle);
     }
   }
 
@@ -319,7 +322,7 @@ export class Game {
             this._isInCutscene = false;
             this._camera.camera.setTarget(this._player.capsule.position);
             this._uiManager.showInstructionModal(
-              currentQuest.caller ?? "Current Objective",
+              currentQuest.caller ?? "ΜΗΝΥΜΑ",
               currentQuest.riddle
             );
           }, 3000);
@@ -343,14 +346,14 @@ export class Game {
         this._camera.camera.attachControl(this._canvas, true);
         this._player.enableControls();
         this._uiManager.showInstructionModal(
-          currentQuest.caller ?? "Current Objective",
+          currentQuest.caller ?? "ΕΠΙΓΡΑΦΗ",
           currentQuest.riddle
         );
       }, 3000);
     } else {
       // No camera animation, just show modal
       this._uiManager.showInstructionModal(
-        currentQuest.caller ?? "Current Objective",
+        currentQuest.caller ?? "ΕΠΙΓΡΑΦΗ",
         currentQuest.riddle
       );
     }
@@ -447,10 +450,7 @@ export class Game {
 
   private _showGameOver(): void {
     this._gameState = "AWAITING_QUEST";
-    this._uiManager.showInstructionModal(
-      "Game Over",
-      "Congratulations! You have saved the city from the fire!"
-    );
+    this._uiManager.showInstructionModal("Game Over", "ΣΥΓΧΑΡΗΤΉΡΙΑ");
   }
 
   private _updateQuestProgress(): void {
@@ -509,10 +509,7 @@ export class Game {
     this._uiManager.updateDistance(-1);
 
     // Show success modal
-    this._uiManager.showInstructionModal(
-      "Quest Complete!",
-      quest.successMessage
-    );
+    this._uiManager.showInstructionModal("ΜΠΡΑΒΟ!", quest.successMessage);
   }
 
   private _onQuestAdvanced(currentQuest: Quest): void {
