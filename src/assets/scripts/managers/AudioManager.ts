@@ -32,6 +32,7 @@ export class AudioManager {
   public initializeAudio = (): void => {
     if (!this._audioInitialized) {
       Tone.start();
+      Tone.Transport.start();
       this._audioInitialized = true;
       this._setupAudioComponents();
       this._startBackgroundMusic();
