@@ -6,13 +6,10 @@ import Layout from "../layouts/Layout.astro";
   <canvas id="renderCanvas" class="h-screen w-screen"></canvas>
 
   <dialog id="phone_call_modal" class="modal pointer-events-auto bg-black/80">
-    <div
-      class="modal-box cartoon-modal w-full max-w-md text-center text-white font-sans"
-    >
+    <div class="modal-box serious-modal w-full max-w-md text-center text-white">
       <div class="flex flex-col items-center gap-6">
         <div
           class="w-32 h-32 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center border-4 border-purple-900"
-          style="box-shadow: 4px 4px 0px #000, 0 0 0 2px #a78bfa;"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -32,15 +29,14 @@ import Layout from "../layouts/Layout.astro";
         <div>
           <p
             id="phone-caller-name"
-            class="text-4xl font-black mb-2"
-            style="text-shadow: 3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;"
+            class="text-4xl font-black mb-2 serious-text-shadow"
           >
           </p>
           <!-- <p class="text-lg font-bold text-green-300">INCOMING CALL!</p> -->
         </div>
       </div>
       <div class="mt-12 flex justify-center">
-        <button id="answer-call-btn" class="cartoon-btn-green">
+        <button id="answer-call-btn" class="serious-btn-green">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -61,31 +57,26 @@ import Layout from "../layouts/Layout.astro";
   </dialog>
 
   <dialog id="dialogue_modal" class="modal pointer-events-auto">
-    <div class="modal-box cartoon-modal max-w-2xl">
+    <div class="modal-box serious-modal max-w-2xl">
       <div class="p-8">
         <div class="mb-6">
           <h3
             id="dialogue-speaker"
-            class="text-4xl font-black text-yellow-300 mb-2"
-            style="text-shadow: 3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;"
+            class="text-4xl font-black text-yellow-300 mb-2 serious-text-shadow"
           >
           </h3>
           <div
             class="h-2 w-24 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"
-            style="box-shadow: 2px 2px 0px #000;"
           >
           </div>
         </div>
 
-        <p
-          id="dialogue-text"
-          class="text-2xl text-white leading-relaxed mb-8 font-bold"
-        >
+        <p id="dialogue-text" class="text-xl text-white leading-relaxed mb-8">
         </p>
 
         <div class="modal-action justify-end m-0">
           <form method="dialog">
-            <button class="cartoon-btn-blue">
+            <button class="serious-btn">
               <span class="font-black uppercase text-sm tracking-wider"
                 >Συνεχισε</span
               >
@@ -98,39 +89,27 @@ import Layout from "../layouts/Layout.astro";
   </dialog>
 
   <dialog id="info-modal" class="modal pointer-events-auto">
-    <div class="modal-box cartoon-modal max-w-2xl">
+    <div class="modal-box serious-modal max-w-2xl">
       <div class="p-8">
         <!-- Desktop Controls -->
         <div class="hidden md:block space-y-6">
           <div class="space-y-3">
             <h3
-              class="text-white/60 text-xs uppercase tracking-wider font-light mb-3"
+              class="text-sky-400 text-xs uppercase tracking-wider font-semibold mb-3"
             >
               Κίνηση
             </h3>
             <div class="grid grid-cols-2 gap-3">
               <div class="flex items-center gap-3">
-                <div
-                  class="px-3 py-1.5 bg-white/5 border border-white/10 rounded text-white/70 text-sm font-mono"
-                >
-                  W A S D
-                </div>
+                <div class="serious-key-box">W A S D</div>
                 <span class="text-white/50 text-sm">Μετακίνηση</span>
               </div>
               <div class="flex items-center gap-3">
-                <div
-                  class="px-3 py-1.5 bg-white/5 border border-white/10 rounded text-white/70 text-sm font-mono"
-                >
-                  Shift
-                </div>
+                <div class="serious-key-box">Shift</div>
                 <span class="text-white/50 text-sm">Τρέξιμο</span>
               </div>
               <div class="flex items-center gap-3">
-                <div
-                  class="px-3 py-1.5 bg-white/5 border border-white/10 rounded text-white/70 text-sm font-mono"
-                >
-                  Space
-                </div>
+                <div class="serious-key-box">Space</div>
                 <span class="text-white/50 text-sm">Πήδημα</span>
               </div>
             </div>
@@ -138,14 +117,12 @@ import Layout from "../layouts/Layout.astro";
 
           <div class="space-y-3">
             <h3
-              class="text-white/60 text-xs uppercase tracking-wider font-light mb-3"
+              class="text-sky-400 text-xs uppercase tracking-wider font-semibold mb-3"
             >
               Κάμερα
             </h3>
             <div class="flex items-center gap-3">
-              <div
-                class="px-3 py-1.5 bg-white/5 border border-white/10 rounded text-white/70 text-sm"
-              >
+              <div class="serious-key-box">
                 <svg
                   class="w-4 h-4"
                   fill="none"
@@ -171,14 +148,12 @@ import Layout from "../layouts/Layout.astro";
         <div class="md:hidden space-y-6">
           <div class="space-y-3">
             <h3
-              class="text-white/60 text-xs uppercase tracking-wider font-light mb-3"
+              class="text-sky-400 text-xs uppercase tracking-wider font-semibold mb-3"
             >
               Κίνηση
             </h3>
             <div class="flex items-center gap-3">
-              <div
-                class="p-2 bg-white/5 border border-white/10 rounded text-white/70"
-              >
+              <div class="serious-key-box p-2">
                 <svg
                   class="w-5 h-5"
                   fill="none"
@@ -201,14 +176,12 @@ import Layout from "../layouts/Layout.astro";
 
           <div class="space-y-3">
             <h3
-              class="text-white/60 text-xs uppercase tracking-wider font-light mb-3"
+              class="text-sky-400 text-xs uppercase tracking-wider font-semibold mb-3"
             >
               Κάμερα
             </h3>
             <div class="flex items-center gap-3">
-              <div
-                class="p-2 bg-white/5 border border-white/10 rounded text-white/70"
-              >
+              <div class="serious-key-box p-2">
                 <svg
                   class="w-5 h-5"
                   fill="none"
@@ -236,7 +209,7 @@ import Layout from "../layouts/Layout.astro";
 
   <div
     id="game-hud"
-    class="absolute inset-0 pointer-events-none text-white font-sans select-none"
+    class="absolute inset-0 pointer-events-none text-white select-none"
   >
     <!-- Center Top - Objective and Timer -->
     <div
@@ -253,8 +226,7 @@ import Layout from "../layouts/Layout.astro";
         </div>
         <p
           id="hud-distance"
-          class="text-4xl font-black text-white"
-          style="text-shadow: 4px 4px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000;"
+          class="text-4xl font-black text-white serious-text-shadow"
         >
           ...
         </p>
@@ -269,8 +241,7 @@ import Layout from "../layouts/Layout.astro";
         </div>
         <p
           id="hud-timer"
-          class="text-4xl font-black text-white"
-          style="text-shadow: 4px 4px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000;"
+          class="text-4xl font-black text-white serious-text-shadow"
         >
           --:--
         </p>
@@ -336,7 +307,73 @@ import Layout from "../layouts/Layout.astro";
 </Layout>
 
 <style is:global>
-  @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;500;600;700;800;900&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700&display=swap");
+
+  body {
+    font-family: "Exo 2", sans-serif;
+  }
+
+  /* Serious/Modern Game Styles */
+  .serious-modal {
+    background: rgba(15, 23, 42, 0.95); /* cool-gray-900 */
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(56, 189, 248, 0.3); /* sky-400 */
+    border-radius: 0.75rem;
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.5),
+      inset 0 0 15px rgba(56, 189, 248, 0.1);
+  }
+
+  .serious-btn {
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    color: rgba(224, 242, 254, 1); /* sky-100 */
+    padding: 10px 24px;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(5px);
+  }
+
+  .serious-btn:hover {
+    background: rgba(56, 189, 248, 0.2);
+    border-color: rgba(56, 189, 248, 0.7);
+    color: white;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+  }
+
+  .serious-btn-green {
+    width: 80px;
+    height: 80px;
+    background: rgba(16, 185, 129, 0.15); /* emerald-500 */
+    border: 2px solid rgba(16, 185, 129, 0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(5px);
+  }
+
+  .serious-btn-green:hover {
+    background: rgba(16, 185, 129, 0.3);
+    border-color: rgba(16, 185, 129, 0.8);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+  }
+
+  .serious-text-shadow {
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+  }
+
+  .serious-key-box {
+    background: rgba(56, 189, 248, 0.05);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    font-weight: 600;
+    color: rgba(224, 242, 254, 1);
+  }
 
   .ui-panel {
     background-color: rgba(17, 24, 39, 0.7);

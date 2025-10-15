@@ -99,7 +99,7 @@ export class GameCamera {
     } else {
       // Desktop: Can be closer
       radius = 80;
-      lowerLimit = 50;
+      lowerLimit = 10;
       upperLimit = 120;
     }
 
