@@ -36,7 +36,7 @@ const DEFAULT_GAME_CONFIG: GameConfig = {
   gravity: new Vector3(0, -9.81, 0),
   initialQuestDelay: 3000,
   questCompleteAnimationDelay: 2000,
-  questTimeLimit: 5_000, // 2 minutes per quest
+  questTimeLimit: 120_000, // 2 minutes per quest
 };
 
 export class Game {
