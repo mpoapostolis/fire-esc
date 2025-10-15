@@ -36,7 +36,7 @@ const DEFAULT_GAME_CONFIG: GameConfig = {
   gravity: new Vector3(0, -9.81, 0),
   initialQuestDelay: 3000,
   questCompleteAnimationDelay: 2000,
-  questTimeLimit: 120000, // 2 minutes per quest
+  questTimeLimit: 5_000, // 2 minutes per quest
 };
 
 export class Game {
@@ -538,10 +538,7 @@ export class Game {
 
   private _onQuestTimerExpired(): void {
     this._gameState = "AWAITING_QUEST";
-    this._uiManager.showInstructionModal(
-      "Time's Up!",
-      "You ran out of time! Click 'Try Again' to restart."
-    );
+    this._uiManager.showInstructionModal("ΤΕΛΟΣ ΧΡΟΝΟΥ!", "ΠΡΟΣΠΑΘΗΣΕ ΞΑΝΑ.");
 
     // Add try again button handler
     setTimeout(() => {
