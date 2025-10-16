@@ -437,25 +437,46 @@ export class Game {
       (pickedMesh.name.startsWith("teleportButton-") ||
         pickedMesh.name.startsWith("numberLabel-"))
     ) {
-      // Teleport logic
       const questId = parseInt(pickedMesh.name.split("-")[1]);
       const quests = this._questManager.getAllQuests();
-      const { spawn_point } = quests.find((q) => q.id === questId) ?? {};
-      if (spawn_point) {
-        const pos = new Vector3(spawn_point?.x, 5, spawn_point?.z);
-        const targetPos = pos.clone();
-        targetPos.y = 3;
-        this._player.capsule.position.copyFrom(targetPos);
-        this._audioManager.playButtonClick();
+      const quest = quests.find((q) => q.id === questId);
 
-        this._camera.switchToNormalView();
-        this._player.hideMarker();
-        this._player.enableControls();
-        this._world.setTeleportButtonsVisible(false);
+      if (quest && quest.spawn_point) {
+        if (quest.isFake) {
+          // Teleport player
+          const pos = new Vector3(quest.spawn_point.x, 5, quest.spawn_point.z);
+          const targetPos = pos.clone();
+          targetPos.y = 3;
+          this._player.capsule.position.copyFrom(targetPos);
+          this._audioManager.playButtonClick();
 
-        const currentQuest = this._questManager.getCurrentQuest();
-        if (currentQuest) {
-          this._world.showFireAtPoint(currentQuest.id);
+          this._camera.switchToNormalView();
+          this._player.hideMarker();
+          this._player.enableControls();
+          this._world.setTeleportButtonsVisible(false);
+          // Show "False alarm!" modal
+          this._uiManager.showInstructionModal(
+            "False alarm!",
+            "Έφτασες άμεσα αλλά… δεν υπάρχει φωτιά! Προσπάθησε ξανά!"
+          );
+          this._questStartTime -= 30_000;
+        } else {
+          // Original teleport logic for real quests
+          const pos = new Vector3(quest.spawn_point.x, 5, quest.spawn_point.z);
+          const targetPos = pos.clone();
+          targetPos.y = 3;
+          this._player.capsule.position.copyFrom(targetPos);
+          this._audioManager.playButtonClick();
+
+          this._camera.switchToNormalView();
+          this._player.hideMarker();
+          this._player.enableControls();
+          this._world.setTeleportButtonsVisible(false);
+
+          const currentQuest = this._questManager.getCurrentQuest();
+          if (currentQuest) {
+            this._world.showFireAtPoint(currentQuest.id);
+          }
         }
       }
     }

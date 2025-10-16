@@ -12,6 +12,7 @@ export interface Quest {
   status: "locked" | "active" | "completed";
   trigger?: "phonecall" | "direct";
   caller?: string;
+  isFake?: boolean;
 }
 
 export const quests: Quest[] = [
@@ -89,5 +90,55 @@ export const quests: Quest[] = [
     status: "locked",
     caller: "",
     trigger: "direct",
+  },
+  {
+    id: 6,
+    title: "Fake 1",
+    point: { x: 0, z: 0 },
+    spawn_point: { x: 0, z: 0 },
+    riddle: "",
+    successMessage: "",
+    status: "locked",
+    isFake: true,
+  },
+  {
+    id: 7,
+    title: "Fake 2",
+    point: { x: -40, z: -40 },
+    spawn_point: { x: -40, z: -40 },
+    riddle: "",
+    successMessage: "",
+    status: "locked",
+    isFake: true,
+  },
+  {
+    id: 8,
+    title: "Fake 3",
+    point: { x: 40, z: 40 },
+    spawn_point: { x: 40, z: 40 },
+    riddle: "",
+    successMessage: "",
+    status: "locked",
+    isFake: true,
+  },
+  {
+    id: 9,
+    title: "Fake 4",
+    point: { x: -20, z: 20 },
+    spawn_point: { x: -20, z: 20 },
+    riddle: "",
+    successMessage: "",
+    status: "locked",
+    isFake: true,
+  },
+  {
+    id: 10,
+    title: "Fake 5",
+    point: { x: 20, z: -20 },
+    spawn_point: { x: 20, z: -20 },
+    riddle: "",
+    successMessage: "",
+    status: "locked",
+    isFake: true,
   },
 ];
