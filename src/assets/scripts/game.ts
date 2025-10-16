@@ -6,6 +6,8 @@ import {
   type EngineOptions,
   type IWebGPUEngineOptions,
   Camera,
+  PointerEventTypes,
+  type PickingInfo,
 } from "@babylonjs/core";
 import { getHavokPlugin } from "./physics";
 import { World } from "./world";
@@ -195,44 +197,7 @@ export class Game {
     this._player.setJoysticks(this._movementJoystick, null);
 
     // Setup click teleport for map view
-    this._scene.onPointerDown = (evt, pickInfo) => {
-      if (
-        this._camera.getView === "map_view" &&
-        pickInfo.hit &&
-        pickInfo.pickedMesh
-      ) {
-        // Check if clicked on a teleport button
-        const meshName = pickInfo.pickedMesh.name;
-        if (
-          meshName.startsWith("teleportButton-") ||
-          meshName.startsWith("numberLabel-")
-        ) {
-          // Extract quest ID from mesh name
-          const questId = parseInt(meshName.split("-")[1]);
-          const quests = this._questManager.getAllQuests();
-          const { spawn_point } = quests.find((q) => q.id === questId) ?? {};
-          if (spawn_point) {
-            const pos = new Vector3(spawn_point?.x, 5, spawn_point?.z);
-            const targetPos = pos.clone();
-            targetPos.y = 3;
-            this._player.capsule.position.copyFrom(targetPos);
-            this._audioManager.playButtonClick();
-
-            // Exit map view and return to normal world view
-            this._camera.switchToNormalView();
-            this._player.hideMarker();
-            this._player.enableControls();
-            this._world.setTeleportButtonsVisible(false);
-
-            // Show the current active quest fire
-            const currentQuest = this._questManager.getCurrentQuest();
-            if (currentQuest) {
-              this._world.showFireAtPoint(currentQuest.id);
-            }
-          }
-        }
-      }
-    };
+    this._camera.onMapClick(this._handleMapClick.bind(this));
   }
 
   private _initializeQuests(): void {
@@ -459,6 +424,41 @@ export class Game {
   private _showGameOver(): void {
     this._gameState = "AWAITING_QUEST";
     this._uiManager.showInstructionModal("Game Over", "ΣΥΓΧΑΡΗΤΉΡΙΑ");
+  }
+
+  private _handleMapClick(pickInfo: PickingInfo): void {
+    if (!pickInfo.hit) return;
+
+    const pickedMesh = pickInfo.pickedMesh;
+    const pickedPoint = pickInfo.pickedPoint;
+
+    if (
+      pickedMesh &&
+      (pickedMesh.name.startsWith("teleportButton-") ||
+        pickedMesh.name.startsWith("numberLabel-"))
+    ) {
+      // Teleport logic
+      const questId = parseInt(pickedMesh.name.split("-")[1]);
+      const quests = this._questManager.getAllQuests();
+      const { spawn_point } = quests.find((q) => q.id === questId) ?? {};
+      if (spawn_point) {
+        const pos = new Vector3(spawn_point?.x, 5, spawn_point?.z);
+        const targetPos = pos.clone();
+        targetPos.y = 3;
+        this._player.capsule.position.copyFrom(targetPos);
+        this._audioManager.playButtonClick();
+
+        this._camera.switchToNormalView();
+        this._player.hideMarker();
+        this._player.enableControls();
+        this._world.setTeleportButtonsVisible(false);
+
+        const currentQuest = this._questManager.getCurrentQuest();
+        if (currentQuest) {
+          this._world.showFireAtPoint(currentQuest.id);
+        }
+      }
+    }
   }
 
   private _updateQuestProgress(): void {

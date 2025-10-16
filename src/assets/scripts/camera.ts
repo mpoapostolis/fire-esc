@@ -1,4 +1,4 @@
-import { Scene, Vector3, ArcRotateCamera, type Vector } from "@babylonjs/core";
+import { Scene, Vector3, ArcRotateCamera, type Vector, type PickingInfo } from "@babylonjs/core";
 
 interface CameraConfig {
   readonly alpha: number;
@@ -30,9 +30,14 @@ export class GameCamera {
   private _savedBeta: number = 0;
   private _savedRadius: number = 0;
   private view: View = "word_view";
+  private _onMapClickCallback: ((pickInfo: PickingInfo) => void) | null = null;
 
   // Animation settings for smooth transitions
   private static readonly TRANSITION_SPEED = 0.1;
+
+  public onMapClick(callback: (pickInfo: PickingInfo) => void): void {
+    this._onMapClickCallback = callback;
+  }
 
   constructor(
     private readonly _scene: Scene,
@@ -43,6 +48,7 @@ export class GameCamera {
   }
 
   private _createCamera(config: CameraConfig): ArcRotateCamera {
+    this._scene.onPointerDown = undefined;
     const camera = new ArcRotateCamera(
       "thirdPersonCamera",
       config.alpha,
@@ -74,7 +80,11 @@ export class GameCamera {
 
   public switchToMapView(): void {
     if (this.view === "map_view") return;
-
+    this._scene.onPointerDown = (evt, pickInfo) => {
+      if (this.view === "map_view" && this._onMapClickCallback && pickInfo) {
+        this._onMapClickCallback(pickInfo);
+      }
+    };
     // Save current camera position
     this._savedAlpha = this.camera.alpha;
     this._savedBeta = this.camera.beta;
@@ -124,6 +134,8 @@ export class GameCamera {
 
   public switchToObjectView(id: idsOfObjects): void {
     if (this.view === "object_view") return;
+    this._scene.onPointerDown = undefined;
+
     // Save current camera state for smooth return
     this._savedAlpha = this.camera.alpha;
     this._savedBeta = this.camera.beta;
@@ -142,6 +154,7 @@ export class GameCamera {
 
   public switchToNormalView(): void {
     if (this.view === "word_view") return;
+    this._scene.onPointerDown = undefined;
 
     // Restore camera position
     this.camera.alpha = this._savedAlpha;
