@@ -274,6 +274,8 @@ export class Game {
     } else if (quest.trigger === "phonecall") {
       this._audioManager.playRingtone();
       this._uiManager.showPhoneCallModal(quest.caller ?? "Unknown");
+    } else if (quest.id === 5) {
+      this._uiManager.showInstructionModal("ΤΕΛΟΣ ΠΑΙΝΧΙΔΙΟΥ", quest.riddle);
     } else {
       this._uiManager.showInstructionModal("ΕΠΟΜΕΝΗ ΑΠΟΣΤΟΛΗ", quest.riddle);
     }
