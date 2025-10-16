@@ -222,8 +222,13 @@ export class Game {
             this._camera.switchToNormalView();
             this._player.hideMarker();
             this._player.enableControls();
-            this._world.setFiresVisible(true);
             this._world.setTeleportButtonsVisible(false);
+
+            // Show the current active quest fire
+            const currentQuest = this._questManager.getCurrentQuest();
+            if (currentQuest) {
+              this._world.showFireAtPoint(currentQuest.id);
+            }
           }
         }
       }
@@ -373,18 +378,23 @@ export class Game {
 
   private _onMapPressed = (): void => {
     if (this._camera.getView === "map_view") {
-      // Exit map view
+      // Exit map view - show fire in world view
       this._camera.switchToNormalView();
       this._player.hideMarker();
       this._player.enableControls();
-      this._world.setFiresVisible(true);
       this._world.setTeleportButtonsVisible(false);
+
+      // Show the current active quest fire
+      const currentQuest = this._questManager.getCurrentQuest();
+      if (currentQuest) {
+        this._world.showFireAtPoint(currentQuest.id);
+      }
     } else {
-      // Enter map view
+      // Enter map view - HIDE ALL FIRES
       this._camera.switchToMapView();
       this._player.showMarker();
       this._player.disableControls();
-      this._world.setFiresVisible(false);
+      this._world.hideAllFires(); // HIDE FIRES IN MAP VIEW!
       this._world.setTeleportButtonsVisible(true);
     }
   };
@@ -528,9 +538,9 @@ export class Game {
     this._camera.switchToMapView();
     this._player.showMarker();
     this._player.disableControls();
-    this._world.setFiresVisible(false);
-    this._world.setTeleportButtonsVisible(true); // Show the new fire (previous fire already hidden on completion)
-    this._world.showFireAtPoint(currentQuest.id);
+    this._world.hideAllFires(); // Make sure NO fires show in map view
+    this._world.setTeleportButtonsVisible(true);
+    // Don't show fire here - it will be shown when player exits map view
   }
 
   private _startQuestTimer(): void {
