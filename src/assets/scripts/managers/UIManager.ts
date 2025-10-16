@@ -8,6 +8,7 @@ export class UIManager {
   private _helpButton: HTMLElement;
   private _mapButton: HTMLElement;
   private _waypoint: HTMLElement;
+  private _compassNeedle: HTMLElement;
 
   // Instruction Modal
   private _infoModal: any;
@@ -29,6 +30,7 @@ export class UIManager {
     this._helpButton = this._getUIElement("help-button");
     this._mapButton = this._getUIElement("map-button");
     this._waypoint = this._getUIElement("waypoint");
+    this._compassNeedle = this._getUIElement("compass-needle");
 
     this._infoModal = this._getUIElement("info-modal");
     this._dialogueModal = this._getUIElement("dialogue_modal");
@@ -133,5 +135,15 @@ export class UIManager {
     } else {
       this._hudTimer.classList.remove('text-red-400');
     }
+  }
+
+  public updateCompass(rotationY: number) {
+    // Convert camera rotation (in radians) to degrees
+    // Babylon uses Y-axis rotation where 0 is facing +Z, rotating CCW
+    // We need to convert this to compass bearing where 0° is North
+    const degrees = (rotationY * 180 / Math.PI) % 360;
+
+    // Rotate the needle (negative because CSS rotates clockwise, compass bearing is clockwise from North)
+    this._compassNeedle.style.transform = `rotate(${degrees}deg)`;
   }
 }

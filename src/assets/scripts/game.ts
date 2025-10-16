@@ -169,6 +169,9 @@ export class Game {
         this._camera.camera.target.copyFrom(this._player.capsule.position);
       }
 
+      // Update compass to show camera direction (alpha is the horizontal rotation for ArcRotateCamera)
+      this._uiManager.updateCompass(this._camera.camera.alpha);
+
       this._scene.render();
       this._updateQuestProgress();
     });

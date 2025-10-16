@@ -211,6 +211,38 @@ import Layout from "../layouts/Layout.astro";
     id="game-hud"
     class="absolute inset-0 pointer-events-none text-white select-none"
   >
+    <!-- Compass - Top Left -->
+    <div class="absolute top-6 left-8 animate-fade-in-left">
+      <div class="relative w-24 h-24">
+        <!-- Compass Background -->
+        <div class="absolute inset-0 rounded-full bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-sm border-2 border-yellow-500/30 shadow-lg">
+        </div>
+
+        <!-- Cardinal Directions -->
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="absolute top-2 text-yellow-400 font-black text-sm">N</div>
+          <div class="absolute bottom-2 text-gray-400 font-bold text-xs">S</div>
+          <div class="absolute right-2 text-gray-400 font-bold text-xs">E</div>
+          <div class="absolute left-2 text-gray-400 font-bold text-xs">W</div>
+        </div>
+
+        <!-- Rotating Needle -->
+        <div id="compass-needle" class="absolute inset-0 flex items-center justify-center transition-transform duration-100" style="transform: rotate(0deg);">
+          <div class="relative w-1 h-16">
+            <!-- North (red) -->
+            <div class="absolute top-0 w-0 h-0 left-1/2 -translate-x-1/2 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[32px] border-b-red-500 drop-shadow-lg"></div>
+            <!-- South (white) -->
+            <div class="absolute bottom-0 w-0 h-0 left-1/2 -translate-x-1/2 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[32px] border-t-gray-300"></div>
+          </div>
+        </div>
+
+        <!-- Center Dot -->
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="w-2 h-2 rounded-full bg-yellow-400 border border-yellow-600 shadow-lg"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- Center Top - Objective and Timer -->
     <div
       class="absolute top-6 flex justify-between w-screen px-8 gap-8 animate-fade-in-down"
