@@ -265,6 +265,7 @@ export class World {
       { size: this._config.skyboxSize },
       this._scene
     );
+    skybox.isPickable = false;
     skybox.infiniteDistance = true;
 
     const material = new StandardMaterial("skyBoxMaterial", this._scene);

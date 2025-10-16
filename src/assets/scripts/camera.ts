@@ -1,4 +1,10 @@
-import { Scene, Vector3, ArcRotateCamera, type Vector, type PickingInfo } from "@babylonjs/core";
+import {
+  Scene,
+  Vector3,
+  ArcRotateCamera,
+  type Vector,
+  type PickingInfo,
+} from "@babylonjs/core";
 
 interface CameraConfig {
   readonly alpha: number;
@@ -30,6 +36,7 @@ export class GameCamera {
   private _savedBeta: number = 0;
   private _savedRadius: number = 0;
   private view: View = "word_view";
+  private map_center: Vector3 = new Vector3(0, 0, 0);
   private _onMapClickCallback: ((pickInfo: PickingInfo) => void) | null = null;
 
   // Animation settings for smooth transitions
@@ -81,6 +88,9 @@ export class GameCamera {
   public switchToMapView(): void {
     if (this.view === "map_view") return;
     this._scene.onPointerDown = (evt, pickInfo) => {
+      if (pickInfo.hit && pickInfo.pickedPoint && evt.button === 2) {
+        this.map_center.copyFrom(pickInfo.pickedPoint);
+      }
       if (this.view === "map_view" && this._onMapClickCallback && pickInfo) {
         this._onMapClickCallback(pickInfo);
       }
@@ -108,9 +118,9 @@ export class GameCamera {
       upperLimit = 150;
     } else {
       // Desktop: Can be closer
-      radius = 80;
-      lowerLimit = 10;
-      upperLimit = 120;
+      radius = 75;
+      lowerLimit = 30;
+      upperLimit = 75;
     }
 
     this.camera.position.set(-radius, radius, -radius);
@@ -124,7 +134,7 @@ export class GameCamera {
     this.camera.upperRadiusLimit = upperLimit;
 
     // Set fixed target position at center of city (0, 0, 0)
-    this.camera.target = new Vector3(0, 0, 0);
+    this.camera.target = this.map_center;
 
     // Keep controls attached for rotation
     // Camera stays attached so user can rotate and zoom
