@@ -215,30 +215,61 @@ import Layout from "../layouts/Layout.astro";
     <div class="absolute top-4 left-4 md:top-6 md:left-8 animate-fade-in-left">
       <div class="relative w-16 h-16 md:w-24 md:h-24">
         <!-- Compass Background -->
-        <div class="absolute inset-0 rounded-full bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-sm border-2 border-yellow-500/30 shadow-lg">
+        <div
+          class="absolute inset-0 rounded-full bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-sm border-2 border-yellow-500/30 shadow-lg"
+        >
         </div>
 
         <!-- Cardinal Directions -->
-        <div class="absolute inset-0 flex items-center justify-center text-[10px] md:text-sm">
-          <div class="absolute top-1 md:top-2 text-yellow-400 font-black">N</div>
-          <div class="absolute bottom-1 md:bottom-2 text-gray-400 font-bold text-[8px] md:text-xs">S</div>
-          <div class="absolute right-1 md:right-2 text-gray-400 font-bold text-[8px] md:text-xs">E</div>
-          <div class="absolute left-1 md:left-2 text-gray-400 font-bold text-[8px] md:text-xs">W</div>
+        <div
+          class="absolute inset-0 flex items-center justify-center text-[10px] md:text-sm"
+        >
+          <div class="absolute top-1 md:top-2 text-yellow-400 font-black">
+            Β
+          </div>
+          <div
+            class="absolute bottom-1 md:bottom-2 text-gray-400 font-bold text-[8px] md:text-xs"
+          >
+            Ν
+          </div>
+          <div
+            class="absolute right-1 md:right-2 text-gray-400 font-bold text-[8px] md:text-xs"
+          >
+            Α
+          </div>
+          <div
+            class="absolute left-1 md:left-2 text-gray-400 font-bold text-[8px] md:text-xs"
+          >
+            Δ
+          </div>
         </div>
 
         <!-- Rotating Needle -->
-        <div id="compass-needle" class="absolute inset-0 flex items-center justify-center transition-transform duration-100" style="transform: rotate(0deg);">
+        <div
+          id="compass-needle"
+          class="absolute inset-0 flex items-center justify-center transition-transform duration-100"
+          style="transform: rotate(0deg);"
+        >
           <div class="relative w-1 h-10 md:h-16">
             <!-- North (red) -->
-            <div class="absolute top-0 w-0 h-0 left-1/2 -translate-x-1/2 border-l-[4px] md:border-l-[6px] border-l-transparent border-r-[4px] md:border-r-[6px] border-r-transparent border-b-[20px] md:border-b-[32px] border-b-red-500 drop-shadow-lg"></div>
+            <div
+              class="absolute top-0 w-0 h-0 left-1/2 -translate-x-1/2 border-l-[4px] md:border-l-[6px] border-l-transparent border-r-[4px] md:border-r-[6px] border-r-transparent border-b-[20px] md:border-b-[32px] border-b-red-500 drop-shadow-lg"
+            >
+            </div>
             <!-- South (white) -->
-            <div class="absolute bottom-0 w-0 h-0 left-1/2 -translate-x-1/2 border-l-[4px] md:border-l-[6px] border-l-transparent border-r-[4px] md:border-r-[6px] border-r-transparent border-t-[20px] md:border-t-[32px] border-t-gray-300"></div>
+            <div
+              class="absolute bottom-0 w-0 h-0 left-1/2 -translate-x-1/2 border-l-[4px] md:border-l-[6px] border-l-transparent border-r-[4px] md:border-r-[6px] border-r-transparent border-t-[20px] md:border-t-[32px] border-t-gray-300"
+            >
+            </div>
           </div>
         </div>
 
         <!-- Center Dot -->
         <div class="absolute inset-0 flex items-center justify-center">
-          <div class="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-yellow-400 border border-yellow-600 shadow-lg"></div>
+          <div
+            class="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-yellow-400 border border-yellow-600 shadow-lg"
+          >
+          </div>
         </div>
       </div>
     </div>

@@ -177,7 +177,7 @@ export class World {
         { width: 6, height: 6 },
         this._scene
       );
-      numberPlane.position.y = 0;
+      numberPlane.position.y = 10;
       numberPlane.parent = button;
       numberPlane.billboardMode = 7; // Always face camera
       numberPlane.isVisible = false; // Hidden by default
