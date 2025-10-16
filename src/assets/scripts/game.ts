@@ -472,11 +472,10 @@ export class Game {
           this._player.hideMarker();
           this._player.enableControls();
           this._world.setTeleportButtonsVisible(false);
-
-          const currentQuest = this._questManager.getCurrentQuest();
-          if (currentQuest) {
-            this._world.showFireAtPoint(currentQuest.id);
-          }
+        }
+        const currentQuest = this._questManager.getCurrentQuest();
+        if (currentQuest) {
+          this._world.showFireAtPoint(currentQuest.id);
         }
       }
     }
