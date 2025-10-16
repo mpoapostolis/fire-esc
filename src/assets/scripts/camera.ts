@@ -4,6 +4,9 @@ import {
   ArcRotateCamera,
   type Vector,
   type PickingInfo,
+  Animation,
+  CubicEase,
+  EasingFunction,
 } from "@babylonjs/core";
 
 interface CameraConfig {
@@ -89,7 +92,7 @@ export class GameCamera {
     if (this.view === "map_view") return;
     this._scene.onPointerDown = (evt, pickInfo) => {
       if (pickInfo.hit && pickInfo.pickedPoint && evt.button === 2) {
-        this.map_center.copyFrom(pickInfo.pickedPoint);
+        this.setTargetAnimated(pickInfo.pickedPoint);
       }
       if (this.view === "map_view" && this._onMapClickCallback && pickInfo) {
         this._onMapClickCallback(pickInfo);
@@ -182,5 +185,38 @@ export class GameCamera {
 
   public get getView(): View {
     return this.view;
+  }
+
+  public setTargetAnimated(newTarget: Vector3): void {
+    const scene = this._scene;
+    const camera = this.camera;
+    const frameRate = 30;
+
+    // Stop any previous animations on the camera
+    scene.stopAnimation(camera);
+    camera.animations = [];
+
+    const animation = new Animation(
+      "cameraTargetAnimation",
+      "target",
+      frameRate,
+      Animation.ANIMATIONTYPE_VECTOR3,
+      Animation.ANIMATIONLOOPMODE_CONSTANT
+    );
+
+    const keys = [
+      { frame: 0, value: camera.target.clone() },
+      { frame: frameRate, value: newTarget },
+    ];
+
+    animation.setKeys(keys);
+
+    const easingFunction = new CubicEase();
+    easingFunction.setEasingMode(EasingFunction.EASINGMODE_EASEINOUT);
+    animation.setEasingFunction(easingFunction);
+
+    camera.animations.push(animation);
+
+    scene.beginAnimation(camera, 0, frameRate, false);
   }
 }
