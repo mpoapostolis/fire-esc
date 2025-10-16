@@ -232,7 +232,28 @@ export class World {
       numberPlane.material = numberMat;
 
       // Render on top of everything
-      numberPlane.renderingGroupId = 1; // Higher rendering group = renders last (on top)
+      // numberPlane.renderingGroupId = 1; // Higher rendering group = renders last (on top)
+
+      // Create vertical line for the button
+      const absolutePlaneY = button.position.y + numberPlane.position.y;
+      const line = MeshBuilder.CreateCylinder(
+        `teleportLine-${quest.id}`,
+        {
+          height: absolutePlaneY,
+          diameter: 0.2,
+        },
+        this._scene
+      );
+      line.parent = button;
+      line.position.y = absolutePlaneY / 2 - button.position.y;
+      line.isPickable = false;
+      line.isVisible = false;
+
+      const lineMat = new StandardMaterial(`lineMat-${quest.id}`, this._scene);
+      lineMat.emissiveColor = new Color3(0.8, 0.8, 0.8);
+      lineMat.disableLighting = true;
+      line.material = lineMat;
+      // line.renderingGroupId = 1;
 
       // Store button reference
       this._teleportButtons.set(quest.id, button);
@@ -245,6 +266,7 @@ export class World {
       button.isPickable = visible;
       // Also hide/show all children (number labels)
       button.getChildMeshes().forEach((child) => {
+        console.log(child);
         child.isVisible = visible;
       });
     }
