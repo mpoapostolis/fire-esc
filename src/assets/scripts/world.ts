@@ -250,7 +250,7 @@ export class World {
       line.isVisible = false;
 
       const lineMat = new StandardMaterial(`lineMat-${quest.id}`, this._scene);
-      lineMat.emissiveColor = new Color3(0.8, 0.8, 0.8);
+      lineMat.emissiveColor = new Color3(0, 0, 0);
       lineMat.disableLighting = true;
       line.material = lineMat;
       // line.renderingGroupId = 1;
@@ -266,7 +266,6 @@ export class World {
       button.isPickable = visible;
       // Also hide/show all children (number labels)
       button.getChildMeshes().forEach((child) => {
-        console.log(child);
         child.isVisible = visible;
       });
     }
@@ -443,7 +442,7 @@ export class World {
 
     const cyclistRoot = new Mesh("cyclistRoot", this._scene);
     cyclistRoot.scaling.set(1.5, 1.5, 1.5);
-    cyclistRoot.position.set(-6.6, 1.5, -17.5);
+    cyclistRoot.position.set(27.073823928833008, 1.5, 17.194150924682617);
 
     for (const mesh of result.meshes) {
       if (mesh.parent === null) mesh.parent = cyclistRoot;

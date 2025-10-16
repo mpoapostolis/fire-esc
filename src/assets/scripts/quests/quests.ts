@@ -1,6 +1,3 @@
-import { Vector3 } from "@babylonjs/core";
-import type { idsOfObjects } from "../camera";
-
 export interface Quest {
   id: number;
   title: string;

@@ -235,11 +235,20 @@ export class Game {
       quest.changeCameraTarget === "cyclist" &&
       quest.trigger !== "phonecall"
     ) {
+      // {x: 27.368310928344727, z: -15.06584644317627}
       // Load and animate cyclist
       this._world.loadCyclist().then(() => {
+        this._player.capsule.position.copyFrom(
+          new Vector3(29.499107360839844, 1, -11.207662582397461)
+        );
+
         const cyclistMesh = this._scene.getMeshByName("cyclistRoot");
         if (cyclistMesh) {
-          const playerPosition = this._player.capsule.position.clone();
+          const playerPosition = new Vector3(
+            28.499107360839844,
+            1.5,
+            -10.207662582397461
+          );
           this._isInCutscene = true;
           this._world.animateCyclistToPosition(playerPosition, 3000);
           this._camera.camera.setTarget(cyclistMesh.position);
@@ -273,7 +282,14 @@ export class Game {
       }, 3000);
     } else if (quest.trigger === "phonecall") {
       this._audioManager.playRingtone();
-      this._uiManager.showPhoneCallModal(quest.caller ?? "Unknown");
+      if (quest.id === 3) {
+        this._uiManager.showPhoneCallModal(
+          quest.caller ?? "Unknown",
+          "message"
+        );
+      } else {
+        this._uiManager.showPhoneCallModal(quest.caller ?? "Unknown", "user");
+      }
     } else if (quest.id === 5) {
       this._uiManager.showInstructionModal("ΤΕΛΟΣ ΠΑΙΝΧΙΔΙΟΥ", quest.riddle);
     } else {
