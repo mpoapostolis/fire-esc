@@ -457,10 +457,12 @@ export class Game {
     ) {
       const questId = parseInt(pickedMesh.name.split("-")[1]);
       const quests = this._questManager.getAllQuests();
-      const quest = quests.find((q) => q.id === questId);
+      const currentQest = this._questManager.getCurrentQuest();
 
+      const quest = quests.find((q) => q.id === questId);
+      const isCorrect = quest?.id === currentQest?.id;
       if (quest && quest.spawn_point) {
-        if (quest.isFake) {
+        if (quest.isFake || !isCorrect) {
           // Teleport player
           const pos = new Vector3(quest.spawn_point.x, 5, quest.spawn_point.z);
           const targetPos = pos.clone();
