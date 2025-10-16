@@ -90,6 +90,7 @@ export class GameCamera {
 
   public switchToMapView(): void {
     if (this.view === "map_view") return;
+    this.map_center = new Vector3(0, 0, 0);
     this._scene.onPointerDown = (evt, pickInfo) => {
       if (pickInfo.hit && pickInfo.pickedPoint && evt.button === 2) {
         this.setTargetAnimated(pickInfo.pickedPoint);
