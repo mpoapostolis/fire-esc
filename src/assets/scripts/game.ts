@@ -322,24 +322,10 @@ export class Game {
     if (currentQuest.changeCameraTarget === "cyclist") {
       // Load and animate cyclist
       this._world.loadCyclist().then(() => {
-        const cyclistMesh = this._scene.getMeshByName("cyclistRoot");
-        if (cyclistMesh) {
-          const playerPosition = this._player.capsule.position.clone();
-          this._isInCutscene = true;
-          this._world.animateCyclistToPosition(playerPosition, 3000);
-          this._camera.camera.setTarget(cyclistMesh.position);
-
-          // After cyclist animation, show the riddle
-          setTimeout(() => {
-            this._world.disposeCyclist();
-            this._isInCutscene = false;
-            this._camera.camera.setTarget(this._player.capsule.position);
-            this._uiManager.showInstructionModal(
-              currentQuest.caller ?? "ΜΗΝΥΜΑ",
-              currentQuest.riddle
-            );
-          }, 3000);
-        }
+        this._uiManager.showInstructionModal(
+          currentQuest.caller ?? "ΕΠΙΓΡΑΦΗ",
+          currentQuest.riddle
+        );
       });
     }
     // If quest has camera position target

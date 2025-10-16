@@ -47,6 +47,7 @@ export const quests: Quest[] = [
     successMessage:
       "Εξαιτίας της διαρροής βενζίνης, το αυτοκίνητο πήρε φωτιά! Άλλη μια εστία φωτιάς που κατάφερες να σβήσεις!",
     status: "locked",
+    caller: "ΜΥΝΗΜΑ",
     trigger: "direct",
   },
   {
