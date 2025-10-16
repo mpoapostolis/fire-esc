@@ -66,7 +66,10 @@ export const quests: Quest[] = [
     title: "Unlucky Number",
     point: { x: 13.289116859436035, z: 32.81192398071289 },
     changeCameraTarget: "billboard",
-    spawn_point: { x: 34.50505447387695, z: 21.381330490112305 },
+    spawn_point: {
+      x: 12.182638168334961,
+      z: 50.832664489746094,
+    },
     riddle:
       "Μην ποντάρεις ποτέ στο νούμερο 15! Θα φέρει την καταστροφή στην πόλη!",
     successMessage:
@@ -78,7 +81,10 @@ export const quests: Quest[] = [
   {
     id: 5,
     title: "Race Against Time",
-    spawn_point: { x: 25.51080894470215, z: -8.761184692382812 },
+    spawn_point: {
+      x: 20.30816078186035,
+      z: -29.072660446166992,
+    },
     point: { x: 3.4120869636535645, z: -27.783315658569336 },
     riddle:
       "Η ώρα πήγε 5… Μήπως άργησες να προλάβεις την τελευταία εστία φωτιάς; Τρέξε για να δραπετεύσεις από τη φωτιά!",
@@ -91,8 +97,14 @@ export const quests: Quest[] = [
   {
     id: 6,
     title: "Fake 1",
-    point: { x: 0, z: 0 },
-    spawn_point: { x: 0, z: 0 },
+    point: {
+      x: -48.729339599609375,
+      z: 49.92324447631836,
+    },
+    spawn_point: {
+      x: -48.729339599609375,
+      z: 49.92324447631836,
+    },
     riddle: "",
     successMessage: "",
     status: "locked",
@@ -101,8 +113,14 @@ export const quests: Quest[] = [
   {
     id: 7,
     title: "Fake 2",
-    point: { x: -40, z: -40 },
-    spawn_point: { x: -40, z: -40 },
+    point: {
+      x: 48.21495056152344,
+      z: -47.23374557495117,
+    },
+    spawn_point: {
+      x: 48.21495056152344,
+      z: -47.23374557495117,
+    },
     riddle: "",
     successMessage: "",
     status: "locked",
@@ -111,8 +129,14 @@ export const quests: Quest[] = [
   {
     id: 8,
     title: "Fake 3",
-    point: { x: 40, z: 40 },
-    spawn_point: { x: 40, z: 40 },
+    point: {
+      x: -12.433309555053711,
+      z: 6.836219787597656,
+    },
+    spawn_point: {
+      x: -12.433309555053711,
+      z: 6.836219787597656,
+    },
     riddle: "",
     successMessage: "",
     status: "locked",
@@ -121,8 +145,14 @@ export const quests: Quest[] = [
   {
     id: 9,
     title: "Fake 4",
-    point: { x: -20, z: 20 },
-    spawn_point: { x: -20, z: 20 },
+    point: {
+      x: -27.873905181884766,
+      z: 10.253406524658203,
+    },
+    spawn_point: {
+      x: -27.873905181884766,
+      z: 10.253406524658203,
+    },
     riddle: "",
     successMessage: "",
     status: "locked",
@@ -131,8 +161,8 @@ export const quests: Quest[] = [
   {
     id: 10,
     title: "Fake 5",
-    point: { x: 20, z: -20 },
-    spawn_point: { x: 20, z: -20 },
+    point: { x: 39.433624267578125, z: 29.225849151611328 },
+    spawn_point: { x: 39.433624267578125, z: 29.225849151611328 },
     riddle: "",
     successMessage: "",
     status: "locked",
