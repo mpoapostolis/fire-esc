@@ -222,6 +222,7 @@ import Layout from "../layouts/Layout.astro";
 
         <!-- Cardinal Directions -->
         <div
+          id="compass-needle"
           class="absolute inset-0 flex items-center justify-center text-[10px] md:text-sm"
         >
           <div class="absolute top-1 md:top-2 text-yellow-400 font-black">
@@ -246,7 +247,7 @@ import Layout from "../layouts/Layout.astro";
 
         <!-- Rotating Needle -->
         <div
-          id="compass-needle"
+          id=""
           class="absolute inset-0 flex items-center justify-center transition-transform duration-100"
           style="transform: rotate(0deg);"
         >
