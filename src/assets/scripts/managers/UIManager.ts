@@ -1,4 +1,5 @@
 import type { AudioManager } from "./AudioManager";
+import { t } from "../i18n";
 
 export class UIManager {
   // --- UI Elements ---
@@ -115,11 +116,11 @@ export class UIManager {
 
   public updateDistance(distance: number | null) {
     if (distance === null) {
-      this._hudDistance.innerText = "No objective";
+      this._hudDistance.innerText = t("ui.status.noObjective");
     } else if (distance < 0) {
-      this._hudDistance.innerText = "✓";
+      this._hudDistance.innerText = t("ui.status.completed");
     } else {
-      this._hudDistance.innerText = `${distance.toFixed(0)}m`;
+      this._hudDistance.innerText = t("ui.status.distanceFormat", { distance: distance.toFixed(0) });
     }
   }
 

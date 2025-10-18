@@ -18,6 +18,7 @@ import { UIManager } from "./managers/UIManager";
 import { AudioManager } from "./managers/AudioManager";
 import { GameCamera, type idsOfObjects } from "./camera";
 import { createJoystick, type JoystickController } from "./joystick";
+import { t } from "./i18n";
 
 type GameState =
   | "SHOWING_WELCOME"
@@ -215,14 +216,7 @@ export class Game {
     this._gameState = "SHOWING_WELCOME";
     this._uiManager.showInstructionModal(
       "",
-      `CP Ranger,  η πόλη σου σε χρειάζεται! Η Πυροσβεστική Υπηρεσία δέχεται απανωτές κλήσεις για διαφορετικές εστίες φωτιάς μέσα στην πόλη. 
-      Είναι ένας εφιάλτης! 
-      
-      Δες τον χάρτη της πόλης. 
-      Λύσε τους γρίφους για να βρεις τις τοποθεσίες όπου ξέσπασαν φωτιές και τρέξε να τις σβήσεις πριν εξαπλωθούν!   
-
-      Δεν έχεις πολύ χρόνο… βιάσου!
-      `
+      t("game.messages.welcome")
     );
   }
 
@@ -259,7 +253,7 @@ export class Game {
             this._isInCutscene = false;
             // Reset camera target back to player
             this._camera.camera.setTarget(this._player.capsule.position);
-            this._uiManager.showInstructionModal("ΜΗΝΥΜΑ", quest.riddle);
+            this._uiManager.showInstructionModal(t("game.modals.message"), quest.riddle);
           }, 3000);
         }
       });
@@ -278,7 +272,7 @@ export class Game {
         this._isInCutscene = false;
         this._camera.switchToNormalView();
         this._player.enableControls();
-        this._uiManager.showInstructionModal("ΕΠΙΓΡΑΦΗ", quest.riddle);
+        this._uiManager.showInstructionModal(t("game.modals.sign"), quest.riddle);
       }, 3000);
     } else if (quest.trigger === "phonecall") {
       this._audioManager.playRingtone();
@@ -291,9 +285,9 @@ export class Game {
         this._uiManager.showPhoneCallModal(quest.caller ?? "Unknown", "user");
       }
     } else if (quest.id === 5) {
-      this._uiManager.showInstructionModal("ΤΕΛΟΣ ΠΑΙΝΧΙΔΙΟΥ", quest.riddle);
+      this._uiManager.showInstructionModal(t("game.modals.gameEnd"), quest.riddle);
     } else {
-      this._uiManager.showInstructionModal("ΕΠΟΜΕΝΗ ΑΠΟΣΤΟΛΗ", quest.riddle);
+      this._uiManager.showInstructionModal(t("game.modals.nextMission"), quest.riddle);
     }
   }
 
@@ -306,7 +300,7 @@ export class Game {
       // Load and animate cyclist
       this._world.loadCyclist().then(() => {
         this._uiManager.showInstructionModal(
-          currentQuest.caller ?? "ΕΠΙΓΡΑΦΗ",
+          currentQuest.caller ?? t("game.modals.sign"),
           currentQuest.riddle
         );
       });
@@ -328,7 +322,7 @@ export class Game {
         this._camera.camera.attachControl(this._canvas, true);
         this._player.enableControls();
         this._uiManager.showInstructionModal(
-          currentQuest.caller ?? "ΕΠΙΓΡΑΦΗ",
+          currentQuest.caller ?? t("game.modals.sign"),
           currentQuest.riddle
         );
       }, 3000);
@@ -441,7 +435,7 @@ export class Game {
 
   private _showGameOver(): void {
     this._gameState = "AWAITING_QUEST";
-    this._uiManager.showInstructionModal("Game Over", "ΣΥΓΧΑΡΗΤΉΡΙΑ");
+    this._uiManager.showInstructionModal(t("game.modals.gameOver"), t("game.modals.congratulations"));
   }
 
   private _handleMapClick(pickInfo: PickingInfo): void {
@@ -476,8 +470,8 @@ export class Game {
           this._world.setTeleportButtonsVisible(false);
           // Show "False alarm!" modal
           this._uiManager.showInstructionModal(
-            "False alarm!",
-            "Έφτασες άμεσα αλλά… δεν υπάρχει φωτιά! Προσπάθησε ξανά!"
+            t("game.modals.falseAlarm"),
+            t("game.messages.falseAlarmMessage")
           );
           this._questStartTime -= 30_000;
         } else {
@@ -557,7 +551,7 @@ export class Game {
     this._uiManager.updateDistance(-1);
 
     // Show success modal
-    this._uiManager.showInstructionModal("ΜΠΡΑΒΟ!", quest.successMessage);
+    this._uiManager.showInstructionModal(t("game.modals.success"), quest.successMessage);
   }
 
   private _onQuestAdvanced(currentQuest: Quest): void {
@@ -586,7 +580,7 @@ export class Game {
 
   private _onQuestTimerExpired(): void {
     this._gameState = "AWAITING_QUEST";
-    this._uiManager.showInstructionModal("ΤΕΛΟΣ ΧΡΟΝΟΥ!", "ΠΡΟΣΠΑΘΗΣΕ ΞΑΝΑ.");
+    this._uiManager.showInstructionModal(t("game.modals.timeUp"), t("game.modals.tryAgain"));
 
     // Add try again button handler
     setTimeout(() => {
