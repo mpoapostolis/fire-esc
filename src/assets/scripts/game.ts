@@ -39,7 +39,7 @@ const DEFAULT_GAME_CONFIG: GameConfig = {
   gravity: new Vector3(0, -9.81, 0),
   initialQuestDelay: 3000,
   questCompleteAnimationDelay: 2000,
-  questTimeLimit: 600_000, // 2 minutes per quest
+  questTimeLimit: 120_000, // 2 minutes per quest
 };
 
 export class Game {
@@ -214,10 +214,7 @@ export class Game {
 
   private _showWelcomeModal(): void {
     this._gameState = "SHOWING_WELCOME";
-    this._uiManager.showInstructionModal(
-      "",
-      t("game.messages.welcome")
-    );
+    this._uiManager.showInstructionModal("", t("game.messages.welcome"));
   }
 
   private _startQuest(quest: Quest): void {
@@ -253,7 +250,10 @@ export class Game {
             this._isInCutscene = false;
             // Reset camera target back to player
             this._camera.camera.setTarget(this._player.capsule.position);
-            this._uiManager.showInstructionModal(t("game.modals.message"), quest.riddle);
+            this._uiManager.showInstructionModal(
+              t("game.modals.message"),
+              quest.riddle
+            );
           }, 3000);
         }
       });
@@ -272,7 +272,10 @@ export class Game {
         this._isInCutscene = false;
         this._camera.switchToNormalView();
         this._player.enableControls();
-        this._uiManager.showInstructionModal(t("game.modals.sign"), quest.riddle);
+        this._uiManager.showInstructionModal(
+          t("game.modals.sign"),
+          quest.riddle
+        );
       }, 3000);
     } else if (quest.trigger === "phonecall") {
       this._audioManager.playRingtone();
@@ -285,9 +288,15 @@ export class Game {
         this._uiManager.showPhoneCallModal(quest.caller ?? "Unknown", "user");
       }
     } else if (quest.id === 5) {
-      this._uiManager.showInstructionModal(t("game.modals.gameEnd"), quest.riddle);
+      this._uiManager.showInstructionModal(
+        t("game.modals.gameEnd"),
+        quest.riddle
+      );
     } else {
-      this._uiManager.showInstructionModal(t("game.modals.nextMission"), quest.riddle);
+      this._uiManager.showInstructionModal(
+        t("game.modals.nextMission"),
+        quest.riddle
+      );
     }
   }
 
@@ -435,7 +444,10 @@ export class Game {
 
   private _showGameOver(): void {
     this._gameState = "AWAITING_QUEST";
-    this._uiManager.showInstructionModal(t("game.modals.gameOver"), t("game.modals.congratulations"));
+    this._uiManager.showInstructionModal(
+      t("game.modals.gameOver"),
+      t("game.modals.congratulations")
+    );
   }
 
   private _handleMapClick(pickInfo: PickingInfo): void {
@@ -551,7 +563,10 @@ export class Game {
     this._uiManager.updateDistance(-1);
 
     // Show success modal
-    this._uiManager.showInstructionModal(t("game.modals.success"), quest.successMessage);
+    this._uiManager.showInstructionModal(
+      t("game.modals.success"),
+      quest.successMessage
+    );
   }
 
   private _onQuestAdvanced(currentQuest: Quest): void {
@@ -580,7 +595,10 @@ export class Game {
 
   private _onQuestTimerExpired(): void {
     this._gameState = "AWAITING_QUEST";
-    this._uiManager.showInstructionModal(t("game.modals.timeUp"), t("game.modals.tryAgain"));
+    this._uiManager.showInstructionModal(
+      t("game.modals.timeUp"),
+      t("game.modals.tryAgain")
+    );
 
     // Add try again button handler
     setTimeout(() => {

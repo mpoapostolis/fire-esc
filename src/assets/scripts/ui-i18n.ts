@@ -16,40 +16,44 @@ export function initUITranslations() {
     continueButton.textContent = t('ui.buttons.continue');
   }
 
-  // Update control labels (desktop)
-  const controlHeaders = document.querySelectorAll('#info-modal h3');
-  if (controlHeaders.length >= 2) {
-    controlHeaders[0].textContent = t('ui.controls.movement');
-    controlHeaders[1].textContent = t('ui.controls.camera');
+  // Update control labels - Get all h3 elements in info modal
+  const allHeaders = document.querySelectorAll('#info-modal h3');
+  // First two are desktop, next two are mobile
+  if (allHeaders.length >= 4) {
+    // Desktop
+    allHeaders[0].textContent = t('ui.controls.movement');
+    allHeaders[1].textContent = t('ui.controls.camera');
+    // Mobile
+    allHeaders[2].textContent = t('ui.controls.movement');
+    allHeaders[3].textContent = t('ui.controls.camera');
   }
 
-  // Update control descriptions (desktop)
-  const controlDescriptions = document.querySelectorAll('#info-modal .hidden.md\\:block span.text-white\\/50');
-  if (controlDescriptions.length >= 4) {
-    (controlDescriptions[0] as HTMLElement).textContent = t('ui.controls.moveKeys');
-    (controlDescriptions[1] as HTMLElement).textContent = t('ui.controls.runKey');
-    (controlDescriptions[2] as HTMLElement).textContent = t('ui.controls.jumpKey');
-    (controlDescriptions[3] as HTMLElement).textContent = t('ui.controls.mouseDrag');
+  // Update control descriptions - Get all span.text-white/50 in info modal
+  const allDescriptions = Array.from(document.querySelectorAll('#info-modal span'));
+  const whiteDescriptions = allDescriptions.filter(span =>
+    span.className.includes('text-white/50') || span.className.includes('text-white\\/50')
+  );
+
+  if (whiteDescriptions.length >= 6) {
+    // Desktop controls (first 4)
+    whiteDescriptions[0].textContent = t('ui.controls.moveKeys');
+    whiteDescriptions[1].textContent = t('ui.controls.runKey');
+    whiteDescriptions[2].textContent = t('ui.controls.jumpKey');
+    whiteDescriptions[3].textContent = t('ui.controls.mouseDrag');
+    // Mobile controls (last 2)
+    whiteDescriptions[4].textContent = t('ui.controls.joystick');
+    whiteDescriptions[5].textContent = t('ui.controls.touchDrag');
   }
 
-  // Update mobile controls
-  const mobileHeaders = document.querySelectorAll('#info-modal .md\\:hidden h3');
-  if (mobileHeaders.length >= 2) {
-    (mobileHeaders[0] as HTMLElement).textContent = t('ui.controls.movement');
-    (mobileHeaders[1] as HTMLElement).textContent = t('ui.controls.camera');
+  // Update HUD labels - use more specific selectors
+  const hudDistanceLabel = document.querySelector('.text-yellow-300.uppercase.font-black.tracking-widest');
+  if (hudDistanceLabel) {
+    hudDistanceLabel.textContent = t('ui.hud.distance');
   }
 
-  const mobileDescriptions = document.querySelectorAll('#info-modal .md\\:hidden span.text-white\\/50');
-  if (mobileDescriptions.length >= 2) {
-    (mobileDescriptions[0] as HTMLElement).textContent = t('ui.controls.joystick');
-    (mobileDescriptions[1] as HTMLElement).textContent = t('ui.controls.touchDrag');
-  }
-
-  // Update HUD labels
-  const hudLabels = document.querySelectorAll('.text-xs.uppercase.font-black.tracking-widest');
-  if (hudLabels.length >= 2) {
-    (hudLabels[0] as HTMLElement).textContent = t('ui.hud.distance');
-    (hudLabels[1] as HTMLElement).textContent = t('ui.hud.time');
+  const hudTimeLabel = document.querySelector('.text-pink-300.uppercase.font-black.tracking-widest');
+  if (hudTimeLabel) {
+    hudTimeLabel.textContent = t('ui.hud.time');
   }
 
   // Update compass directions

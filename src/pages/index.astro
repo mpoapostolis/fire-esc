@@ -6,10 +6,10 @@ import Layout from "../layouts/Layout.astro";
   <canvas id="renderCanvas" class="h-screen w-screen"></canvas>
 
   <dialog id="phone_call_modal" class="modal pointer-events-auto bg-black/80">
-    <div class="modal-box serious-modal w-full max-w-md text-center text-white">
-      <div class="flex flex-col items-center gap-6">
+    <div class="modal-box serious-modal w-11/12 max-w-xs md:max-w-md text-center text-white">
+      <div class="flex flex-col items-center gap-4 md:gap-6">
         <div
-          class="w-32 h-32 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center border-4 border-purple-900"
+          class="w-20 h-20 md:w-32 md:h-32 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center border-4 border-purple-900"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -17,7 +17,7 @@ import Layout from "../layouts/Layout.astro";
             viewBox="0 0 24 24"
             stroke-width="2.5"
             stroke="currentColor"
-            class="w-16 h-16 text-white"
+            class="w-10 h-10 md:w-16 md:h-16 text-white"
           >
             <path
               stroke-linecap="round"
@@ -29,21 +29,20 @@ import Layout from "../layouts/Layout.astro";
         <div>
           <p
             id="phone-caller-name"
-            class="text-4xl font-black mb-2 serious-text-shadow"
+            class="text-2xl md:text-4xl font-black mb-2 serious-text-shadow"
           >
           </p>
-          <!-- <p class="text-lg font-bold text-green-300">INCOMING CALL!</p> -->
         </div>
       </div>
-      <div class="mt-12 flex justify-center">
-        <button id="answer-call-btn" class="serious-btn-green">
+      <div class="mt-8 md:mt-12 flex justify-center">
+        <button id="answer-call-btn" class="serious-btn-green w-16 h-16 md:w-20 md:h-20">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="3"
             stroke="currentColor"
-            class="w-12 h-12"
+            class="w-8 h-8 md:w-12 md:h-12"
           >
             <path
               stroke-linecap="round"
@@ -57,27 +56,27 @@ import Layout from "../layouts/Layout.astro";
   </dialog>
 
   <dialog id="dialogue_modal" class="modal pointer-events-auto">
-    <div class="modal-box serious-modal max-w-2xl">
-      <div class="p-8">
-        <div class="mb-6">
+    <div class="modal-box serious-modal w-11/12 max-w-md md:max-w-2xl">
+      <div class="p-4 md:p-8">
+        <div class="mb-4 md:mb-6">
           <h3
             id="dialogue-speaker"
-            class="text-4xl font-black text-yellow-300 mb-2 serious-text-shadow"
+            class="text-xl md:text-3xl lg:text-4xl font-black text-yellow-300 mb-2 serious-text-shadow"
           >
           </h3>
           <div
-            class="h-2 w-24 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"
+            class="h-1 md:h-2 w-16 md:w-24 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"
           >
           </div>
         </div>
 
-        <p id="dialogue-text" class="text-xl text-white leading-relaxed mb-8">
+        <p id="dialogue-text" class="text-sm md:text-lg lg:text-xl text-white leading-relaxed mb-6 md:mb-8 whitespace-pre-line">
         </p>
 
         <div class="modal-action justify-end m-0">
           <form method="dialog">
-            <button class="serious-btn">
-              <span class="font-black uppercase text-sm tracking-wider"
+            <button class="serious-btn text-xs md:text-sm">
+              <span class="font-black uppercase tracking-wider"
                 >Συνεχισε</span
               >
             </button>
@@ -89,8 +88,8 @@ import Layout from "../layouts/Layout.astro";
   </dialog>
 
   <dialog id="info-modal" class="modal pointer-events-auto">
-    <div class="modal-box serious-modal max-w-2xl">
-      <div class="p-8">
+    <div class="modal-box serious-modal w-11/12 max-w-md md:max-w-2xl">
+      <div class="p-4 md:p-8">
         <!-- Desktop Controls -->
         <div class="hidden md:block space-y-6">
           <div class="space-y-3">
@@ -279,20 +278,20 @@ import Layout from "../layouts/Layout.astro";
 
     <!-- Center Top - Objective and Timer -->
     <div
-      class="absolute top-6 flex justify-between w-screen px-8 gap-8 animate-fade-in-down"
+      class="absolute top-4 md:top-6 flex justify-between w-screen px-4 md:px-8 gap-2 md:gap-8 animate-fade-in-down"
     >
       <div></div>
 
       <!-- Objective -->
       <div class="text-center">
         <div
-          class="text-xs text-yellow-300 uppercase font-black tracking-widest mb-1"
+          class="text-[8px] md:text-xs text-yellow-300 uppercase font-black tracking-widest mb-0.5 md:mb-1"
         >
           ΑΠΟΣΤΑΣΗ
         </div>
         <p
           id="hud-distance"
-          class="text-4xl font-black text-white serious-text-shadow"
+          class="text-xl md:text-3xl lg:text-4xl font-black text-white serious-text-shadow"
         >
           ...
         </p>
@@ -301,13 +300,13 @@ import Layout from "../layouts/Layout.astro";
       <!-- Timer -->
       <div class="text-center">
         <div
-          class="text-xs text-pink-300 uppercase font-black tracking-widest mb-1"
+          class="text-[8px] md:text-xs text-pink-300 uppercase font-black tracking-widest mb-0.5 md:mb-1"
         >
           ΧΡΟΝΟΣ
         </div>
         <p
           id="hud-timer"
-          class="text-4xl font-black text-white serious-text-shadow"
+          class="text-xl md:text-3xl lg:text-4xl font-black text-white serious-text-shadow"
         >
           --:--
         </p>
@@ -409,8 +408,6 @@ import Layout from "../layouts/Layout.astro";
   }
 
   .serious-btn-green {
-    width: 80px;
-    height: 80px;
     background: rgba(16, 185, 129, 0.15); /* emerald-500 */
     border: 2px solid rgba(16, 185, 129, 0.5);
     border-radius: 50%;
