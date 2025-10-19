@@ -1,27 +1,27 @@
 {
   "ui": {
     "buttons": {
-      "continue": "Continue"
+      "continue": "Συνεχισε"
     },
     "controls": {
-      "movement": "Movement",
-      "camera": "Camera",
-      "moveKeys": "Move",
-      "runKey": "Run",
-      "jumpKey": "Jump",
-      "mouseDrag": "Drag mouse to look around",
-      "joystick": "Use joystick (bottom left) to move",
-      "touchDrag": "Drag screen to look around"
+      "movement": "Κίνηση",
+      "camera": "Κάμερα",
+      "moveKeys": "Μετακίνηση",
+      "runKey": "Τρέξιμο",
+      "jumpKey": "Πήδημα",
+      "mouseDrag": "Σύρετε το ποντίκι για να κοιτάξετε γύρω",
+      "joystick": "Χρησιμοποιήστε το joystick (κάτω αριστερά) για μετακίνηση",
+      "touchDrag": "Σύρετε την οθόνη για να κοιτάξετε γύρω"
     },
     "hud": {
-      "distance": "DISTANCE",
-      "time": "TIME"
+      "distance": "ΑΠΟΣΤΑΣΗ",
+      "time": "ΧΡΟΝΟΣ"
     },
     "compass": {
-      "north": "N",
-      "south": "S",
-      "east": "E",
-      "west": "W"
+      "north": "Β",
+      "south": "Ν",
+      "east": "Α",
+      "west": "Δ"
     },
     "status": {
       "noObjective": "No objective",
@@ -31,52 +31,52 @@
   },
   "game": {
     "modals": {
-      "message": "MESSAGE",
-      "sign": "SIGN",
-      "nextMission": "NEXT MISSION",
-      "gameEnd": "GAME END",
-      "success": "SUCCESS!",
-      "timeUp": "TIME'S UP!",
-      "tryAgain": "TRY AGAIN",
+      "message": "ΜΗΝΥΜΑ",
+      "sign": "ΕΠΙΓΡΑΦΗ",
+      "nextMission": "ΕΠΟΜΕΝΗ ΑΠΟΣΤΟΛΗ",
+      "gameEnd": "ΤΕΛΟΣ ΠΑΙΝΧΙΔΙΟΥ",
+      "success": "ΜΠΡΑΒΟ!",
+      "timeUp": "ΤΕΛΟΣ ΧΡΟΝΟΥ!",
+      "tryAgain": "ΠΡΟΣΠΑΘΗΣΕ ΞΑΝΑ.",
       "gameOver": "Game Over",
-      "congratulations": "CONGRATULATIONS",
-      "falseAlarm": "False Alarm!"
+      "congratulations": "ΣΥΓΧΑΡΗΤΉΡΙΑ",
+      "falseAlarm": "False alarm!"
     },
     "messages": {
-      "welcome": "⚠️ CODE RED - ALL UNITS RESPOND\n\nRanger, Chief Morrison here. An arsonist is terrorizing the city with 5 fires. They're sending riddles.\n\nYour mission: Decode riddles, find fires, extinguish them before they spread.\n\nProve you're smarter. The city counts on you. Move out!",
-      "falseAlarmMessage": "You arrived quickly, but there's no fire here. The arsonist is playing games. Check your intel and try again!"
+      "welcome": "CP Ranger,  η πόλη σου σε χρειάζεται! Η Πυροσβεστική Υπηρεσία δέχεται απανωτές κλήσεις για διαφορετικές εστίες φωτιάς μέσα στην πόλη. \n      Είναι ένας εφιάλτης! \n      \n      Δες τον χάρτη της πόλης. \n      Λύσε τους γρίφους για να βρεις τις τοποθεσίες όπου ξέσπασαν φωτιές και τρέξε να τις σβήσεις πριν εξαπλωθούν!   \n\n      Δεν έχεις πολύ χρόνο… βιάσου!\n      ",
+      "falseAlarmMessage": "Έφτασες άμεσα αλλά… δεν υπάρχει φωτιά! Προσπάθησε ξανά!"
     }
   },
   "quests": {
     "quest1": {
       "title": "The First Spark",
-      "riddle": "MESSAGE 001: 'Where children laugh beneath the trees, wood and leaves make perfect fuel.'\n\nHINT: Green space.",
-      "successMessage": "FIRE OUT! Park saved. Dry brush targeted. Families were nearby. One down, four to go!",
+      "riddle": "\"Το βράδυ ανάψαμε φωτιά\nΚαι τραγουδούσαμε γύρω τριγύρω:\nΦωτιά ωραία φωτιά μη λυπηθείς τα κούτσουρα\nΦωτιά ωραία φωτιά μη φτάσεις ως τη στάχτη\nΦωτιά ωραία φωτιά καίγε μας\nλέγε μας τη ζωή.\" \n\nαπό το ποίημα του Οδ. Ελύτη «Ήλιος ο Πρώτος»",
+      "successMessage": "Τα πάρκα της πόλης θα πρέπει να είναι καθαρισμένα από πεσμένα κούτσουρα, κλαδιά και ξερά φύλλα! Ευτυχώς, έσβησες άμεσα την πρώτη φωτιά!",
       "caller": "112"
     },
     "quest2": {
       "title": "The Red Herring",
-      "riddle": "MESSAGE 002: 'Red machines zoom everywhere, but one sits still in eastern air. Two wheels, gasoline.'\n\nHINT: Red vehicle. Eastern side.",
-      "successMessage": "CRITICAL SAVE! Fuel tank leaking. Bomb defused. This maniac knows where to strike!",
-      "caller": "DISPATCH"
+      "riddle": "Υπάρχουν πολλά κόκκινα που κινούνται παντού, αλλά εσύ ψάχνεις αυτό που βρίσκεται πιο ανατολικά από τα υπόλοιπα.",
+      "successMessage": "Εξαιτίας της διαρροής βενζίνης, το αυτοκίνητο πήρε φωτιά! Άλλη μια εστία φωτιάς που κατάφερες να σβήσεις!",
+      "caller": "ΜΥΝΗΜΑ"
     },
     "quest3": {
       "title": "A Burning Problem",
-      "riddle": "MESSAGE 003: 'Where waste rots and people discard. One spark in metal burns the whole block.'\n\nHINT: Trash bin.",
-      "successMessage": "DISASTER AVERTED! Dumpster packed with accelerants. Premeditated. Block saved!",
-      "caller": "ANONYMOUS"
+      "riddle": "Κάνει ζημιά στην υγεία του ανθρώπου και όχι μόνο. Αν το πετάξει κάποιος εκεί μέσα, μπορεί να κάψει ολόκληρη την πόλη!",
+      "successMessage": "Κάποιος/α ασυνείδητος/η πέταξε μια γόπα από τσιγάρο μέσα στον σκουπιδοτενεκέ. Ευτυχώς, πρόλαβες τα χειρότερα!",
+      "caller": "Uknown"
     },
     "quest4": {
       "title": "Unlucky Number",
-      "riddle": "MESSAGE 004: 'Fifteen is cursed. Look high. Families trapped wave for aid. Tick tock!'\n\nHINT: Building #15. Billboard.",
-      "successMessage": "HERO! Apartment reached in time. Residents trapped, waving. Kitchen fire. Lives saved!",
-      "caller": "CIVILIAN"
+      "riddle": "Μην ποντάρεις ποτέ στο νούμερο 15! Θα φέρει την καταστροφή στην πόλη!",
+      "successMessage": "Έφτασες γρήγορα και έσωσες τους ανθρώπους που κουνούσαν μαντίλια στα παράθυρα της πολυκατοικίας. Η φωτιά είχε ξεσπάσει από μια ηλεκτρική κουζίνα που ο ιδιοκτήτης ξέχασε αναμμένη.",
+      "caller": "ΕΠΙΓΡΑΦΗ"
     },
     "quest5": {
       "title": "Race Against Time",
-      "riddle": "MESSAGE 005 - FINAL: 'Clock strikes five. City Hall burns. Every record. Grand finale. You're too late!'\n\nHINT: Government building. Center.",
-      "successMessage": "🎖️ MISSION COMPLETE! City Hall saved with seconds left! Archives secured. Five fires, five wins. You're the hero. Chief Morrison: 'Outstanding work!'",
-      "caller": "CHIEF"
+      "riddle": "Η ώρα πήγε 5… Μήπως άργησες να προλάβεις την τελευταία εστία φωτιάς; Τρέξε για να δραπετεύσεις από τη φωτιά!",
+      "successMessage": "Μπράβο σου! Κατάφερες να σβήσεις μέχρι και την τελευταία εστία φωτιάς που είχε ξεσπάσει στο Δημαρχείο. Η φωτιά ξεκίνησε από ένα βραχυκύκλωμα στο αρχείο του Δημαρχείου. Γλίτωσες την πόλη από αστική πυρκαγιά! Η εκπαίδευσή σου άξιζε τον κόπο!!!!",
+      "caller": ""
     }
   }
 }
