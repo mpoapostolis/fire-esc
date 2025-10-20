@@ -43,40 +43,40 @@
       "falseAlarm": "False Alarm!"
     },
     "messages": {
-      "welcome": "⚠️ CODE RED - ALL UNITS RESPOND\n\nRanger, Chief Morrison here. An arsonist is terrorizing the city with 5 fires. They're sending riddles.\n\nYour mission: Decode riddles, find fires, extinguish them before they spread.\n\nProve you're smarter. The city counts on you. Move out!",
-      "falseAlarmMessage": "You arrived quickly, but there's no fire here. The arsonist is playing games. Check your intel and try again!"
+      "welcome": "⚠️ CODE RED - ALL UNITS RESPOND\n\nRanger, this is Chief Morrison. We have a situation. Someone calling themselves 'The Matchmaker' has been sending us encrypted messages for the past hour.\n\n10 minutes ago, the first fire started.\n\nThey're toying with us - riddles, false leads, and real fires scattered across the city. Every second counts. Decode their twisted clues, find the real fires, and put them out before this escalates.\n\nThe city is depending on you. Don't let them win this game. Move out!",
+      "falseAlarmMessage": "DISPATCH: False alarm, Ranger. The Matchmaker is messing with us - planted fake smoke signals to waste your time. Every fake call costs us 30 seconds. Stay sharp and trust your instincts!"
     }
   },
   "quests": {
     "quest1": {
       "title": "The First Spark",
-      "riddle": "MESSAGE 001: 'Where children laugh beneath the trees, wood and leaves make perfect fuel.'\n\nHINT: Green space.",
-      "successMessage": "FIRE OUT! Park saved. Dry brush targeted. Families were nearby. One down, four to go!",
-      "caller": "112"
+      "riddle": "THE MATCHMAKER: Message 1/5\n\n'Little voices echo where the wooden giants sleep,\nSwings of joy now silent, shadows dark and deep.\nDried memories crackle best when kissed by flame,\nFind my gift before the innocence goes up in shame.'\n\n⏰ Timer starts NOW.",
+      "successMessage": "FIRE EXTINGUISHED!\n\nChief Morrison: 'Playground saved! That sick bastard doused the jungle gym in accelerant. Parents were bringing kids in 20 minutes. You did good, Ranger.'\n\n[THE MATCHMAKER]: '1 down, you're quicker than I thought. Let's raise the stakes...'",
+      "caller": "112 EMERGENCY"
     },
     "quest2": {
       "title": "The Red Herring",
-      "riddle": "MESSAGE 002: 'Red machines zoom everywhere, but one sits still in eastern air. Two wheels, gasoline.'\n\nHINT: Red vehicle. Eastern side.",
-      "successMessage": "CRITICAL SAVE! Fuel tank leaking. Bomb defused. This maniac knows where to strike!",
-      "caller": "DISPATCH"
+      "riddle": "THE MATCHMAKER: Message 2/5\n\n'A crimson stallion rests where morning light awakes,\nTwo wheels, one tank, such beautiful mistakes.\nNot the fleet that roars, but the one forgotten,\nEastern winds will carry the boom I've begotten.'\n\nP.S. - I left you some DISTRACTIONS. Choose wisely, hero.",
+      "successMessage": "CRITICAL SAVE!\n\nChief Morrison: 'Jesus... the fuel line was rigged to blow. Whole eastern block would've gone up. Cyclist left it here this morning, said a 'mechanic' offered a free tune-up.'\n\n[THE MATCHMAKER]: 'Impressive. But did you waste time on my decoys? Tick tock...'",
+      "caller": "WITNESS REPORT"
     },
     "quest3": {
       "title": "A Burning Problem",
-      "riddle": "MESSAGE 003: 'Where waste rots and people discard. One spark in metal burns the whole block.'\n\nHINT: Trash bin.",
-      "successMessage": "DISASTER AVERTED! Dumpster packed with accelerants. Premeditated. Block saved!",
-      "caller": "ANONYMOUS"
+      "riddle": "THE MATCHMAKER: Message 3/5\n\n'Society's shame, tucked behind closed doors,\nMetal mouths that swallow what nobody adores.\nOne man's trash, my canvas for disaster,\nFind the container before the flames spread faster.'\n\nHINT: Not all smoke signals lead to fire... 🔥🔥🔥💨💨",
+      "successMessage": "BLAZE CONTAINED!\n\nDispatch: 'Dumpster was packed with oily rags and propane canisters! Fire was spreading to the apartment building - 47 residents evacuated. You got there just in time!'\n\n[THE MATCHMAKER]: 'You're good. Too good. Time to make this PERSONAL...'",
+      "caller": "ANONYMOUS TIP"
     },
     "quest4": {
       "title": "Unlucky Number",
-      "riddle": "MESSAGE 004: 'Fifteen is cursed. Look high. Families trapped wave for aid. Tick tock!'\n\nHINT: Building #15. Billboard.",
-      "successMessage": "HERO! Apartment reached in time. Residents trapped, waving. Kitchen fire. Lives saved!",
-      "caller": "CIVILIAN"
+      "riddle": "THE MATCHMAKER: Message 4/5\n\n'Superstition marks the tower of despair,\nFive plus ten, families gasping for air.\nLook UP where messages hang in the sky,\nWave goodbye to those who are about to die.'\n\n🆘 URGENT: Multiple 112 calls reporting smoke! This is the REAL one!",
+      "successMessage": "LIVES SAVED!\n\nChief Morrison: 'Ranger, that was a fifth-floor apartment - family of four trapped at the window! Kitchen fire spreading fast. You're a damn hero. But we got one more message...'\n\n[THE MATCHMAKER]: 'Congrats, HERO. Saved some civilians. But can you save your LEGACY?'",
+      "caller": "CIVILIAN - CRYING"
     },
     "quest5": {
       "title": "Race Against Time",
-      "riddle": "MESSAGE 005 - FINAL: 'Clock strikes five. City Hall burns. Every record. Grand finale. You're too late!'\n\nHINT: Government building. Center.",
-      "successMessage": "🎖️ MISSION COMPLETE! City Hall saved with seconds left! Archives secured. Five fires, five wins. You're the hero. Chief Morrison: 'Outstanding work!'",
-      "caller": "CHIEF"
+      "riddle": "THE MATCHMAKER: FINAL MESSAGE\n\n'Where power sits and history sleeps in files,\nCorruption burns beautifully - can you run the miles?\nThe heart of the city, the clock counts down,\nYour finale awaits in the center of town.'\n\nEvery. Record. Every. Secret. ASHES.\n\nYou have 2 minutes. I'll be watching. 🔥👁️",
+      "successMessage": "🎖️ MISSION COMPLETE!\n\nChief Morrison: 'CITY HALL SAVED! Archives secured, every document intact. Fire started in the records room - would've destroyed 100 years of history. We got surveillance footage... suspect fleeing. Units in pursuit.'\n\n[THE MATCHMAKER - INTERCEPTED]: 'You won this round, Ranger. But fire never truly dies... it just waits.'\n\n⭐ CITY SAVED - OUTSTANDING WORK!",
+      "caller": "CHIEF MORRISON"
     }
   }
 }
