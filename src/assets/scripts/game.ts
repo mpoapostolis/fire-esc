@@ -441,9 +441,17 @@ export class Game {
 
   private _showGameOver(): void {
     this._gameState = "AWAITING_QUEST";
+
+    // EPIC FINAL CELEBRATION!
+    this._uiManager.celebrateSuccess();
+    this._uiManager.screenShake(10, 1000);
+
+    const finalScore = this._uiManager.getScore();
+    const message = `${t("game.modals.congratulations")}\n\nFINAL SCORE: ${finalScore} points!`;
+
     this._uiManager.showInstructionModal(
       t("game.modals.gameOver"),
-      t("game.modals.congratulations")
+      message
     );
   }
 
@@ -466,6 +474,11 @@ export class Game {
       const isCorrect = quest?.id === currentQest?.id;
       if (quest && quest.spawn_point) {
         if (quest.isFake || !isCorrect) {
+          // 🎮 FALSE ALARM - PENALTY JUICE! 🎮
+          this._uiManager.screenShake(20, 400);
+          this._uiManager.flashScreen('rgba(255, 0, 0, 0.4)', 400);
+          this._uiManager.resetCombo(); // Reset combo multiplier!
+
           // Teleport player
           const pos = new Vector3(quest.spawn_point.x, 5, quest.spawn_point.z);
           const targetPos = pos.clone();
@@ -511,6 +524,11 @@ export class Game {
     const remainingTime = this._getRemainingTime();
     this._uiManager.updateTimer(remainingTime);
 
+    // DRAMATIC COUNTDOWN WARNING when < 30 seconds!
+    if (remainingTime < 30000 && remainingTime % 5000 < 16) {
+      this._uiManager.showCountdownWarning();
+    }
+
     // Cache current quest to avoid multiple lookups
     const currentQuest = this._questManager.getCurrentQuest();
     if (!currentQuest) {
@@ -551,6 +569,18 @@ export class Game {
     this._gameState = "SHOWING_SUCCESS";
     this._completedQuest = quest;
 
+    // 🎮 GAME JUICE TIME! 🎮
+    // Screen shake on fire extinguished!
+    this._uiManager.screenShake(15, 500);
+
+    // Confetti celebration!
+    this._uiManager.celebrateSuccess();
+
+    // Add score with combo system
+    const basePoints = 1000;
+    const timeBonus = Math.floor(this._getRemainingTime() / 1000) * 10;
+    this._uiManager.addScore(basePoints + timeBonus, quest.id);
+
     // IMMEDIATELY hide the fire and stop sound
     this._world.hideAllFires();
     this._audioManager.stopFireSound();
@@ -559,11 +589,13 @@ export class Game {
     this._audioManager.playQuestCompleteSound();
     this._uiManager.updateDistance(-1);
 
-    // Show success modal
-    this._uiManager.showInstructionModal(
-      t("game.modals.success"),
-      quest.successMessage
-    );
+    // Show success modal after a brief moment
+    setTimeout(() => {
+      this._uiManager.showInstructionModal(
+        t("game.modals.success"),
+        quest.successMessage
+      );
+    }, 800);
   }
 
   private _onQuestAdvanced(currentQuest: Quest): void {
