@@ -6,7 +6,9 @@ import Layout from "../layouts/Layout.astro";
   <canvas id="renderCanvas" class="h-screen w-screen"></canvas>
 
   <dialog id="phone_call_modal" class="modal pointer-events-auto bg-black/80">
-    <div class="modal-box serious-modal w-11/12 max-w-xs md:max-w-md text-center text-white">
+    <div
+      class="modal-box serious-modal w-11/12 max-w-xs md:max-w-md text-center text-white"
+    >
       <div class="flex flex-col items-center gap-4 md:gap-6">
         <div
           class="w-20 h-20 md:w-32 md:h-32 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center border-4 border-purple-900"
@@ -35,7 +37,10 @@ import Layout from "../layouts/Layout.astro";
         </div>
       </div>
       <div class="mt-8 md:mt-12 flex justify-center">
-        <button id="answer-call-btn" class="serious-btn-green w-16 h-16 md:w-20 md:h-20">
+        <button
+          id="answer-call-btn"
+          class="serious-btn-green w-16 h-16 md:w-20 md:h-20"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -70,15 +75,16 @@ import Layout from "../layouts/Layout.astro";
           </div>
         </div>
 
-        <p id="dialogue-text" class="text-sm md:text-lg lg:text-xl text-white leading-relaxed mb-6 md:mb-8 whitespace-pre-line">
+        <p
+          id="dialogue-text"
+          class="text-sm md:text-lg lg:text-xl text-white leading-relaxed mb-6 md:mb-8 whitespace-pre-line"
+        >
         </p>
 
         <div class="modal-action justify-end m-0">
           <form method="dialog">
             <button class="serious-btn text-xs md:text-sm">
-              <span class="font-black uppercase tracking-wider"
-                >Συνεχισε</span
-              >
+              <span class="font-black uppercase tracking-wider">Συνεχισε</span>
             </button>
           </form>
         </div>
@@ -219,49 +225,49 @@ import Layout from "../layouts/Layout.astro";
         >
         </div>
 
-        <!-- Cardinal Directions -->
+        <!-- Rotating Compass (Cardinal Directions + Needle) -->
         <div
           id="compass-needle"
-          class="absolute inset-0 flex items-center justify-center text-[10px] md:text-sm"
+          class="absolute inset-0 flex items-center justify-center"
+          style="transform: rotate(0deg); will-change: transform;"
         >
-          <div
-            class="absolute -rotate-90 top-1 md:top-1 text-yellow-400 font-black"
-          >
-            Β
-          </div>
-          <div
-            class="absolute rotate-90 bottom-1 md:bottom-1 text-gray-400 font-bold text-[8px] md:text-xs"
-          >
-            Ν
-          </div>
-          <div
-            class="absolute rotate-90 right-1 md:right-1 text-gray-400 font-bold text-[8px] md:text-xs"
-          >
-            Α
-          </div>
-          <div
-            class="absolute -rotate-90 left-1 md:left-1 text-gray-400 font-bold text-[8px] md:text-xs"
-          >
-            Δ
-          </div>
-        </div>
-
-        <!-- Rotating Needle -->
-        <div
-          id=""
-          class="absolute inset-0 flex items-center justify-center transition-transform duration-100"
-          style="transform: rotate(0deg);"
-        >
-          <div class="relative w-1 h-10 md:h-16">
-            <!-- North (red) -->
+          <!-- Cardinal Directions -->
+          <div class="absolute inset-0 flex items-center justify-center text-[10px] md:text-sm">
             <div
-              class="absolute top-0 w-0 h-0 left-1/2 -translate-x-1/2 border-l-[4px] md:border-l-[6px] border-l-transparent border-r-[4px] md:border-r-[6px] border-r-transparent border-b-[20px] md:border-b-[32px] border-b-red-500 drop-shadow-lg"
+              class="absolute -rotate-90 top-1 md:top-1 text-yellow-400 font-black"
             >
+              Β
             </div>
-            <!-- South (white) -->
             <div
-              class="absolute bottom-0 w-0 h-0 left-1/2 -translate-x-1/2 border-l-[4px] md:border-l-[6px] border-l-transparent border-r-[4px] md:border-r-[6px] border-r-transparent border-t-[20px] md:border-t-[32px] border-t-gray-300"
+              class="absolute rotate-90 bottom-1 md:bottom-1 text-gray-400 font-bold text-[8px] md:text-xs"
             >
+              Ν
+            </div>
+            <div
+              class="absolute rotate-90 right-1 md:right-1 text-gray-400 font-bold text-[8px] md:text-xs"
+            >
+              Α
+            </div>
+            <div
+              class="absolute -rotate-90 left-1 md:left-1 text-gray-400 font-bold text-[8px] md:text-xs"
+            >
+              Δ
+            </div>
+          </div>
+
+          <!-- Needle -->
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="relative w-1 h-10 md:h-16">
+              <!-- North (red) -->
+              <div
+                class="absolute top-0 w-0 h-0 left-1/2 -translate-x-1/2 border-l-[4px] md:border-l-[6px] border-l-transparent border-r-[4px] md:border-r-[6px] border-r-transparent border-b-[20px] md:border-b-[32px] border-b-red-500 drop-shadow-lg"
+              >
+              </div>
+              <!-- South (white) -->
+              <div
+                class="absolute bottom-0 w-0 h-0 left-1/2 -translate-x-1/2 border-l-[4px] md:border-l-[6px] border-l-transparent border-r-[4px] md:border-r-[6px] border-r-transparent border-t-[20px] md:border-t-[32px] border-t-gray-300"
+              >
+              </div>
             </div>
           </div>
         </div>

@@ -280,14 +280,16 @@ export class Game {
     } else if (quest.trigger === "phonecall") {
       this._audioManager.playRingtone();
       if (quest.id === 3) {
-        this._uiManager.showPhoneCallModal(
-          quest.caller ?? "Unknown",
-          "message"
-        );
+        this._uiManager.showPhoneCallModal(quest.caller ?? "Unknown");
       } else {
-        this._uiManager.showPhoneCallModal(quest.caller ?? "Unknown", "user");
+        this._uiManager.showPhoneCallModal(quest.caller ?? "Unknown");
       }
     } else if (quest.id === 5) {
+      this._uiManager.showInstructionModal(
+        t("game.modals.lastMission"),
+        quest.riddle
+      );
+    } else if (quest.id === 6) {
       this._uiManager.showInstructionModal(
         t("game.modals.gameEnd"),
         quest.riddle
