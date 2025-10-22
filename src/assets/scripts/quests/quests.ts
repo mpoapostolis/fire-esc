@@ -12,6 +12,7 @@ export interface Quest {
   trigger?: "phonecall" | "direct";
   caller?: string;
   isFake?: boolean;
+  mapq?: number;
 }
 
 /**
@@ -43,6 +44,7 @@ export const quests: Quest[] = [
     get caller() {
       return getQuestData(1).caller;
     },
+    mapq: 6,
   },
   {
     id: 2,
@@ -63,6 +65,7 @@ export const quests: Quest[] = [
       return getQuestData(2).caller;
     },
     trigger: "direct",
+    mapq: 10,
   },
   {
     id: 3,
@@ -82,6 +85,7 @@ export const quests: Quest[] = [
       return getQuestData(3).caller;
     },
     trigger: "phonecall",
+    mapq: 8,
   },
   {
     id: 4,
@@ -105,6 +109,7 @@ export const quests: Quest[] = [
       return getQuestData(4).caller;
     },
     trigger: "direct",
+    mapq: 5,
   },
   {
     id: 5,
@@ -127,6 +132,7 @@ export const quests: Quest[] = [
       return getQuestData(5).caller;
     },
     trigger: "direct",
+    mapq: 9,
   },
   {
     id: 6,
@@ -143,6 +149,7 @@ export const quests: Quest[] = [
     successMessage: "",
     status: "locked",
     isFake: true,
+    mapq: 1,
   },
   {
     id: 7,
@@ -159,6 +166,7 @@ export const quests: Quest[] = [
     successMessage: "",
     status: "locked",
     isFake: true,
+    mapq: 2,
   },
   {
     id: 8,
@@ -175,6 +183,7 @@ export const quests: Quest[] = [
     successMessage: "",
     status: "locked",
     isFake: true,
+    mapq: 3,
   },
   {
     id: 9,
@@ -191,6 +200,7 @@ export const quests: Quest[] = [
     successMessage: "",
     status: "locked",
     isFake: true,
+    mapq: 4,
   },
   {
     id: 10,
@@ -201,5 +211,6 @@ export const quests: Quest[] = [
     successMessage: "",
     status: "locked",
     isFake: true,
+    mapq: 7,
   },
 ];

@@ -219,7 +219,7 @@ export class World {
       ctx.textBaseline = "middle";
 
       ctx.fillText(
-        isDev ? `${index}` : `🔥`,
+        isDev ? `${quest.mapq}` : `🔥`,
         textureSize / 2,
         textureSize / 2 + 10
       );
