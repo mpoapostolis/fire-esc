@@ -28,7 +28,7 @@ export const quests: Quest[] = [
     get title() {
       return getQuestData(1).title;
     },
-    point: { x: 2.5884740352630615, z: 6.506937026977539 },
+    point: { x: 19.066526412963867, z: 3.5244359970092773 },
     spawn_point: {
       x: -3.9238533973693848,
       z: -13.887053489685059,
@@ -175,10 +175,7 @@ export const quests: Quest[] = [
       x: -12.433309555053711,
       z: 6.836219787597656,
     },
-    spawn_point: {
-      x: -12.433309555053711,
-      z: 6.836219787597656,
-    },
+    spawn_point: { x: -18.937257766723633, z: 4.377799034118652 },
     riddle: "",
     successMessage: "",
     status: "locked",
