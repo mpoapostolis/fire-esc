@@ -211,11 +211,18 @@ export class World {
       ctx.fill();
 
       // Draw number with cartoon style - bigger and bolder
-      ctx.fillStyle = "#000000";
+      const isDev = window.location.search === "?dev";
+
+      ctx.fillStyle = isDev ? "#ffffff" : "#000000";
       ctx.font = "bold 340px Arial";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("🔥", textureSize / 2, textureSize / 2 + 10);
+
+      ctx.fillText(
+        isDev ? `${index}` : `🔥`,
+        textureSize / 2,
+        textureSize / 2 + 10
+      );
 
       dynamicTexture.update();
 
