@@ -51,8 +51,8 @@ export const quests: Quest[] = [
     get title() {
       return getQuestData(2).title;
     },
-    point: { x: 35.21452331542969, z: -13.330437660217285 },
-    spawn_point: { x: 26.77629280090332, z: 12.804500579833984 },
+    point: { x: 35.20489501953125, z: -13.273333549499512 },
+    spawn_point: { x: 43.1906852722168, z: 5.397865295410156 },
     changeCameraTarget: "cyclist",
     get riddle() {
       return getQuestData(2).riddle;

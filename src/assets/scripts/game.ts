@@ -173,7 +173,7 @@ export class Game {
       }
 
       // Update compass to show camera direction (alpha is the horizontal rotation for ArcRotateCamera)
-      this._uiManager.updateCompass(this._camera.camera.alpha - Math.PI / 2);
+      this._uiManager.updateCompass(this._camera.camera.alpha + Math.PI / 2);
 
       this._scene.render();
       this._updateQuestProgress();
