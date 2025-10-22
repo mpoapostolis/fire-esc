@@ -134,14 +134,8 @@ export const quests: Quest[] = [
   {
     id: 6,
     title: "Fake 1",
-    point: {
-      x: -48.729339599609375,
-      z: 49.92324447631836,
-    },
-    spawn_point: {
-      x: -48.729339599609375,
-      z: 49.92324447631836,
-    },
+    point: { x: -43.90224838256836, z: -28.06712532043457 },
+    spawn_point: { x: -43.90224838256836, z: -28.06712532043457 },
     riddle: "",
     successMessage: "",
     status: "locked",
