@@ -96,8 +96,19 @@ import Layout from "../layouts/Layout.astro";
   <dialog id="info-modal" class="modal pointer-events-auto">
     <div class="modal-box serious-modal w-11/12 max-w-md md:max-w-2xl">
       <div class="p-4 md:p-8">
-        <!-- Desktop Controls -->
-        <div class="hidden md:block space-y-6">
+        <div class="block space-y-6">
+          <div class="space-y-3">
+            <h3
+              class="text-sky-400 text-xs uppercase tracking-wider font-semibold mb-3"
+            >
+              ΟΔΗΓΙΕΣ
+            </h3>
+            <p class="text-white/50 text-sm">
+              Μόλις πατήσεις το σήμα με τη φωτιά που επέλεξες, μπορείς να
+              μετακινηθείς με τα πλήκτρα WASD. Το πληκτρολόγιο πρέπει να είναι
+              στα αγγλικά για να μετακινηθείς.
+            </p>
+          </div>
           <div class="space-y-3">
             <h3
               class="text-sky-400 text-xs uppercase tracking-wider font-semibold mb-3"
@@ -149,7 +160,6 @@ import Layout from "../layouts/Layout.astro";
           </div>
         </div>
 
-        <!-- Mobile Controls -->
         <div class="md:hidden space-y-6">
           <div class="space-y-3">
             <h3
@@ -232,7 +242,9 @@ import Layout from "../layouts/Layout.astro";
           style="transform: rotate(0deg); will-change: transform;"
         >
           <!-- Cardinal Directions -->
-          <div class="absolute inset-0 flex items-center justify-center text-[10px] md:text-sm">
+          <div
+            class="absolute inset-0 flex items-center justify-center text-[10px] md:text-sm"
+          >
             <div
               class="absolute -rotate-90 top-1 md:top-1 text-yellow-400 font-black"
             >
