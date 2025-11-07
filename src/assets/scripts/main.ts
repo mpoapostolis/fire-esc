@@ -6,6 +6,10 @@ import { initUITranslations } from "./ui-i18n";
 window.addEventListener("DOMContentLoaded", async () => {
     const canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
     const modelSelect = document.getElementById("model-select") as HTMLSelectElement;
+    const loadingScreen = document.getElementById("loading-screen") as HTMLDivElement;
+    const progressBar = document.getElementById("loading-progress-bar") as HTMLDivElement;
+    const percentage = document.getElementById("loading-percentage") as HTMLParagraphElement;
+    const statusText = document.getElementById("loading-status") as HTMLParagraphElement;
 
     if (canvas) {
         // Load translations first
@@ -23,9 +27,36 @@ window.addEventListener("DOMContentLoaded", async () => {
             modelSelect.value = modelFromUrl;
         }
 
-        // Load game with model from URL
-        const game = await Game.CreateAsync(canvas, { cityModel: modelFromUrl });
-        game.run();
+        // Progress callback for updating loading screen
+        const onProgress = (progress: number, status: string) => {
+            if (progressBar) {
+                progressBar.style.width = `${progress}%`;
+            }
+            if (percentage) {
+                percentage.textContent = `${progress}%`;
+            }
+            if (statusText) {
+                statusText.textContent = status;
+            }
+        };
+
+        // Load game with model from URL and progress callback
+        const game = await Game.CreateAsync(canvas, {
+            cityModel: modelFromUrl,
+            onProgress
+        });
+
+        // Wait for all assets to load before hiding loading screen
+        await game.run();
+
+        // Hide loading screen with fade out effect after all assets are ready
+        if (loadingScreen) {
+            loadingScreen.style.opacity = "0";
+            loadingScreen.style.transition = "opacity 0.5s ease-out";
+            setTimeout(() => {
+                loadingScreen.style.display = "none";
+            }, 500);
+        }
 
         // Handle model changes - just reload with new query param
         modelSelect?.addEventListener("change", () => {

@@ -33,6 +33,7 @@ interface GameConfig {
   readonly questCompleteAnimationDelay: number;
   readonly questTimeLimit: number;
   readonly cityModel?: string;
+  readonly onProgress?: (progress: number, status: string) => void;
 }
 
 const DEFAULT_GAME_CONFIG: GameConfig = {
@@ -108,15 +109,38 @@ export class Game {
   }
 
   public async run(): Promise<void> {
+    const reportProgress = (progress: number, status: string) => {
+      this._config.onProgress?.(progress, status);
+    };
+
+    reportProgress(5, "Προετοιμασία ήχου...");
     this._setupAudioTrigger();
+
+    reportProgress(10, "Φόρτωση φυσικής...");
     await this._initializePhysics();
+
+    reportProgress(15, "Φόρτωση κόσμου...");
     await this._loadWorld();
+
+    reportProgress(60, "Φόρτωση χαρακτήρα...");
     await this._setupPlayerAndCamera();
+
+    reportProgress(80, "Ρύθμιση καμερών...");
     this._setupCameras();
+
+    reportProgress(85, "Επεξεργασία εφέ...");
     this._world.setupPostProcessing();
+
+    reportProgress(90, "Ρύθμιση διεπαφής...");
     this._setupUIAndListeners();
+
+    reportProgress(95, "Φόρτωση αποστολών...");
     this._initializeQuests();
+
+    reportProgress(98, "Βελτιστοποίηση...");
     this._optimizeScene();
+
+    reportProgress(100, "Ολοκλήρωση...");
     this._startRenderLoop();
   }
 
