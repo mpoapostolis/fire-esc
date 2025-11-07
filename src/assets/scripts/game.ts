@@ -20,7 +20,7 @@ import { GameCamera, type idsOfObjects } from "./camera";
 import { createJoystick, type JoystickController } from "./joystick";
 import { t } from "./i18n";
 
-type GameState =
+export type GameState =
   | "SHOWING_WELCOME"
   | "AWAITING_QUEST"
   | "PLAYING"
@@ -188,7 +188,9 @@ export class Game {
 
   private _startRenderLoop(): void {
     this._engine.runRenderLoop(() => {
-      this._player.update();
+      this._player.enableControls();
+      this._player.update(this._gameState);
+
       const view = this._camera.getView;
 
       // Follow player in normal view, but FIXED in map view or cutscene

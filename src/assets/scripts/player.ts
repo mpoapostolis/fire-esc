@@ -15,6 +15,7 @@ import {
   Color3,
 } from "@babylonjs/core";
 import type { JoystickController } from "./joystick";
+import type { GameState } from "./game";
 
 interface PlayerConfig {
   readonly modelPath: string;
@@ -213,8 +214,11 @@ export class Player {
     });
   }
 
-  public update(): void {
+  public update(gameState: GameState): void {
     if (!this._physicsAggregate || !this._controlsEnabled) return;
+    if (gameState !== "AWAITING_QUEST" && gameState !== "PLAYING") {
+      this.disableControls();
+    }
 
     // Check if player fell below death plane
     this._checkDeathPlane();
@@ -264,6 +268,9 @@ export class Player {
 
   public disableControls(): void {
     this._controlsEnabled = false;
+    this._keyInputMap.clear();
+    this._isJumping = false;
+    this._playIdleAnimation();
     // Stop movement when controls are disabled (reuse temp vector)
     if (this._physicsAggregate) {
       this._tempVec.set(0, 0, 0);
@@ -284,9 +291,10 @@ export class Player {
   }
 
   private _updateMovement(): void {
-    const speed = this._isKeyPressed("ShiftLeft") || this._isKeyPressed("ShiftRight")
-      ? this._config.sprintSpeed
-      : this._config.walkSpeed;
+    const speed =
+      this._isKeyPressed("ShiftLeft") || this._isKeyPressed("ShiftRight")
+        ? this._config.sprintSpeed
+        : this._config.walkSpeed;
 
     this._updateCameraDirections();
 
@@ -382,7 +390,8 @@ export class Player {
 
   private _playRunAnimation(): void {
     // Determine speed (sprint vs walk) - for joystick, check magnitude
-    let isSprinting = this._isKeyPressed("ShiftLeft") || this._isKeyPressed("ShiftRight");
+    let isSprinting =
+      this._isKeyPressed("ShiftLeft") || this._isKeyPressed("ShiftRight");
 
     // For joystick users: if joystick is pushed far, consider it sprinting
     if (this._movementJoystick?.isPressed()) {
