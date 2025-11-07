@@ -306,13 +306,13 @@ export class Player {
     this._moveDirection.set(0, 0, 0);
 
     // Keyboard input
-    if (this._isKeyPressed("w"))
+    if (this._isKeyPressed("w") || this._isKeyPressed("ς"))
       this._moveDirection.addInPlace(this._cameraForward);
-    if (this._isKeyPressed("s"))
+    if (this._isKeyPressed("s") || this._isKeyPressed("σ"))
       this._moveDirection.subtractInPlace(this._cameraForward);
-    if (this._isKeyPressed("a"))
+    if (this._isKeyPressed("a") || this._isKeyPressed("α"))
       this._moveDirection.subtractInPlace(this._cameraRight);
-    if (this._isKeyPressed("d"))
+    if (this._isKeyPressed("d") || this._isKeyPressed("δ"))
       this._moveDirection.addInPlace(this._cameraRight);
 
     // Joystick input (mobile)
