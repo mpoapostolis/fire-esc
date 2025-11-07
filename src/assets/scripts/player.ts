@@ -189,15 +189,16 @@ export class Player {
 
   private _setupInput(): void {
     this._scene.onKeyboardObservable.add((kbInfo) => {
-      const key = kbInfo.event.key.toLowerCase();
+      // Use event.code for physical key position (works with all keyboard layouts)
+      const code = kbInfo.event.code;
 
       switch (kbInfo.type) {
         case KeyboardEventTypes.KEYDOWN:
-          this._keyInputMap.set(key, true);
-          if (key === " " && !this._isJumping) {
+          this._keyInputMap.set(code, true);
+          if (code === "Space" && !this._isJumping) {
             this._jump();
           }
-          if (key === "p") {
+          if (code === "KeyP") {
             console.log({
               x: this.capsule.position._x,
               z: this.capsule.position._z,
@@ -206,7 +207,7 @@ export class Player {
           break;
 
         case KeyboardEventTypes.KEYUP:
-          this._keyInputMap.set(key, false);
+          this._keyInputMap.set(code, false);
           break;
       }
     });
@@ -283,7 +284,7 @@ export class Player {
   }
 
   private _updateMovement(): void {
-    const speed = this._isKeyPressed("shift")
+    const speed = this._isKeyPressed("ShiftLeft") || this._isKeyPressed("ShiftRight")
       ? this._config.sprintSpeed
       : this._config.walkSpeed;
 
@@ -305,14 +306,14 @@ export class Player {
   private _calculateMoveDirection(): void {
     this._moveDirection.set(0, 0, 0);
 
-    // Keyboard input
-    if (this._isKeyPressed("w") || this._isKeyPressed("ς"))
+    // Keyboard input (using physical key codes - works with all keyboard layouts)
+    if (this._isKeyPressed("KeyW"))
       this._moveDirection.addInPlace(this._cameraForward);
-    if (this._isKeyPressed("s") || this._isKeyPressed("σ"))
+    if (this._isKeyPressed("KeyS"))
       this._moveDirection.subtractInPlace(this._cameraForward);
-    if (this._isKeyPressed("a") || this._isKeyPressed("α"))
+    if (this._isKeyPressed("KeyA"))
       this._moveDirection.subtractInPlace(this._cameraRight);
-    if (this._isKeyPressed("d") || this._isKeyPressed("δ"))
+    if (this._isKeyPressed("KeyD"))
       this._moveDirection.addInPlace(this._cameraRight);
 
     // Joystick input (mobile)
@@ -381,7 +382,7 @@ export class Player {
 
   private _playRunAnimation(): void {
     // Determine speed (sprint vs walk) - for joystick, check magnitude
-    let isSprinting = this._isKeyPressed("shift");
+    let isSprinting = this._isKeyPressed("ShiftLeft") || this._isKeyPressed("ShiftRight");
 
     // For joystick users: if joystick is pushed far, consider it sprinting
     if (this._movementJoystick?.isPressed()) {
