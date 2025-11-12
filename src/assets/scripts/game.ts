@@ -63,6 +63,10 @@ export class Game {
   private _questTimer: number | null = null;
   private _questStartTime: number = 0;
   private _hasShownWelcome = false;
+  private _isPaused = false;
+  private _totalPausedTime: number = 0;
+  private _pauseStartTime: number = 0;
+  private _pendingTimeouts: number[] = [];
 
   // Cached values for performance
   private readonly _reusableVector = new Vector3();
@@ -217,6 +221,7 @@ export class Game {
       onInstructionModalClose: this._onInstructionModalClosed,
       onPhoneModalClose: this._onPhoneModalClosed,
       onAnswerCall: this._onAnswerCall,
+      onHelpModalClose: this._onHelpModalClosed,
     });
 
     // Initialize mobile joystick for character movement
@@ -271,7 +276,7 @@ export class Game {
           this._camera.camera.setTarget(cyclistMesh.position);
 
           // After cyclist animation, show the riddle
-          setTimeout(() => {
+          this._delayedAction(() => {
             this._world.disposeCyclist();
             this._isInCutscene = false;
             // Reset camera target back to player
@@ -294,7 +299,7 @@ export class Game {
       this._camera.camera.detachControl();
 
       // // After 3 seconds, return camera and show riddle
-      setTimeout(() => {
+      this._delayedAction(() => {
         this._isInCutscene = false;
         this._camera.switchToNormalView();
         this._player.enableControls();
@@ -373,7 +378,12 @@ export class Game {
   };
 
   private _onHelpPressed = (): void => {
+    this._pauseGame();
     this._uiManager.showInfoModal();
+  };
+
+  private _onHelpModalClosed = (): void => {
+    this._resumeGame();
   };
 
   private _onMapPressed = (): void => {
@@ -436,7 +446,7 @@ export class Game {
     this._hasShownWelcome = true;
     this._gameState = "AWAITING_QUEST";
     // Wait 3 seconds after welcome modal closes, then start first quest
-    setTimeout(() => {
+    this._delayedAction(() => {
       if (this._pendingQuest) {
         this._startQuest(this._pendingQuest);
       }
@@ -459,7 +469,7 @@ export class Game {
     const nextQuest = this._questManager.completeCurrentQuestAndGetNext();
 
     // Wait 3 seconds before starting next quest
-    setTimeout(() => {
+    this._delayedAction(() => {
       this._completedQuest = null;
 
       if (nextQuest) {
@@ -536,7 +546,7 @@ export class Game {
   }
 
   private _updateQuestProgress(): void {
-    if (this._gameState !== "PLAYING") return;
+    if (this._gameState !== "PLAYING" || this._isPaused) return;
 
     // Update timer
     const remainingTime = this._getRemainingTime();
@@ -609,9 +619,24 @@ export class Game {
   private _startQuestTimer(): void {
     this._stopQuestTimer();
     this._questStartTime = Date.now();
-    this._questTimer = window.setTimeout(() => {
+    this._totalPausedTime = 0;
+    this._pauseStartTime = 0;
+    this._isPaused = false;
+    this._checkQuestTimer();
+  }
+
+  private _checkQuestTimer(): void {
+    const remainingTime = this._getRemainingTime();
+
+    if (remainingTime <= 0 && !this._isPaused) {
       this._onQuestTimerExpired();
-    }, this._config.questTimeLimit);
+      return;
+    }
+
+    // Check again in 100ms
+    this._questTimer = window.setTimeout(() => {
+      this._checkQuestTimer();
+    }, 100);
   }
 
   private _stopQuestTimer(): void {
@@ -636,7 +661,56 @@ export class Game {
 
   private _getRemainingTime(): number {
     if (this._questStartTime === 0) return this._config.questTimeLimit;
-    const elapsed = Date.now() - this._questStartTime;
+    const elapsed = Date.now() - this._questStartTime - this._totalPausedTime;
     return Math.max(0, this._config.questTimeLimit - elapsed);
+  }
+
+  private _delayedAction(callback: () => void, delay: number): void {
+    let remainingTime = delay;
+    let lastCheckTime = Date.now();
+
+    const checkAndExecute = () => {
+      if (this._isPaused) {
+        // If paused, just wait and check again without counting down time
+        lastCheckTime = Date.now(); // Reset to current time so we don't count pause time
+        const timeoutId = window.setTimeout(checkAndExecute, 100);
+        this._pendingTimeouts.push(timeoutId);
+        return;
+      }
+
+      // Calculate how much time actually passed while not paused
+      const now = Date.now();
+      const elapsed = now - lastCheckTime;
+      lastCheckTime = now;
+      remainingTime -= elapsed;
+
+      if (remainingTime <= 0) {
+        callback();
+      } else {
+        const timeoutId = window.setTimeout(checkAndExecute, Math.min(100, remainingTime));
+        this._pendingTimeouts.push(timeoutId);
+      }
+    };
+
+    const timeoutId = window.setTimeout(checkAndExecute, Math.min(100, delay));
+    this._pendingTimeouts.push(timeoutId);
+  }
+
+  private _pauseGame(): void {
+    if (this._isPaused) return;
+    this._isPaused = true;
+    this._pauseStartTime = Date.now();
+  }
+
+  private _resumeGame(): void {
+    if (!this._isPaused) return;
+    this._isPaused = false;
+    const pauseDuration = Date.now() - this._pauseStartTime;
+    this._totalPausedTime += pauseDuration;
+  }
+
+  private _clearAllTimeouts(): void {
+    this._pendingTimeouts.forEach(timeoutId => clearTimeout(timeoutId));
+    this._pendingTimeouts = [];
   }
 }

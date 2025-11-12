@@ -60,6 +60,7 @@ export class UIManager {
     onInstructionModalClose: () => void;
     onPhoneModalClose: () => void;
     onAnswerCall: () => void;
+    onHelpModalClose?: () => void;
   }) {
     this._infoButton.addEventListener("click", () => {
       this._audioManager?.playButtonClick();
@@ -78,6 +79,10 @@ export class UIManager {
 
     this._dialogueModal.addEventListener("close", callbacks.onInstructionModalClose);
     this._phoneCallModal.addEventListener("close", callbacks.onPhoneModalClose);
+
+    if (callbacks.onHelpModalClose) {
+      this._infoModal.addEventListener("close", callbacks.onHelpModalClose);
+    }
 
     this._answerCallBtn.addEventListener("click", () => {
       this._audioManager?.playButtonClick();
