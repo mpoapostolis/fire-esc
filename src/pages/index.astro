@@ -3,50 +3,121 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-  <!-- Loading Screen -->
+  <!-- Language Selection Screen -->
   <div
-    id="loading-screen"
-    class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900"
+    id="language-selection-screen"
+    class="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900"
   >
     <div class="text-center space-y-8">
-      <!-- Fire Icon Animation -->
+      <!-- Fire Icon -->
       <div class="relative flex justify-center">
-        <div class="absolute w-32 h-32 bg-orange-500/30 rounded-full blur-3xl animate-pulse"></div>
+        <div
+          class="absolute w-32 h-32 bg-orange-500/30 rounded-full blur-3xl animate-pulse"
+        >
+        </div>
         <svg
           class="w-32 h-32 text-orange-500 relative z-10 animate-bounce-subtle"
           fill="currentColor"
           viewBox="0 0 24 24"
         >
-          <path d="M12 23a7.5 7.5 0 0 1-5.138-12.963C8.204 8.774 11.5 6.5 11 1.5c6 4 9 8 3 14 1 0 2.5 0 5-2.47.27.773.5 1.604.5 2.47A7.5 7.5 0 0 1 12 23z"></path>
+          <path
+            d="M12 23a7.5 7.5 0 0 1-5.138-12.963C8.204 8.774 11.5 6.5 11 1.5c6 4 9 8 3 14 1 0 2.5 0 5-2.47.27.773.5 1.604.5 2.47A7.5 7.5 0 0 1 12 23z"
+          ></path>
         </svg>
       </div>
 
       <!-- Title -->
       <div>
-        <h1 class="text-4xl md:text-6xl font-black text-yellow-300 serious-text-shadow mb-4">
+        <h1
+          class="text-4xl md:text-6xl font-black text-yellow-300 serious-text-shadow mb-4"
+        >
           Fire Escape
         </h1>
-        <p class="text-lg md:text-xl text-white/80">Σώσε την πόλη!</p>
+        <p class="text-lg md:text-xl text-white/80 mb-8">
+          Select Your Language / Επιλέξτε Γλώσσα
+        </p>
+      </div>
+
+      <!-- Language Buttons -->
+      <div class="flex flex-col gap-4 w-full max-w-md px-8">
+        <button
+          data-lang="el"
+          class="language-btn cartoon-btn-blue-huge text-2xl md:text-3xl font-black uppercase tracking-wider"
+        >
+          🇬🇷 Ελληνικα
+        </button>
+        <button
+          data-lang="en"
+          class="language-btn cartoon-btn-blue-huge text-2xl md:text-3xl font-black uppercase tracking-wider"
+        >
+          🇬🇧 English
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Screen -->
+  <div
+    id="loading-screen"
+    class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900"
+    style="display: none;"
+  >
+    <div class="text-center space-y-8">
+      <!-- Fire Icon Animation -->
+      <div class="relative flex justify-center">
+        <div
+          class="absolute w-32 h-32 bg-orange-500/30 rounded-full blur-3xl animate-pulse"
+        >
+        </div>
+        <svg
+          class="w-32 h-32 text-orange-500 relative z-10 animate-bounce-subtle"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M12 23a7.5 7.5 0 0 1-5.138-12.963C8.204 8.774 11.5 6.5 11 1.5c6 4 9 8 3 14 1 0 2.5 0 5-2.47.27.773.5 1.604.5 2.47A7.5 7.5 0 0 1 12 23z"
+          ></path>
+        </svg>
+      </div>
+
+      <!-- Title -->
+      <div>
+        <h1
+          class="text-4xl md:text-6xl font-black text-yellow-300 serious-text-shadow mb-4"
+        >
+          Fire Escape
+        </h1>
+        <p id="loading-subtitle" class="text-lg md:text-xl text-white/80">
+          Σώσε την πόλη!
+        </p>
       </div>
 
       <!-- Loading Progress -->
       <div class="flex flex-col items-center gap-4 w-full max-w-md px-8">
-        <div class="w-16 h-16 border-4 border-yellow-500/30 border-t-yellow-500 rounded-full animate-spin"></div>
+        <div
+          class="w-16 h-16 border-4 border-yellow-500/30 border-t-yellow-500 rounded-full animate-spin"
+        >
+        </div>
 
         <!-- Progress Bar -->
         <div class="w-full space-y-2">
           <div class="flex justify-between text-sm">
-            <p class="text-white/60">Φόρτωση...</p>
+            <p id="loading-text" class="text-white/60">Φόρτωση...</p>
             <p id="loading-percentage" class="text-yellow-300 font-bold">0%</p>
           </div>
-          <div class="w-full h-3 bg-slate-800/50 rounded-full overflow-hidden border border-yellow-500/20">
+          <div
+            class="w-full h-3 bg-slate-800/50 rounded-full overflow-hidden border border-yellow-500/20"
+          >
             <div
               id="loading-progress-bar"
               class="h-full bg-gradient-to-r from-yellow-500 to-orange-500 transition-all duration-300 ease-out rounded-full"
               style="width: 0%"
-            ></div>
+            >
+            </div>
           </div>
-          <p id="loading-status" class="text-white/40 text-xs text-center">Προετοιμασία...</p>
+          <p id="loading-status" class="text-white/40 text-xs text-center">
+            Προετοιμασία...
+          </p>
         </div>
       </div>
     </div>
@@ -145,17 +216,21 @@ import Layout from "../layouts/Layout.astro";
   <dialog id="info-modal" class="modal pointer-events-auto">
     <div class="modal-box serious-modal w-11/12 max-w-md md:max-w-2xl">
       <form method="dialog">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-white hover:bg-white/10">✕</button>
+        <button
+          class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-white hover:bg-white/10"
+          >✕</button
+        >
       </form>
       <div class="p-4 md:p-8">
         <div class="block space-y-6">
           <div class="space-y-3">
             <h4
+              id="info-modal-title"
               class="text-sky-400 text-xs uppercase tracking-wider font-semibold mb-3"
             >
               ΟΔΗΓΙΕΣ
             </h4>
-            <p class="text-white/50 text-sm">
+            <p id="info-modal-instructions" class="text-white/50 text-sm">
               Μόλις πατήσεις το σήμα με τη φωτιά που επέλεξες, μπορείς να
               μετακινηθείς με τα πλήκτρα WASD. Το πληκτρολόγιο πρέπει να είναι
               στα αγγλικά για να μετακινηθείς.
@@ -298,21 +373,25 @@ import Layout from "../layouts/Layout.astro";
             class="absolute inset-0 flex items-center justify-center text-[10px] md:text-sm"
           >
             <div
+              id="compass-north"
               class="absolute -rotate-90 top-1 md:top-1 text-yellow-400 font-black"
             >
               Β
             </div>
             <div
+              id="compass-south"
               class="absolute rotate-90 bottom-1 md:bottom-1 text-gray-400 font-bold text-[8px] md:text-xs"
             >
               Ν
             </div>
             <div
+              id="compass-east"
               class="absolute rotate-90 right-1 md:right-1 text-gray-400 font-bold text-[8px] md:text-xs"
             >
               Α
             </div>
             <div
+              id="compass-west"
               class="absolute -rotate-90 left-1 md:left-1 text-gray-400 font-bold text-[8px] md:text-xs"
             >
               Δ

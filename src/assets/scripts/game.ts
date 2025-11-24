@@ -117,34 +117,34 @@ export class Game {
       this._config.onProgress?.(progress, status);
     };
 
-    reportProgress(5, "Προετοιμασία ήχου...");
+    reportProgress(5, "");
     this._setupAudioTrigger();
 
-    reportProgress(10, "Φόρτωση φυσικής...");
+    reportProgress(10, "");
     await this._initializePhysics();
 
-    reportProgress(15, "Φόρτωση κόσμου...");
+    reportProgress(15, "");
     await this._loadWorld();
 
-    reportProgress(60, "Φόρτωση χαρακτήρα...");
+    reportProgress(60, "");
     await this._setupPlayerAndCamera();
 
-    reportProgress(80, "Ρύθμιση καμερών...");
+    reportProgress(80, "");
     this._setupCameras();
 
-    reportProgress(85, "Επεξεργασία εφέ...");
+    reportProgress(85, "");
     this._world.setupPostProcessing();
 
-    reportProgress(90, "Ρύθμιση διεπαφής...");
+    reportProgress(90, "");
     this._setupUIAndListeners();
 
-    reportProgress(95, "Φόρτωση αποστολών...");
+    reportProgress(95, "");
     this._initializeQuests();
 
-    reportProgress(98, "Βελτιστοποίηση...");
+    reportProgress(98, "");
     this._optimizeScene();
 
-    reportProgress(100, "Ολοκλήρωση...");
+    reportProgress(100, "");
     this._startRenderLoop();
   }
 

@@ -1,0 +1,92 @@
+{
+  "ui": {
+    "buttons": {
+      "continue": "Continue"
+    },
+    "loading": {
+      "subtitle": "Save the city!",
+      "loading": "Loading...",
+      "preparing": "Preparing..."
+    },
+    "infoModal": {
+      "title": "INSTRUCTIONS",
+      "instructions": "Once you click on the fire marker you selected, you can move using the WASD keys. The keyboard must be set to English to move."
+    },
+    "controls": {
+      "movement": "MOVEMENT",
+      "camera": "CAMERA",
+      "moveKeys": "Move Forward, Left, Backward, Right",
+      "runKey": "Running",
+      "jumpKey": "Jumping",
+      "mouseDrag": "Drag the mouse to look around",
+      "joystick": "Use the joystick (bottom left) to move",
+      "touchDrag": "Swipe the screen to look around"
+    },
+    "hud": {
+      "distance": "DISTANCE",
+      "time": "TIME"
+    },
+    "compass": {
+      "north": "N",
+      "south": "S",
+      "east": "E",
+      "west": "W"
+    },
+    "status": {
+      "noObjective": "No objective",
+      "completed": "✓",
+      "distanceFormat": "{distance}m"
+    }
+  },
+  "game": {
+    "modals": {
+      "message": "MESSAGE",
+      "sign": "SIGN",
+      "nextMission": "NEXT MISSION",
+      "lastMission": "LAST MISSION",
+      "gameEnd": "GAME OVER",
+      "success": "WELL DONE!",
+      "timeUp": "TIME’S UP!",
+      "tryAgain": "TRY AGAIN.",
+      "gameOver": "Game Over",
+      "congratulations": "CONGRATULATIONS",
+      "falseAlarm": "False alarm!"
+    },
+    "messages": {
+      "welcome": " CP Team, your city needs you! The Fire Department is receiving continuous calls about different fire outbreaks around the city. \n      It’s a nightmare! \n      \n      Look at the city map. \n      Solve the riddles to find the locations where fires have broken out and run to extinguish them before they spread!   \n\n      You don’t have much time… hurry!\n      ",
+      "falseAlarmMessage": "You arrived quickly but… there is no fire! Try again!"
+    }
+  },
+  "quests": {
+    "quest1": {
+      "title": "The First Spark",
+      "riddle": "\"At night we lit a fire\nAnd we sang all around:\nBeautiful fire, fire, don’t pity the logs\nBeautiful fire, fire, don’t burn all the way to ash\nBeautiful fire, fire, burn us\ntell us about life.\" \n\nfrom Odysseas Elytis’ poem «The First Sun»",
+      "successMessage": "The city’s parks must be cleared of fallen logs, branches, and dry leaves! Luckily, you extinguished the first fire immediately!",
+      "caller": "Hide"
+    },
+    "quest2": {
+      "title": "The Red Herring",
+      "riddle": "There are many red ones moving everywhere, but you’re looking for the one that is further east than the others.",
+      "successMessage": "Because of the gasoline leak, the car caught fire! Another fire outbreak you managed to extinguish!",
+      "caller": "MESSAGE"
+    },
+    "quest3": {
+      "title": "A Burning Problem",
+      "riddle": "It harms human health and more. If someone throws it in there, it could burn the entire city!",
+      "successMessage": "Someone inconsiderate threw a cigarette butt into the trash bin. Fortunately, you prevented the worst!",
+      "caller": "Hide"
+    },
+    "quest4": {
+      "title": "Unlucky Number",
+      "riddle": "Never bet on number 15! It will bring destruction to the city!",
+      "successMessage": "You arrived quickly and saved the people waving handkerchiefs from the apartment windows. The fire had started from an electric stove the owner left on.",
+      "caller": "SIGN"
+    },
+    "quest5": {
+      "title": "Race Against Time",
+      "riddle": "It’s 5 o’clock… Did you arrive too late to stop the last fire outbreak? Run to escape the fire!",
+      "successMessage": "You managed to extinguish even the last fire outbreak that had broken out in the Town Hall. The fire started from a short circuit in the Town Hall’s archive. You saved the city from an urban fire! Your training was worth it!!!!",
+      "caller": ""
+    }
+  }
+}

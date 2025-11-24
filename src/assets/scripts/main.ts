@@ -6,17 +6,50 @@ import { initUITranslations } from "./ui-i18n";
 window.addEventListener("DOMContentLoaded", async () => {
     const canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
     const modelSelect = document.getElementById("model-select") as HTMLSelectElement;
+    const languageSelectionScreen = document.getElementById("language-selection-screen") as HTMLDivElement;
     const loadingScreen = document.getElementById("loading-screen") as HTMLDivElement;
     const progressBar = document.getElementById("loading-progress-bar") as HTMLDivElement;
     const percentage = document.getElementById("loading-percentage") as HTMLParagraphElement;
     const statusText = document.getElementById("loading-status") as HTMLParagraphElement;
 
     if (canvas) {
-        // Load translations first
-        await i18n.loadTranslations("el");
+        // Always show language selection screen (no localStorage)
+        if (languageSelectionScreen) {
+            languageSelectionScreen.style.display = "flex";
+        }
 
-        // Initialize UI translations
-        initUITranslations();
+        // Wait for language selection
+        await new Promise<void>((resolve) => {
+            const languageButtons = document.querySelectorAll(".language-btn");
+            languageButtons.forEach((btn) => {
+                btn.addEventListener("click", async (e) => {
+                    const target = e.currentTarget as HTMLButtonElement;
+                    const selectedLang = target.getAttribute("data-lang") || "el";
+
+                    // Hide language selection screen
+                    if (languageSelectionScreen) {
+                        languageSelectionScreen.style.opacity = "0";
+                        languageSelectionScreen.style.transition = "opacity 0.5s ease-out";
+                        setTimeout(() => {
+                            languageSelectionScreen.style.display = "none";
+                        }, 500);
+                    }
+
+                    // Show loading screen
+                    if (loadingScreen) {
+                        loadingScreen.style.display = "flex";
+                    }
+
+                    // Load translations with selected language
+                    await i18n.loadTranslations(selectedLang);
+
+                    // Initialize UI translations
+                    initUITranslations();
+
+                    resolve();
+                });
+            });
+        });
 
         // Get model from URL query params or default
         const urlParams = new URLSearchParams(window.location.search);
