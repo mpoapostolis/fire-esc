@@ -13,6 +13,7 @@ import { getHavokPlugin } from "./physics";
 import { World } from "./world";
 import { Player } from "./player";
 import { QuestManager } from "./managers/QuestManager";
+import { CinematicManager } from "./managers/CinematicManager";
 import type { Quest } from "./quests/quests";
 import { UIManager } from "./managers/UIManager";
 import { AudioManager } from "./managers/AudioManager";
@@ -25,6 +26,10 @@ export type GameState =
   | "AWAITING_QUEST"
   | "PLAYING"
   | "SHOWING_INSTRUCTIONS"
+  | "SHOWING_REWARD"      // New: Arrived at point, showing scenario description
+  | "PLAYING_QUIZ"        // New: Answering quiz
+  | "SHOWING_QUIZ_RESULT" // New: Correct answer feedback
+  | "SHOWING_QUIZ_FAIL"   // New: Wrong answer feedback
   | "SHOWING_SUCCESS";
 
 interface GameConfig {
@@ -51,6 +56,7 @@ export class Game {
   private readonly _questManager: QuestManager;
   private readonly _uiManager: UIManager;
   private readonly _audioManager: AudioManager;
+  private _cinematicManager!: CinematicManager;
 
   private _world: World;
   private _player: Player;
@@ -82,9 +88,11 @@ export class Game {
     this._canvas = canvas;
     this._scene = new Scene(this._engine);
     this._config = { ...DEFAULT_GAME_CONFIG, ...config };
-    this._questManager = new QuestManager();
     this._uiManager = new UIManager();
     this._audioManager = new AudioManager();
+    this._uiManager.setAudioManager(this._audioManager);
+
+    this._questManager = new QuestManager();
   }
 
   public static async CreateAsync(
@@ -117,34 +125,34 @@ export class Game {
       this._config.onProgress?.(progress, status);
     };
 
-    reportProgress(5, "Προετοιμασία ήχου...");
+    reportProgress(5, "");
     this._setupAudioTrigger();
 
-    reportProgress(10, "Φόρτωση φυσικής...");
+    reportProgress(10, "");
     await this._initializePhysics();
 
-    reportProgress(15, "Φόρτωση κόσμου...");
+    reportProgress(15, "");
     await this._loadWorld();
 
-    reportProgress(60, "Φόρτωση χαρακτήρα...");
+    reportProgress(60, "");
     await this._setupPlayerAndCamera();
 
-    reportProgress(80, "Ρύθμιση καμερών...");
+    reportProgress(80, "");
     this._setupCameras();
 
-    reportProgress(85, "Επεξεργασία εφέ...");
+    reportProgress(85, "");
     this._world.setupPostProcessing();
 
-    reportProgress(90, "Ρύθμιση διεπαφής...");
+    reportProgress(90, "");
     this._setupUIAndListeners();
 
-    reportProgress(95, "Φόρτωση αποστολών...");
+    reportProgress(95, "");
     this._initializeQuests();
 
-    reportProgress(98, "Βελτιστοποίηση...");
+    reportProgress(98, "");
     this._optimizeScene();
 
-    reportProgress(100, "Ολοκλήρωση...");
+    reportProgress(100, "");
     this._startRenderLoop();
   }
 
@@ -176,6 +184,14 @@ export class Game {
     this._camera = new GameCamera(this._scene);
     this._player = new Player(this._scene, this._camera.camera);
     await this._player.load();
+
+    // Initialize CinematicManager after _world and _player are created
+    this._cinematicManager = new CinematicManager(
+      this._scene,
+      this._world,
+      this._uiManager,
+      this._player
+    );
   }
 
   private _setupCameras(): void {
@@ -222,6 +238,7 @@ export class Game {
       onPhoneModalClose: this._onPhoneModalClosed,
       onAnswerCall: this._onAnswerCall,
       onHelpModalClose: this._onHelpModalClosed,
+      onThermometerModalClose: this._onThermometerModalClosed,
     });
 
     // Initialize mobile joystick for character movement
@@ -230,6 +247,44 @@ export class Game {
 
     // Setup click teleport for map view
     this._camera.onMapClick(this._handleMapClick.bind(this));
+
+    // POINT SELECTION TOOL - Press P to log current position
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "p" || e.key === "P") {
+        const pos = this._player.capsule.position;
+        console.log("======================");
+        console.log("📍 POSITION CAPTURED:");
+        console.log(`point: { x: ${pos.x.toFixed(2)}, z: ${pos.z.toFixed(2)} }`);
+        console.log(`spawn_point: { x: ${pos.x.toFixed(2)}, z: ${pos.z.toFixed(2)} }`);
+        console.log("======================");
+
+        // Show on screen notification
+        const notification = document.createElement("div");
+        notification.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: rgba(34, 211, 238, 0.95);
+          color: white;
+          padding: 20px 40px;
+          border-radius: 12px;
+          font-size: 18px;
+          font-weight: bold;
+          z-index: 9999;
+          box-shadow: 0 0 30px rgba(34, 211, 238, 0.8);
+          animation: fadeOut 2s forwards;
+        `;
+        notification.innerHTML = `📍 Position Captured!<br><small>x: ${pos.x.toFixed(2)}, z: ${pos.z.toFixed(2)}</small>`;
+        document.body.appendChild(notification);
+
+        const style = document.createElement("style");
+        style.textContent = "@keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; } }";
+        document.head.appendChild(style);
+
+        setTimeout(() => notification.remove(), 2000);
+      }
+    });
   }
 
   private _initializeQuests(): void {
@@ -241,6 +296,8 @@ export class Game {
       // Store the first quest to start after welcome modal closes
       this._pendingQuest = firstQuest;
     }
+
+    // DON'T load any characters at start - only show when quest is active
   }
 
   private _showWelcomeModal(): void {
@@ -252,40 +309,56 @@ export class Game {
     this._pendingQuest = quest;
     this._gameState = "SHOWING_INSTRUCTIONS";
 
-    // If quest starts with cyclist animation
-    if (
+    // Quest 2 - Show thermometer warning first
+    if (quest.id === 2) {
+      this._uiManager.showThermometerModal();
+      return;
+    }
+
+    // Skater Cinematic (Quest 3)
+    if (quest.changeCameraTarget === "skater") {
+      this._isInCutscene = true;
+
+      this._cinematicManager.playCinematic({
+        cameraTarget: "skate", // Use skate.glb file
+        spawnPoint: new Vector3(10.50, 2.3, -39.40),
+        targetPosition: new Vector3(9, 2.3, -21),
+        riddle: quest.riddle,
+        onComplete: () => {
+          this._isInCutscene = false;
+          // Reset camera is handled by CinematicManager or manual reset here if needed
+          this._scene.activeCamera = this._camera.camera;
+          this._camera.camera.setTarget(this._player.capsule.position);
+
+          this._uiManager.showInstructionModal(
+            quest.caller ?? t("game.modals.message"),
+            quest.riddle
+          );
+        }
+      });
+      return; // Stop processing other quest logic
+    }
+    // Cyclist Cinematic (Legacy / Quest 1?)
+    else if (
       quest.changeCameraTarget === "cyclist" &&
       quest.trigger !== "phonecall"
     ) {
-      // {x: 27.368310928344727, z: -15.06584644317627}
-      // Load and animate cyclist
-      this._world.loadCyclist().then(() => {
-        this._player.capsule.position.copyFrom(
-          new Vector3(29.499107360839844, 1, -11.207662582397461)
-        );
+      this._isInCutscene = true;
+      this._cinematicManager.playCinematic({
+        cameraTarget: "cyclist",
+        spawnPoint: new Vector3(27.073823928833008, 1.5, 17.194150924682617),
+        targetPosition: new Vector3(quest.point.x, 2, quest.point.z),
+        riddle: quest.riddle,
+        onComplete: () => {
+          this._isInCutscene = false;
+          // Reset camera
+          this._scene.activeCamera = this._camera.camera;
+          this._camera.camera.setTarget(this._player.capsule.position);
 
-        const cyclistMesh = this._scene.getMeshByName("cyclistRoot");
-        if (cyclistMesh) {
-          const playerPosition = new Vector3(
-            28.499107360839844,
-            1.5,
-            -10.207662582397461
+          this._uiManager.showInstructionModal(
+            t("game.modals.message"),
+            quest.riddle
           );
-          this._isInCutscene = true;
-          this._world.animateCyclistToPosition(playerPosition, 3000);
-          this._camera.camera.setTarget(cyclistMesh.position);
-
-          // After cyclist animation, show the riddle
-          this._delayedAction(() => {
-            this._world.disposeCyclist();
-            this._isInCutscene = false;
-            // Reset camera target back to player
-            this._camera.camera.setTarget(this._player.capsule.position);
-            this._uiManager.showInstructionModal(
-              t("game.modals.message"),
-              quest.riddle
-            );
-          }, 3000);
         }
       });
     }
@@ -294,11 +367,8 @@ export class Game {
       this._isInCutscene = true;
       this._player.disableControls();
       this._camera.switchToObjectView(quest.changeCameraTarget as idsOfObjects);
-
-      // Disable camera controls during cutscene
       this._camera.camera.detachControl();
 
-      // // After 3 seconds, return camera and show riddle
       this._delayedAction(() => {
         this._isInCutscene = false;
         this._camera.switchToNormalView();
@@ -337,27 +407,21 @@ export class Game {
     const currentQuest = this._questManager.getCurrentQuest();
     if (!currentQuest) return;
 
-    // If quest has camera target, animate to it
     if (currentQuest.changeCameraTarget === "cyclist") {
-      // Load and animate cyclist
-      this._world.loadCyclist().then(() => {
-        this._uiManager.showInstructionModal(
-          currentQuest.caller ?? t("game.modals.sign"),
-          currentQuest.riddle
-        );
-      });
+      // Just show info, no cinematic replay for info press
+      this._uiManager.showInstructionModal(
+        currentQuest.caller ?? t("game.modals.sign"),
+        currentQuest.riddle
+      );
     }
-    // If quest has camera position target
     else if (currentQuest.changeCameraTarget) {
       const id = currentQuest.changeCameraTarget as idsOfObjects;
       this._isInCutscene = true;
       this._player.disableControls();
 
-      // Switch to map view and position camera MUCH closer
       this._camera.switchToObjectView(id);
       this._camera.camera.detachControl();
 
-      // After 3 seconds, return camera and show riddle
       setTimeout(() => {
         this._isInCutscene = false;
         this._camera.switchToNormalView();
@@ -369,7 +433,6 @@ export class Game {
         );
       }, 3000);
     } else {
-      // No camera animation, just show modal
       this._uiManager.showInstructionModal(
         currentQuest.caller ?? "ΕΠΙΓΡΑΦΗ",
         currentQuest.riddle
@@ -386,25 +449,32 @@ export class Game {
     this._resumeGame();
   };
 
+  private _onThermometerModalClosed = (): void => {
+    // After thermometer modal closes, show the riddle for Quest 2
+    if (this._pendingQuest && this._pendingQuest.id === 2) {
+      this._uiManager.showInstructionModal(
+        this._pendingQuest.caller ?? t("game.modals.sign"),
+        this._pendingQuest.riddle
+      );
+    }
+  };
+
   private _onMapPressed = (): void => {
     if (this._camera.getView === "map_view") {
-      // Exit map view - show fire in world view
       this._camera.switchToNormalView();
       this._player.hideMarker();
       this._player.enableControls();
       this._world.setTeleportButtonsVisible(false);
 
-      // Show the current active quest fire
       const currentQuest = this._questManager.getCurrentQuest();
       if (currentQuest) {
-        this._world.showFireAtPoint(currentQuest.id);
+        this._world.loadQuestCharacter(currentQuest);
       }
     } else {
-      // Enter map view - HIDE ALL FIRES
       this._camera.switchToMapView();
       this._player.showMarker();
       this._player.disableControls();
-      this._world.hideAllFires(); // HIDE FIRES IN MAP VIEW!
+      this._world.hideAllFires(); // Hides characters too
       this._world.setTeleportButtonsVisible(true);
     }
   };
@@ -437,6 +507,12 @@ export class Game {
       this._handleWelcomeClosed();
     } else if (this._gameState === "SHOWING_INSTRUCTIONS") {
       this._handleInstructionsClosed();
+    } else if (this._gameState === "SHOWING_REWARD") {
+      this._handleRewardClosed();
+    } else if (this._gameState === "SHOWING_QUIZ_RESULT") {
+      this._handleQuestSuccess(); // Flow continues to absolute success
+    } else if (this._gameState === "SHOWING_QUIZ_FAIL") {
+      this._handleQuizRetry();
     } else if (this._gameState === "SHOWING_SUCCESS") {
       this._handleQuestSuccess();
     }
@@ -445,7 +521,6 @@ export class Game {
   private _handleWelcomeClosed(): void {
     this._hasShownWelcome = true;
     this._gameState = "AWAITING_QUEST";
-    // Wait 3 seconds after welcome modal closes, then start first quest
     this._delayedAction(() => {
       if (this._pendingQuest) {
         this._startQuest(this._pendingQuest);
@@ -453,22 +528,75 @@ export class Game {
     }, 3000);
   }
 
-  private _handleInstructionsClosed(): void {
+  private async _handleInstructionsClosed(): Promise<void> {
     if (this._pendingQuest) {
       this._questManager.activateQuestById(this._pendingQuest.id);
-      this._onQuestAdvanced(this._pendingQuest);
+      await this._onQuestAdvanced(this._pendingQuest);
       this._pendingQuest = null;
       this._startQuestTimer();
     }
     this._gameState = "PLAYING";
   }
 
+  private _handleRewardClosed(): void {
+    // Reward message closed. Check if we have a quiz.
+    if (this._completedQuest && this._completedQuest.quiz) {
+      this._startQuiz(this._completedQuest);
+    } else {
+      // No quiz, just finish it.
+      this._handleQuestSuccess();
+    }
+  }
+
+  private _startQuiz(quest: Quest): void {
+    if (!quest.quiz) return;
+    this._gameState = "PLAYING_QUIZ";
+    this._uiManager.showQuizModal(
+      quest.quiz.question,
+      quest.quiz.options,
+      (index) => this._onQuizAnswer(index, quest)
+    );
+  }
+
+  private _onQuizAnswer(index: number, quest: Quest): void {
+    if (!quest.quiz) return;
+    this._uiManager.hideQuizModal();
+
+    if (index === quest.quiz.correctIndex) {
+      // Correct!
+      this._gameState = "SHOWING_QUIZ_RESULT";
+      this._uiManager.showInstructionModal(
+        t("game.modals.success"),
+        quest.quiz.feedback
+      );
+    } else {
+      // Wrong!
+      this._gameState = "SHOWING_QUIZ_FAIL";
+      this._uiManager.showInstructionModal(
+        t("game.modals.fail"),
+        quest.quiz.failureMessage || t("game.messages.quizFailMessage")
+      );
+    }
+  }
+
+  private _handleQuizRetry(): void {
+    // Retry the quiz for the current quest
+    if (this._completedQuest) {
+      this._startQuiz(this._completedQuest);
+    }
+  }
+
   private _handleQuestSuccess(): void {
     this._stopQuestTimer();
     this._gameState = "AWAITING_QUEST";
+
+    // Remove the character from the completed quest
+    if (this._completedQuest) {
+      this._world.removeQuestCharacter(this._completedQuest.id);
+    }
+
     const nextQuest = this._questManager.completeCurrentQuestAndGetNext();
 
-    // Wait 3 seconds before starting next quest
     this._delayedAction(() => {
       this._completedQuest = null;
 
@@ -516,6 +644,8 @@ export class Game {
 
           this._camera.switchToNormalView();
           this._player.hideMarker();
+          this._player.enableControls(); // FIX: Re-enable controls after teleport
+          this._world.setTeleportButtonsVisible(false); // Clean up Map UI
           this._player.enableControls();
           this._world.setTeleportButtonsVisible(false);
           // Show "False alarm!" modal
@@ -537,9 +667,10 @@ export class Game {
           this._player.enableControls();
           this._world.setTeleportButtonsVisible(false);
         }
+
         const currentQuest = this._questManager.getCurrentQuest();
         if (currentQuest) {
-          this._world.showFireAtPoint(currentQuest.id);
+          this._world.loadQuestCharacter(currentQuest);
         }
       }
     }
@@ -581,7 +712,7 @@ export class Game {
     const distance = Math.sqrt(distanceSquared);
     this._audioManager.updateFireVolume(distance);
 
-    if (distanceSquared < 25) {
+    if (distanceSquared < 4) {
       this._completeActiveQuest(currentQuest);
     } else {
       this._uiManager.updateDistance(distance);
@@ -589,31 +720,42 @@ export class Game {
   }
 
   private _completeActiveQuest(quest: Quest): void {
-    this._gameState = "SHOWING_SUCCESS";
+    // OLD: this._gameState = "SHOWING_SUCCESS";
+    // NEW: Show reward first
+    this._gameState = "SHOWING_REWARD";
     this._completedQuest = quest;
 
     // IMMEDIATELY hide the fire and stop sound
     this._world.hideAllFires();
     this._audioManager.stopFireSound();
 
+    // Load character when player arrives
+    this._world.loadQuestCharacter(quest);
+
     // Play completion sound and update UI
     this._audioManager.playQuestCompleteSound();
     this._uiManager.updateDistance(-1);
 
-    // Show success modal
+    // Show reward/arrival success modal
     this._uiManager.showInstructionModal(
       t("game.modals.success"),
       quest.successMessage
     );
   }
 
-  private _onQuestAdvanced(currentQuest: Quest): void {
+  private async _onQuestAdvanced(currentQuest: Quest): Promise<void> {
+    // Load character for this quest if it doesn't have a cinematic
+    if (currentQuest.character && !currentQuest.changeCameraTarget) {
+      await this._world.loadQuestCharacter(currentQuest);
+    }
+
+    // ALWAYS open map after quest - player needs to CHOOSE location based on riddle!
+    // This is the core game mechanic!
     this._camera.switchToMapView();
     this._player.showMarker();
     this._player.disableControls();
-    this._world.hideAllFires(); // Make sure NO fires show in map view
+    this._world.hideAllFires(); // Make sure NO characters show in map view
     this._world.setTeleportButtonsVisible(true);
-    // Don't show fire here - it will be shown when player exits map view
   }
 
   private _startQuestTimer(): void {

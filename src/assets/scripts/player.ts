@@ -33,7 +33,7 @@ interface PlayerConfig {
 const DEFAULT_PLAYER_CONFIG: PlayerConfig = {
   modelPath: "/models/",
   modelFile: "Worker.glb",
-  scaling: 0.9,
+  scaling: 0.7,
   walkSpeed: 5,
   sprintSpeed: 12,
   jumpImpulse: 7,
@@ -115,11 +115,7 @@ export class Player {
   }
 
   public async load(
-    startPosition: Vector3 = new Vector3(
-      -44.742218017578125,
-      1.8362194299697876,
-      -28.74200439453125
-    )
+    startPosition: Vector3 = new Vector3(9, 2, -20)
   ): Promise<AbstractMesh[]> {
     const result = await SceneLoader.ImportMeshAsync(
       "",

@@ -1,10 +1,10 @@
-import { quests, type Quest } from "../quests/quests";
+import { getQuests, type Quest } from "../quests/quests";
 
 export class QuestManager {
   private _quests: Quest[];
 
   constructor() {
-    this._quests = JSON.parse(JSON.stringify(quests));
+    this._quests = getQuests();
     // Ενεργοποιούμε το πρώτο quest μόνο αν δεν περιμένει κάποιο trigger
     if (this._quests.length > 0 && !this._quests[0].trigger) {
       this._quests[0].status = "active";

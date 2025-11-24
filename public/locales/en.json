@@ -1,0 +1,181 @@
+{
+  "ui": {
+    "buttons": {
+      "continue": "Continue"
+    },
+    "loading": {
+      "subtitle": "Escape Game: The City Sends an SOS",
+      "loading": "Loading...",
+      "preparing": "Preparing..."
+    },
+    "infoModal": {
+      "title": "INSTRUCTIONS",
+      "instructions": "Once you press the signal for the incident you selected, you can move using the WASD keys. The keyboard must be set to English to move."
+    },
+    "controls": {
+      "movement": "MOVEMENT",
+      "camera": "CAMERA",
+      "moveKeys": "Forward, Left, Back, Right movement",
+      "runKey": "Run",
+      "jumpKey": "Jump",
+      "mouseDrag": "Drag mouse to look around",
+      "joystick": "Use the joystick (bottom left) to move",
+      "touchDrag": "Drag screen to look around"
+    },
+    "hud": {
+      "distance": "DISTANCE",
+      "time": "TIME"
+    },
+    "compass": {
+      "north": "N",
+      "south": "S",
+      "east": "E",
+      "west": "W"
+    },
+    "status": {
+      "noObjective": "No objective",
+      "completed": "✓",
+      "distanceFormat": "{distance}m"
+    }
+  },
+  "game": {
+    "modals": {
+      "message": "MESSAGE",
+      "sign": "SIGN",
+      "nextMission": "NEXT MISSION",
+      "lastMission": "LAST MISSION",
+      "gameEnd": "GAME END",
+      "success": "WELL DONE!",
+      "timeUp": "TIME'S UP!",
+      "tryAgain": "TRY AGAIN",
+      "gameOver": "Game Over",
+      "congratulations": "CONGRATULATIONS",
+      "falseAlarm": "False alarm!",
+      "fail": "❌ Wrong Answer!"
+    },
+    "messages": {
+      "welcome": "CP Ranger, 112 is overwhelmed with calls: minor accidents, injuries, children needing help!\nOnly you can locate the incidents, arrive at the spots on time, and provide first aid.\nYour mission is to:\n• Solve the riddles to find where in the city each incident occurred.\n• Select the correct spot on the map before time runs out.\n• Answer the first aid questions correctly to save the person in need.\n\nRemember:\n• Don't rush – read every clue carefully.\n• Work with speed and safety!\n• Every correct answer brings you closer to success!\n\nAre you ready to start your mission?\nYou don't have much time... the city needs you now!",
+      "falseAlarmMessage": "False alarm! No incident here! Try again!",
+      "quizFailMessage": "That wasn't the right choice. Think carefully again and give it another try!"
+    }
+  },
+  "quests": {
+    "quest1": {
+      "title": "Park",
+      "riddle": "Someone slipped and hurt their knee! They are where people enjoy the sun lying under thick leafy shade while chatting, where children play after school.",
+      "successMessage": "You arrived quickly! Little Nick has an abrasion on his knee. That's part of the game!",
+      "caller": "112 Emergency",
+      "quiz": {
+        "question": "🤕 What do you do?",
+        "options": [
+          "Apply ice.",
+          "Clean with clean water and cover with sterile gauze.",
+          "Pour rubbing alcohol or hydrogen peroxide on the wound to disinfect."
+        ],
+        "correctIndex": 1,
+        "feedback": "✅ Well done! You cleaned the wound with clean water, applied sterile gauze, and told Nick to keep the area clean.",
+        "failureMessage": "You didn't do well."
+      }
+    },
+    "quest2": {
+      "title": "Stadium",
+      "riddle": "Alarm! The temperature in the city has risen dangerously. You hear anxious voices on the radio.\n\nGrass without trees,\na crowd shouting loudly.\nA ball rolls and the sun burns.\nWhat place is this where everyone runs but no one leaves?\n\nWhere will you head now, CP Ranger?",
+      "successMessage": "You arrived quickly!",
+      "caller": "🌡️ ALARM",
+      "quiz": {
+        "question": "Luckily you arrived on time. A child collapsed during practice! He is flushed and looks very tired! Heatstroke! What do you do?",
+        "options": [
+          "Give ice to cool him down.",
+          "Suggest not moving him and notify his family.",
+          "Move the child to a cool place and give him water."
+        ],
+        "correctIndex": 2,
+        "feedback": "✅ Bravo, you prevented a serious episode of heatstroke. The child wasn't wearing a hat and wasn't drinking enough water during exercise. Did you see what happens if one doesn't take proper protection measures?",
+        "failureMessage": "You didn't do well."
+      }
+    },
+    "quest3": {
+      "title": "Pool",
+      "riddle": "You are drinking water to stay hydrated when suddenly a kid on a scooter gives you a message:\n\nWater without waves,\ndives without fish,\nrun to where they guard lives with a whistle!\n\nCP Ranger run!",
+      "successMessage": "Yes, you arrived correctly. Although it's hot, the child has hypothermia!",
+      "caller": "🛹 Message",
+      "quiz": {
+        "question": "🥶 What is the correct first step for hypothermia?",
+        "options": [
+          "Warm the person slowly and cover them.",
+          "Put them in front of a heater.",
+          "Pour hot water on them."
+        ],
+        "correctIndex": 0,
+        "feedback": "✅ Correct action! Hypothermia doesn't only appear in the snow or when swimming in freezing water in winter. It can happen after a long swim or exposure to wind, even in summer. So be careful!",
+        "failureMessage": "You didn't do well."
+      }
+    },
+    "quest4": {
+      "title": "School Yard",
+      "riddle": "You receive a message on your mobile:\n\nIt has no desks or blackboard,\nbut every recess a lesson in friendship happens there.\nIn this space, your composure will be tested!",
+      "successMessage": "You arrived in time, CP Ranger!\nYes, a child is lying in the yard. No one knows what to do!",
+      "caller": "📱 Message",
+      "quiz": {
+        "question": "😵 What do you NOT do?",
+        "options": [
+          "Lay him on his back.",
+          "Raise his legs a little higher.",
+          "Open up space for air and call for help.",
+          "Pour water on him and give him something to eat to perk him up."
+        ],
+        "correctIndex": 3,
+        "feedback": "✅ You guessed right! The child fainted from the heat and the exhaustion of playing. Maybe also because he didn't eat a good breakfast!",
+        "failureMessage": "You didn't do well."
+      }
+    },
+    "quest5": {
+      "title": "Town Hall",
+      "riddle": "Run to where the celebration starts, when the clock shows 7.",
+      "successMessage": "You arrived on time! At the Town Hall, at an event for students, a child ate chocolate with peanuts. Suddenly he started turning red, coughing, and struggling to breathe. Yes! You thought correctly! Allergic reaction!",
+      "caller": "🕖 Clock",
+      "quiz": {
+        "question": "🥜 What do you do?",
+        "options": [
+          "Nothing. Wait for it to pass.",
+          "Ask the child if he has an allergy and if he has adrenaline (EpiPen) with him, and call 112 (or 166).",
+          "Give water or food to the child to \"calm down\".",
+          "Lay the child on his back without checking if he is struggling to breathe."
+        ],
+        "correctIndex": 1,
+        "feedback": "✅ Well done! You reacted correctly and saved precious time — in an allergic crisis, immediate action makes the difference!",
+        "failureMessage": "You didn't do well."
+      }
+    },
+    "quest6": {
+      "title": "Vacant Lot",
+      "riddle": "",
+      "successMessage": "",
+      "caller": ""
+    },
+    "quest7": {
+      "title": "School Courtyard",
+      "riddle": "",
+      "successMessage": "",
+      "caller": ""
+    },
+    "quest8": {
+      "title": "Lake",
+      "riddle": "",
+      "successMessage": "",
+      "caller": ""
+    },
+    "quest9": {
+      "title": "Street",
+      "riddle": "",
+      "successMessage": "",
+      "caller": ""
+    },
+    "quest10": {
+      "title": "Church",
+      "riddle": "",
+      "successMessage": "",
+      "caller": ""
+    }
+  }
+}

@@ -73,7 +73,7 @@ class I18n {
    */
   async loadTranslations(locale: string = 'el'): Promise<void> {
     try {
-      const response = await fetch(`/locales/${locale}.json`);
+      const response = await fetch(`/locales/${locale}.json?v=${Date.now()}`);
       if (!response.ok) {
         throw new Error(`Failed to load translations for locale: ${locale}`);
       }
@@ -148,6 +148,30 @@ class I18n {
   }
 
   /**
+   * Get a configuration object or array by key path
+   */
+  getObject<T>(keyPath: string): T | null {
+    if (!this.translations) {
+      console.warn('Translations not loaded yet');
+      return null;
+    }
+
+    const keys = keyPath.split('.');
+    let value: any = this.translations;
+
+    for (const key of keys) {
+      if (value && typeof value === 'object' && key in value) {
+        value = value[key];
+      } else {
+        console.warn(`Translation key not found: ${keyPath}`);
+        return null;
+      }
+    }
+
+    return value as T;
+  }
+
+  /**
    * Check if translations are loaded
    */
   isLoaded(): boolean {
@@ -161,6 +185,8 @@ export const i18n = new I18n();
 // Helper function for shorter syntax
 export const t = (keyPath: string, replacements?: Record<string, string | number>) =>
   i18n.t(keyPath, replacements);
+
+export const getObject = <T>(keyPath: string) => i18n.getObject<T>(keyPath);
 
 // Export type for use in other files
 export type { Translations };

@@ -4,23 +4,28 @@ import {
   HemisphericLight,
   SceneLoader,
   AbstractMesh,
-  Mesh,
-  PhysicsBody,
-  PhysicsShapeMesh,
-  PhysicsMotionType,
-  StandardMaterial,
-  Color3,
-  CubeTexture,
-  MeshBuilder,
-  Texture,
-  ParticleHelper,
-  ArcRotateCamera,
   Animation,
   AnimationGroup,
-  DirectionalLight,
-  ShadowGenerator,
+  ArcRotateCamera,
+  Color3,
+  Color4,
+  CubeTexture,
   DefaultRenderingPipeline,
+  DirectionalLight,
   DynamicTexture,
+  Mesh,
+  MeshBuilder,
+  ParticleSystem,
+  PhysicsBody,
+  PhysicsMotionType,
+  PhysicsShapeMesh,
+  Scalar,
+  ShadowGenerator,
+  SpotLight,
+  StandardMaterial,
+  Texture,
+  PointLight, // Added PointLight
+  type ISceneLoaderAsyncResult,
 } from "@babylonjs/core";
 import type { IParticleSystem } from "@babylonjs/core/Particles/IParticleSystem";
 import type { Quest } from "./quests/quests";
@@ -53,7 +58,7 @@ const MODEL_CONFIGS: Record<string, ModelConfig> = {
   },
   "city-white.glb": {
     scale: new Vector3(1.2, 1.2, -1.2),
-    position: new Vector3(0, -2, 0),
+    position: new Vector3(0, -6, 0),
     rotation: new Vector3(0, 0, 0),
   },
 };
@@ -75,10 +80,14 @@ export class World {
   private readonly _firePoints = new Map<number, Mesh>();
   private readonly _fireParticleSystems: IParticleSystem[] = [];
   private readonly _teleportButtons = new Map<number, Mesh>();
-  private _cyclist?: AbstractMesh;
-  private _cyclistAnimations: AnimationGroup[] = [];
   private _shadowGenerator?: ShadowGenerator;
   private _pipeline?: DefaultRenderingPipeline;
+
+  // Generic character system
+  private readonly _questCharacters = new Map<number, AbstractMesh>();
+  private readonly _characterAnimations = new Map<number, AnimationGroup[]>();
+
+  // Cache for optimized lookups
 
   // Cache for optimized lookups
   private readonly _meshCache = new Map<string, AbstractMesh>();
@@ -112,6 +121,10 @@ export class World {
 
   public createQuestFirePoints(quests: Quest[]): void {
     for (const quest of quests) {
+      // Just store position reference or whatever logic is needed for tracking
+      // We no longer create sphere meshes for fire points as they are replaced by characters
+      // If logic relies on _firePoints existing, we might need to keep empty meshes or update logic.
+      // For now, let's keep invisible markers just in case collision/logic depends on it
       const firePoint = MeshBuilder.CreateSphere(
         `firePoint-${quest.id}`,
         { diameter: 5 },
@@ -124,27 +137,234 @@ export class World {
   }
 
   public async showFireAtPoint(id: number): Promise<void> {
-    const firePoint = this._firePoints.get(id);
-    if (!firePoint) return;
+    // Previously showed fire/aid kit. Now we load the character.
+    // We need access to the quest data to know which character to load.
+    // However, this method only takes an ID.
+    // We'll rely on the caller to handle specific character loading if needed,
+    // OR we need to pass the character model name here.
+    // Wait, the quests array is available in quests.ts but World doesn't import 'quests' value directly to avoid circular deps maybe?
+    // But World imports 'Quest' type.
 
-    const set = await ParticleHelper.CreateAsync("fire", this._scene);
-    for (const system of set.systems) {
-      system.emitter = firePoint;
-      system.minSize = 2.5;
-      system.maxSize = 10;
-      system.emitRate = 600;
-      this._fireParticleSystems.push(system);
-    }
-    set.start();
+    // Instead of re-fetching quest data here which might be complex without the QuestManager,
+    // let's assume this method is changing purpose. 
+    // The implementation plan said: "Implement loadQuestCharacter(quest: Quest)".
+    // So distinct from showFireAtPoint.
+
+    // However, the Game class probably calls `showFireAtPoint`. 
+    // Ideally we update Game class too, but let's see if we can adapt this method or add a new one.
+    // For now, I will implement `loadQuestCharacter` and leave `showFireAtPoint` as a deprecated/empty shell or proxy if possible.
+    // But since I don't have the Quest object here, I cannot know which GLB to load.
+
+    // Let's implement `loadQuestCharacter` and I will update the Game class/QuestManager to call THAT instead of showFireAtPoint.
+    // Or simpler: The user task said "each quest now instead of fire should load the character glb".
+
+    console.warn("showFireAtPoint is deprecated. Use loadQuestCharacter instead.");
   }
 
+  public async loadQuestCharacter(quest: Quest): Promise<void> {
+    if (this._questCharacters.has(quest.id)) {
+      const char = this._questCharacters.get(quest.id);
+      if (char) {
+        char.setEnabled(true);
+        return;
+      }
+    }
+
+    if (!quest.character) {
+      console.warn(`Quest ${quest.id} has no character model defined.`);
+      // Fallback or just return? Let's fallback to aid kit if strictly needed, but goal is character.
+      // Let's return to avoid breaking if no model.
+      return;
+    }
+
+    try {
+      console.log(`Loading character for Quest ${quest.id}: ${quest.character}`);
+      const result = await SceneLoader.ImportMeshAsync(
+        "",
+        this._config.modelPath,
+        quest.character,
+        this._scene
+      );
+
+      const root = new Mesh(`questCharacter-${quest.id}`, this._scene);
+      root.scaling.set(0.7, 0.7, 0.7);
+      root.position.set(quest.point.x, 2.2, quest.point.z);
+      // root.scaling.set(1.5, 1.5, 1.5); // Ensure they are visible size
+
+      // If it's Nikos or generic, maybe rotation needs adjustment?
+      // Default to facing somewhat towards camera or origin?
+      // root.lookAt(new Vector3(0, 2, 0));      
+
+      // --- SELECTION DECAL (Requested by User) ---
+      // Ground mesh with dynamic texture for a clean selection ring
+      const decalSize = 2.5;
+      const decal = MeshBuilder.CreateGround(`questDecal_${quest.id}`, { width: decalSize, height: decalSize }, this._scene);
+      decal.parent = root;
+      decal.position.y = -0.3; // Slightly above ground to prevent Z-fighting
+
+      const decalTexture = new DynamicTexture(`decalTex_${quest.id}`, { width: 512, height: 512 }, this._scene);
+      const ctx = decalTexture.getContext();
+      const cx = 256;
+      const cy = 256;
+      const r = 240;
+
+      // Draw Cyan Glow Ring
+      ctx.clearRect(0, 0, 512, 512);
+
+      // Outer glow
+      const gradient = ctx.createRadialGradient(cx, cy, r - 40, cx, cy, r);
+      gradient.addColorStop(0, "rgba(0, 255, 255, 0)");
+      gradient.addColorStop(0.5, "rgba(0, 255, 255, 0.8)"); // Cyan
+      gradient.addColorStop(1, "rgba(0, 255, 255, 0)");
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // Sharp inner ring
+      ctx.beginPath();
+      ctx.arc(cx, cy, r - 20, 0, Math.PI * 2);
+      ctx.lineWidth = 15;
+      ctx.strokeStyle = "rgba(0, 255, 255, 0.9)";
+      ctx.stroke();
+
+      decalTexture.update();
+      decalTexture.hasAlpha = true;
+
+      const decalMat = new StandardMaterial(`decalMat_${quest.id}`, this._scene);
+      decalMat.diffuseTexture = decalTexture;
+      decalMat.opacityTexture = decalTexture;
+      decalMat.emissiveColor = new Color3(0, 1, 1); // Glow self-lit
+      decalMat.disableLighting = true;
+      decalMat.useAlphaFromDiffuseTexture = true;
+      decal.material = decalMat;
+
+      // Slow breathing animation
+      const decalAnim = new Animation("decalPulse", "scaling", 30, Animation.ANIMATIONTYPE_VECTOR3, Animation.ANIMATIONLOOPMODE_CYCLE);
+      decalAnim.setKeys([
+        { frame: 0, value: new Vector3(1, 1, 1) },
+        { frame: 60, value: new Vector3(1.1, 1.1, 1.1) },
+        { frame: 120, value: new Vector3(1, 1, 1) }
+      ]);
+      decal.animations.push(decalAnim);
+      this._scene.beginAnimation(decal, 0, 120, true);
+
+      // Removed Bubbles as per user request.
+
+      for (const mesh of result.meshes) {
+        if (mesh.parent === null) mesh.parent = root;
+        mesh.isVisible = true;
+        if (mesh instanceof Mesh) {
+          mesh.receiveShadows = true;
+          if (this._shadowGenerator) {
+            this._shadowGenerator.addShadowCaster(mesh);
+          }
+        }
+      }
+
+      this._questCharacters.set(quest.id, root);
+      this._characterAnimations.set(quest.id, result.animationGroups);
+
+      // Play idle animation if exists
+      if (result.animationGroups.length > 0) {
+        // Check for "Idle" or similar, or just play first
+        const idle = result.animationGroups.find(a => a.name.toLowerCase().includes("idle")) || result.animationGroups[0];
+        idle.play(true);
+      }
+
+      // ADD QUEST MARKER (!) ABOVE CHARACTER HEAD
+      this._addQuestMarker(root, quest.id);
+
+    } catch (e) {
+      console.error(`Failed to load character ${quest.character} for quest ${quest.id}`, e);
+    }
+  }
+
+  private _addQuestMarker(characterRoot: AbstractMesh, questId: number): void {
+    // Create exclamation mark above character
+    const marker = MeshBuilder.CreatePlane(`questMarker_${questId}`, {
+      size: 1.2,
+      sideOrientation: Mesh.DOUBLESIDE
+    }, this._scene);
+
+    marker.position.y = 2.2; // Lower position
+    marker.parent = characterRoot;
+    marker.billboardMode = Mesh.BILLBOARDMODE_ALL; // Always face camera
+
+    // Create material (NO glow/sparkles)
+    const material = new StandardMaterial(`questMarkerMat_${questId}`, this._scene);
+    material.diffuseColor = new Color3(1, 1, 1);
+    material.emissiveColor = new Color3(0, 0, 0); // No glow
+    material.disableLighting = false;
+
+    // Create texture with "!"
+    const dynamicTexture = new DynamicTexture(`questMarkerTexture_${questId}`, 256, this._scene);
+    const ctx = dynamicTexture.getContext();
+    ctx.fillStyle = "transparent";
+    ctx.fillRect(0, 0, 256, 256);
+    ctx.font = "bold 200px Arial";
+    ctx.fillStyle = "yellow";
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 10;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.strokeText("!", 128, 128);
+    ctx.fillText("!", 128, 128);
+    dynamicTexture.update();
+
+    material.diffuseTexture = dynamicTexture;
+    material.opacityTexture = dynamicTexture;
+    marker.material = material;
+
+    // Animate bobbing up and down
+    const anim = new Animation(
+      `questMarkerAnim_${questId}`,
+      "position.y",
+      30,
+      Animation.ANIMATIONTYPE_FLOAT,
+      Animation.ANIMATIONLOOPMODE_CYCLE
+    );
+    anim.setKeys([
+      { frame: 0, value: 2.2 },
+      { frame: 15, value: 2.6 },
+      { frame: 30, value: 2.2 }
+    ]);
+    marker.animations.push(anim);
+    this._scene.beginAnimation(marker, 0, 30, true);
+
+    // Spotlight removed as per user request (focus on particles)
+  }
+
+
   public hideAllFires(): void {
-    // Stop and dispose in reverse order for better performance
+    // Hide all characters
+    for (const char of this._questCharacters.values()) {
+      char.setEnabled(false);
+    }
+
+    // Also clean up old fire systems if any exist (safety)
     for (let i = this._fireParticleSystems.length - 1; i >= 0; i--) {
-      this._fireParticleSystems[i].stop(); // STOP IMMEDIATELY
-      this._fireParticleSystems[i].dispose();
+      const system = this._fireParticleSystems[i];
+      if ('stop' in system && typeof system.stop === 'function') system.stop();
+      if ('dispose' in system && typeof system.dispose === 'function') system.dispose();
     }
     this._fireParticleSystems.length = 0;
+  }
+
+  public removeQuestCharacter(questId: number): void {
+    const character = this._questCharacters.get(questId);
+    if (character) {
+      console.log(`Removing character for Quest ${questId}`);
+      character.dispose();
+      this._questCharacters.delete(questId);
+    }
+
+    const animations = this._characterAnimations.get(questId);
+    if (animations) {
+      animations.forEach(anim => anim.dispose());
+      this._characterAnimations.delete(questId);
+    }
   }
 
   public setFiresVisible(visible: boolean): void {
@@ -194,35 +414,50 @@ export class World {
 
       const ctx = dynamicTexture.getContext();
 
-      // Clear with transparent background
-      ctx.clearRect(0, 0, textureSize, textureSize);
+      // Draw premium map marker
+      const centerX = textureSize / 2;
+      const centerY = textureSize / 2;
+      const radius = textureSize / 2 - 20;
 
-      // Draw thick black outline (outer)
+      // Shadow
+      ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+      ctx.shadowBlur = 20;
+      ctx.shadowOffsetX = 5;
+      ctx.shadowOffsetY = 10;
 
-      // Draw white circle background (inner)
+      // Main Circle Background (White)
       ctx.beginPath();
-      ctx.arc(
-        textureSize / 2,
-        textureSize / 2,
-        textureSize / 2 - 30,
-        0,
-        2 * Math.PI
-      );
+      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+      ctx.fillStyle = "#ffffff";
       ctx.fill();
 
-      // Draw number with cartoon style - bigger and bolder
-      const isDev = window.location.search === "?dev";
+      // Reset shadow for inner elements
+      ctx.shadowColor = "transparent";
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
 
-      ctx.fillStyle = isDev ? "#ffffff" : "#000000";
-      ctx.font = "bold 340px Arial";
+      // Red Border/Ring (First Aid Theme)
+      ctx.lineWidth = 15;
+      ctx.strokeStyle = "#ef4444"; // Red-500
+      ctx.stroke();
+
+      // Inner thin ring for detail
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius - 20, 0, Math.PI * 2);
+      ctx.strokeStyle = "#e5e7eb"; // Gray-200
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Number Text
+      ctx.fillStyle = "#1e293b"; // Slate-800
+      // Use a slightly smaller font to fit inside the rings comfortably
+      ctx.font = "bold 280px Arial, sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      ctx.fillText(
-        isDev ? `${quest.mapq}` : `🔥`,
-        textureSize / 2,
-        textureSize / 2 + 10
-      );
+      // Slight offset y to visually center due to font metrics
+      ctx.fillText(`${quest.mapq}`, centerX, centerY + 25);
 
       dynamicTexture.update();
 
@@ -313,7 +548,7 @@ export class World {
   }
 
   private _createLight(): void {
-    // Indie game warm lighting
+    // Ambient light
     const hemispheric = new HemisphericLight(
       "hemisphericLight",
       Vector3.UpReadOnly,
@@ -321,9 +556,9 @@ export class World {
     );
     hemispheric.intensity = 0.65;
     hemispheric.groundColor = new Color3(0.4, 0.3, 0.2);
-    hemispheric.diffuse = new Color3(1.0, 0.8, 0.6);
+    hemispheric.diffuse = new Color3(1, 0.9, 0.8);
 
-    // Warm sun
+    // Sun
     const directional = new DirectionalLight(
       "directionalLight",
       new Vector3(-1, -2, -1),
@@ -331,7 +566,7 @@ export class World {
     );
     directional.position = new Vector3(50, 100, 50);
     directional.intensity = 0.9;
-    directional.diffuse = new Color3(1.0, 0.75, 0.5);
+    directional.diffuse = new Color3(1, 0.95, 0.85)
 
     // Optimized shadows - 1024 is enough
     this._shadowGenerator = new ShadowGenerator(1024, directional);
@@ -374,6 +609,7 @@ export class World {
       this._setupStaticMeshPhysics(mesh);
       this._optimizeMesh(mesh);
     }
+
   }
 
   private _setupStaticMeshPhysics(mesh: Mesh): void {
@@ -433,53 +669,89 @@ export class World {
       this._pipeline.imageProcessing.vignetteWeight = 0.3;
       this._pipeline.imageProcessing.vignetteStretch = 0.5;
     }
-
     // Efficient antialiasing
     this._pipeline.fxaaEnabled = true;
     this._pipeline.samples = 2; // Reduced from 4, still looks clean
   }
 
-  public async loadCyclist(): Promise<void> {
-    const result = await SceneLoader.ImportMeshAsync(
-      "",
-      this._config.modelPath,
-      this._config.cyclistModel,
-      this._scene
-    );
 
-    const cyclistRoot = new Mesh("cyclistRoot", this._scene);
-    cyclistRoot.scaling.set(1.5, 1.5, 1.5);
-    cyclistRoot.position.set(27.073823928833008, 1.5, 17.194150924682617);
+  // --- GENERIC CINEMATIC SYSTEM ---
 
-    for (const mesh of result.meshes) {
-      if (mesh.parent === null) mesh.parent = cyclistRoot;
-      mesh.isVisible = true;
-      if (mesh instanceof Mesh) {
-        mesh.receiveShadows = true;
-        if (this._shadowGenerator) {
-          this._shadowGenerator.addShadowCaster(mesh);
-        }
-      }
-    }
+  // Active cinematic character tracking
+  public cinematicCharacter?: AbstractMesh; public cinematicCamera?: ArcRotateCamera;
+  private _cinematicAnimations: AnimationGroup[] = [];
+  private _cinematicParticleSystem?: IParticleSystem;
 
-    this._cyclist = cyclistRoot;
-    this._cyclistAnimations = result.animationGroups;
-    this._setupCyclistCamera(cyclistRoot);
+  public getCinematicCharacter(): AbstractMesh | undefined {
+    return this.cinematicCharacter;
   }
 
-  public animateCyclistToPosition(
+  public getCinematicCamera(): ArcRotateCamera | undefined {
+    return this.cinematicCamera;
+  }
+
+  public async loadCinematicCharacter(
+    modelName: string,
+    spawnPosition: Vector3,
+    scale: number = 1
+  ): Promise<void> {
+    // Cleanup any existing
+    this.disposeCinematicCharacter();
+
+    try {
+      const result = await SceneLoader.ImportMeshAsync(
+        "",
+        this._config.modelPath,
+        modelName + ".glb", // Assuming modelName is filename without extension or we handle it
+        this._scene
+      );
+
+      const root = new Mesh("cinematicRoot", this._scene);
+      root.scaling.set(scale, scale, scale);
+      root.position.copyFrom(spawnPosition);
+      root.rotation.y = Math.PI / 2; // 45 degrees clockwise
+
+      for (const mesh of result.meshes) {
+        if (mesh.parent === null) mesh.parent = root;
+        mesh.isVisible = true;
+        if (mesh instanceof Mesh) {
+          mesh.receiveShadows = true;
+          if (this._shadowGenerator) {
+            this._shadowGenerator.addShadowCaster(mesh);
+          }
+        }
+      }
+
+      this.cinematicCharacter = root;
+      this._cinematicAnimations = result.animationGroups;
+
+      // Play idle if available
+      if (this._cinematicAnimations.length > 0) {
+        this._cinematicAnimations[0].play(true);
+      }
+
+      // Particles removed as per user request
+
+      // Spotlight removed as per user request
+
+      this._setupCinematicCamera(root);
+
+    } catch (e) {
+      console.error(`Failed to load cinematic character ${modelName}`, e);
+    }
+  }
+
+  public async animateCinematicCharacter(
     targetPosition: Vector3,
-    duration: number = 2000
-  ): void {
-    if (!this._cyclist) return;
+    duration: number = 3000
+  ): Promise<void> {
+    if (!this.cinematicCharacter) return;
 
-    const startPosition = this._cyclist.position.clone();
-    startPosition.y = 2;
+    const startPosition = this.cinematicCharacter.position.clone();
 
-    this._cyclist.lookAt(targetPosition);
 
     const moveAnimation = new Animation(
-      "cyclistMove",
+      "cinematicMove",
       "position",
       60,
       Animation.ANIMATIONTYPE_VECTOR3,
@@ -492,45 +764,54 @@ export class World {
     ];
 
     moveAnimation.setKeys(keys);
-    this._cyclist.animations = [moveAnimation];
+    this.cinematicCharacter.animations.push(moveAnimation);
 
-    this._scene.beginAnimation(this._cyclist, 0, 60 * (duration / 1000), false);
-
-    for (const animGroup of this._cyclistAnimations) {
-      if (animGroup.name.includes("Ride") || animGroup.name.includes("Cycle")) {
-        animGroup.play(true);
-        break;
-      }
-    }
+    return new Promise((resolve) => {
+      const anim = this._scene.beginAnimation(
+        this.cinematicCharacter,
+        0,
+        60 * (duration / 1000),
+        false,
+        1.0,
+        () => resolve()
+      );
+    });
   }
 
-  public disposeCyclist(): void {
-    if (!this._cyclist) return;
+  public disposeCinematicCharacter(): void {
+    if (this.cinematicCharacter) {
+      this.cinematicCharacter.dispose();
+      this.cinematicCharacter = undefined;
+    }
 
-    for (const animGroup of this._cyclistAnimations) {
+    for (const animGroup of this._cinematicAnimations) {
       animGroup.dispose();
     }
-    this._cyclistAnimations = [];
+    this._cinematicAnimations = [];
 
-    this._cyclist.dispose();
-    this._cyclist = undefined;
+    if (this._cinematicParticleSystem) {
+      this._cinematicParticleSystem.stop();
+      this._cinematicParticleSystem.dispose();
+      this._cinematicParticleSystem = undefined;
+    }
 
-    if (this.cyclistCamera) {
-      this.cyclistCamera.dispose();
-      this.cyclistCamera = undefined;
+    if (this.cinematicCamera) {
+      this.cinematicCamera.dispose();
+      this.cinematicCamera = undefined;
     }
   }
 
-  private _setupCyclistCamera(target: AbstractMesh): void {
-    this.cyclistCamera = new ArcRotateCamera(
-      "cyclistCamera",
+  private _setupCinematicCamera(target: AbstractMesh): void {
+    this.cinematicCamera = new ArcRotateCamera(
+      "cinematicCamera",
       -Math.PI / 2,
       Math.PI / 2.5,
       10,
       target.position,
       this._scene
     );
-    this.cyclistCamera.lockedTarget = target;
-    this.cyclistCamera.setEnabled(false);
+    this.cinematicCamera.lockedTarget = target;
+    this.cinematicCamera.setEnabled(false);
   }
+
 }

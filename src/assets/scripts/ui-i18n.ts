@@ -10,6 +10,33 @@ import { i18n, t } from "./i18n";
  * Must be called after translations are loaded
  */
 export function initUITranslations() {
+  // Update loading screen text
+  const loadingSubtitle = document.getElementById('loading-subtitle');
+  if (loadingSubtitle) {
+    loadingSubtitle.textContent = t('ui.loading.subtitle');
+  }
+
+  const loadingText = document.getElementById('loading-text');
+  if (loadingText) {
+    loadingText.textContent = t('ui.loading.loading');
+  }
+
+  const loadingStatus = document.getElementById('loading-status');
+  if (loadingStatus) {
+    loadingStatus.textContent = t('ui.loading.preparing');
+  }
+
+  // Update info modal
+  const infoModalTitle = document.getElementById('info-modal-title');
+  if (infoModalTitle) {
+    infoModalTitle.textContent = t('ui.infoModal.title');
+  }
+
+  const infoModalInstructions = document.getElementById('info-modal-instructions');
+  if (infoModalInstructions) {
+    infoModalInstructions.textContent = t('ui.infoModal.instructions');
+  }
+
   // Update button text
   const continueButton = document.querySelector('#dialogue_modal button span');
   if (continueButton) {
@@ -57,15 +84,27 @@ export function initUITranslations() {
   }
 
   // Update compass directions
-  const compassDirections = document.querySelectorAll('#compass-needle > div');
-  if (compassDirections.length >= 4) {
-    // North (top)
-    (compassDirections[0] as HTMLElement).textContent = t('ui.compass.north');
-    // South (bottom)
-    (compassDirections[1] as HTMLElement).textContent = t('ui.compass.south');
-    // East (right)
-    (compassDirections[2] as HTMLElement).textContent = t('ui.compass.east');
-    // West (left)
-    (compassDirections[3] as HTMLElement).textContent = t('ui.compass.west');
-  }
+  const north = document.getElementById('compass-north');
+  if (north) north.textContent = t('ui.compass.north');
+
+  const south = document.getElementById('compass-south');
+  if (south) south.textContent = t('ui.compass.south');
+
+  const east = document.getElementById('compass-east');
+  if (east) east.textContent = t('ui.compass.east');
+
+  const west = document.getElementById('compass-west');
+  if (west) west.textContent = t('ui.compass.west');
+
+  // GENERIC DATA-I18N HANDLER (Handles Thermometer Modal & Future Elements)
+  const i18nElements = document.querySelectorAll('[data-i18n]');
+  i18nElements.forEach(element => {
+    const key = element.getAttribute('data-i18n');
+    if (key) {
+      const translation = t(key);
+      if (translation !== key) {
+        element.textContent = translation;
+      }
+    }
+  });
 }

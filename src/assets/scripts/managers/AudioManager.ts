@@ -12,10 +12,10 @@ export class AudioManager {
   private _bassSynth: Tone.Synth | null = null;
   private _padSynth: Tone.PolySynth | null = null;
 
-  // Fire sound effects
-  private _fireNoise: Tone.Noise | null = null;
-  private _fireVolume: Tone.Volume | null = null;
-  private _fireFilter: Tone.Filter | null = null;
+  // Emergency ambient sound effects
+  private _emergencyNoise: Tone.Noise | null = null;
+  private _emergencyVolume: Tone.Volume | null = null;
+  private _emergencyFilter: Tone.Filter | null = null;
 
   // Sound effect synths
   private _fxSynth: Tone.Synth | null = null;
@@ -67,16 +67,18 @@ export class AudioManager {
     }).connect(padChorus);
     this._padSynth.volume.value = -32;
 
-    // Crackling fire with character
-    this._fireVolume = new Tone.Volume(-35).toDestination();
-    this._fireFilter = new Tone.Filter(800, "lowpass").connect(
-      this._fireVolume
+    // Subtle emergency ambient sound (like distant sirens/heartbeat)
+    /* Disabled by request
+    this._emergencyVolume = new Tone.Volume(-40).toDestination();
+    this._emergencyFilter = new Tone.Filter(600, "lowpass").connect(
+      this._emergencyVolume
     );
-    const fireFilter2 = new Tone.Filter(150, "highpass").connect(
-      this._fireFilter
+    const emergencyFilter2 = new Tone.Filter(200, "highpass").connect(
+      this._emergencyFilter
     );
-    this._fireNoise = new Tone.Noise("brown").connect(fireFilter2);
-    this._fireNoise.start();
+    this._emergencyNoise = new Tone.Noise("pink").connect(emergencyFilter2);
+    this._emergencyNoise.start();
+    */
 
     // Crisp UI sounds - triangle for softer clicks
     this._uiSynth = new Tone.Synth({
@@ -103,7 +105,7 @@ export class AudioManager {
     this._impactSynth.volume.value = -12;
   }
 
-  private _startBackgroundMusic(): void {}
+  private _startBackgroundMusic(): void { }
 
   public playQuestCompleteSound = (): void => {
     if (!this._audioInitialized || !this._fxSynth || !this._impactSynth) return;
@@ -147,27 +149,35 @@ export class AudioManager {
   };
 
   public updateFireVolume(distance: number): void {
-    if (!this._fireVolume) return;
+    // Fire sounds disabled by request
+    return;
+    /* 
+    if (!this._emergencyVolume) return;
 
-    // Max fire sound at 0-10m, fade out by 50m
+    // Max emergency sound at 0-10m, fade out by 50m
     const maxDistance = 50;
     const minDistance = 10;
 
     if (distance <= minDistance) {
-      this._fireVolume.volume.value = -10;
+      this._emergencyVolume.volume.value = -15;
     } else if (distance >= maxDistance) {
-      this._fireVolume.volume.value = -60;
+      this._emergencyVolume.volume.value = -60;
     } else {
       // Logarithmic falloff for realistic spatial audio
       const normalized = (distance - minDistance) / (maxDistance - minDistance);
-      this._fireVolume.volume.value = -10 - normalized * 50;
+      this._emergencyVolume.volume.value = -15 - normalized * 45;
     }
+    */
   }
 
   public stopFireSound(): void {
-    if (this._fireVolume) {
-      this._fireVolume.volume.value = -60; // Silent
+    // Fire sounds disabled
+    return;
+    /*
+    if (this._emergencyVolume) {
+      this._emergencyVolume.volume.value = -60; // Silent
     }
+    */
   }
 
   public playRingtone = (): void => {
@@ -208,8 +218,8 @@ export class AudioManager {
     if (this._backgroundMusicLoop) {
       this._backgroundMusicLoop.stop();
     }
-    if (this._fireNoise) {
-      this._fireNoise.stop();
+    if (this._emergencyNoise) {
+      this._emergencyNoise.stop();
     }
   }
 
@@ -223,9 +233,9 @@ export class AudioManager {
     this._leadSynth?.dispose();
     this._bassSynth?.dispose();
     this._padSynth?.dispose();
-    this._fireNoise?.dispose();
-    this._fireVolume?.dispose();
-    this._fireFilter?.dispose();
+    this._emergencyNoise?.dispose();
+    this._emergencyVolume?.dispose();
+    this._emergencyFilter?.dispose();
     this._fxSynth?.dispose();
     this._impactSynth?.dispose();
     this._uiSynth?.dispose();

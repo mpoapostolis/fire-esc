@@ -8,8 +8,6 @@ export class UIManager {
   private _infoButton: HTMLElement;
   private _helpButton: HTMLElement;
   private _mapButton: HTMLElement;
-  private _waypoint: HTMLElement;
-  private _compassNeedle: HTMLElement;
 
   // Instruction Modal
   private _infoModal: any;
@@ -24,14 +22,20 @@ export class UIManager {
 
   private _audioManager: AudioManager | null = null;
 
+  // Quiz Modal
+  private _quizModal: any;
+  private _quizQuestion: HTMLElement;
+  private _quizOptions: HTMLElement;
+
+  // Thermometer Modal
+  private _thermometerModal: any;
+
   constructor() {
     this._hudDistance = this._getUIElement("hud-distance");
     this._hudTimer = this._getUIElement("hud-timer");
     this._infoButton = this._getUIElement("info-button");
     this._helpButton = this._getUIElement("help-button");
     this._mapButton = this._getUIElement("map-button");
-    this._waypoint = this._getUIElement("waypoint");
-    this._compassNeedle = this._getUIElement("compass-needle");
 
     this._infoModal = this._getUIElement("info-modal");
     this._dialogueModal = this._getUIElement("dialogue_modal");
@@ -41,6 +45,12 @@ export class UIManager {
     this._phoneCallModal = this._getUIElement("phone_call_modal");
     this._phoneCallerName = this._getUIElement("phone-caller-name");
     this._answerCallBtn = this._getUIElement("answer-call-btn");
+
+    this._quizModal = this._getUIElement("quiz_modal");
+    this._quizQuestion = this._getUIElement("quiz-question");
+    this._quizOptions = this._getUIElement("quiz-options");
+
+    this._thermometerModal = this._getUIElement("thermometer_modal");
   }
 
   public setAudioManager(audioManager: AudioManager): void {
@@ -61,6 +71,7 @@ export class UIManager {
     onPhoneModalClose: () => void;
     onAnswerCall: () => void;
     onHelpModalClose?: () => void;
+    onThermometerModalClose?: () => void;
   }) {
     this._infoButton.addEventListener("click", () => {
       this._audioManager?.playButtonClick();
@@ -82,6 +93,10 @@ export class UIManager {
 
     if (callbacks.onHelpModalClose) {
       this._infoModal.addEventListener("close", callbacks.onHelpModalClose);
+    }
+
+    if (callbacks.onThermometerModalClose) {
+      this._thermometerModal.addEventListener("close", callbacks.onThermometerModalClose);
     }
 
     this._answerCallBtn.addEventListener("click", () => {
@@ -109,15 +124,41 @@ export class UIManager {
     this._phoneCallModal.close();
   }
 
-  public updateWaypoint(position: { x: number; y: number } | null) {
-    if (position) {
-      this._waypoint.classList.remove("hidden");
-      this._waypoint.style.left = `${position.x}px`;
-      this._waypoint.style.top = `${position.y}px`;
-    } else {
-      this._waypoint.classList.add("hidden");
-    }
+  public showQuizModal(question: string, options: string[], onSelect: (index: number) => void) {
+    this._quizQuestion.innerText = question;
+    this._quizOptions.innerHTML = "";
+
+    const optionLetters = ['Α', 'Β', 'Γ', 'Δ'];
+
+    options.forEach((option, index) => {
+      const btn = document.createElement("button");
+      // Polished RPG Theme for Quiz Buttons
+      btn.className = "quiz-option-btn group relative overflow-hidden w-full text-left p-4 md:p-5 rounded-lg border-2 border-slate-600 bg-slate-800/90 hover:bg-slate-700 hover:border-sky-400 transition-all duration-200 text-slate-200 hover:text-white shadow-md";
+
+      btn.innerHTML = `
+        <div class="flex items-center gap-4">
+          <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center font-black text-white text-lg md:text-xl shadow-lg group-hover:scale-110 transition-transform">
+            ${optionLetters[index]}
+          </div>
+          <span class="flex-1 text-white text-sm md:text-base leading-relaxed">${option}</span>
+        </div>
+      `;
+
+      btn.onclick = () => {
+        this._audioManager?.playButtonClick();
+        onSelect(index);
+      };
+      this._quizOptions.appendChild(btn);
+    });
+
+    this._quizModal.showModal();
   }
+
+  public hideQuizModal() {
+    this._quizModal.close();
+  }
+
+
 
   public updateDistance(distance: number | null) {
     if (distance === null) {
@@ -144,12 +185,14 @@ export class UIManager {
   }
 
   public updateCompass(rotationY: number) {
-    // Convert camera rotation (in radians) to degrees
-    // Babylon uses Y-axis rotation where 0 is facing +Z, rotating CCW
-    // We need to convert this to compass bearing where 0° is North
-    const degrees = (rotationY * 180 / Math.PI) % 360;
+    // Compass removed per user request
+  }
 
-    // Rotate the needle (negative because CSS rotates clockwise, compass bearing is clockwise from North)
-    this._compassNeedle.style.transform = `rotate(${degrees}deg)`;
+  public showThermometerModal() {
+    this._thermometerModal.showModal();
+  }
+
+  public hideThermometerModal() {
+    this._thermometerModal.close();
   }
 }
