@@ -124,6 +124,24 @@ export class Player {
       this._scene
     );
 
+    const kit = await SceneLoader.ImportMeshAsync(
+      "",
+      this._config.modelPath,
+      "aid_kit.glb",
+      this._scene
+    );
+    const hands = result.meshes.find((mesh) => {
+      return mesh.name === "Casual_Body_primitive1";
+    });
+    const kitRoot = kit.meshes.at(0);
+    kitRoot?.scaling.setAll(-0.003)
+    kitRoot?.position.set(0, 0.0033, 0);
+    const hand = this._scene.transformNodes.find((node) => {
+      return node.name === "Wrist.L";
+    });
+    if (kitRoot && hand) {
+      kitRoot.parent = hand;
+    }
     this._heroRoot = result.meshes[0];
     this._heroRoot.position = startPosition;
     const scale = this._config.scaling;

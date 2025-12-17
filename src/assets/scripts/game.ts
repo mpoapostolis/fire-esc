@@ -41,11 +41,12 @@ interface GameConfig {
   readonly onProgress?: (progress: number, status: string) => void;
 }
 
+console.log(window?.location?.search)
 const DEFAULT_GAME_CONFIG: GameConfig = {
   gravity: new Vector3(0, -9.81, 0),
   initialQuestDelay: 3000,
   questCompleteAnimationDelay: 2000,
-  questTimeLimit: 120_000, // 2 minutes per quest
+  questTimeLimit: window?.location?.search === "?test" ? 1_200_000 : 120_000, // 2 minutes per quest
 };
 
 export class Game {
