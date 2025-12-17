@@ -44,14 +44,26 @@
       "sign": "SIGN",
       "nextMission": "NEXT MISSION",
       "lastMission": "LAST MISSION",
-      "gameEnd": "GAME END",
+      "gameEnd": "GAME OVER",
       "success": "WELL DONE!",
       "timeUp": "TIME'S UP!",
       "tryAgain": "TRY AGAIN",
       "gameOver": "Game Over",
       "congratulations": "CONGRATULATIONS",
       "falseAlarm": "False alarm!",
-      "fail": "❌ Wrong Answer!"
+      "fail": "❌ Wrong Answer!",
+      "incomingCall": "Incoming call",
+      "center112": "112 Center",
+      "answer": "ANSWER",
+      "quizTitle": "🏥 FIRST AID",
+      "thermometerModal": {
+        "title": "⚠️ ALARM",
+        "level": "DANGEROUS LEVEL",
+        "message1": "The temperature has reached",
+        "messagehighlight": "dangerous levels",
+        "message2": "!",
+        "message3": ""
+      }
     },
     "messages": {
       "welcome": "CP Ranger, 112 is overwhelmed with calls: minor accidents, injuries, children needing help!\nOnly you can locate the incidents, arrive at the spots on time, and provide first aid.\nYour mission is to:\n• Solve the riddles to find where in the city each incident occurred.\n• Select the correct spot on the map before time runs out.\n• Answer the first aid questions correctly to save the person in need.\n\nRemember:\n• Don't rush – read every clue carefully.\n• Work with speed and safety!\n• Every correct answer brings you closer to success!\n\nAre you ready to start your mission?\nYou don't have much time... the city needs you now!",
@@ -64,7 +76,7 @@
       "title": "Park",
       "riddle": "Someone slipped and hurt their knee! They are where people enjoy the sun lying under thick leafy shade while chatting, where children play after school.",
       "successMessage": "You arrived quickly! Little Nick has an abrasion on his knee. That's part of the game!",
-      "caller": "112 Emergency",
+      "caller": "Emergency",
       "quiz": {
         "question": "🤕 What do you do?",
         "options": [
@@ -90,7 +102,7 @@
           "Move the child to a cool place and give him water."
         ],
         "correctIndex": 2,
-        "feedback": "✅ Bravo, you prevented a serious episode of heatstroke. The child wasn't wearing a hat and wasn't drinking enough water during exercise. Did you see what happens if one doesn't take proper protection measures?",
+        "feedback": "✅ Congratulations, you prevented a serious episode of heatstroke. The child wasn't wearing a hat and wasn't drinking enough water during exercise. Did you see what happens if one doesn't take proper protection measures?",
         "failureMessage": "You didn't do well."
       }
     },

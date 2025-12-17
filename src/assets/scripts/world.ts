@@ -187,6 +187,15 @@ export class World {
       );
 
       const root = new Mesh(`questCharacter-${quest.id}`, this._scene);
+      const kit = await SceneLoader.ImportMeshAsync(
+        "",
+        this._config.modelPath,
+        "aid_kit.glb",
+        this._scene
+      );
+      kit.meshes[0].parent = root;
+      kit.meshes[0].position.set(2, 0, 2);
+      kit.meshes[0].scaling.set(0.7, 0.7, 0.7);
       root.scaling.set(0.7, 0.7, 0.7);
       root.position.set(quest.point.x, 2.2, quest.point.z);
       // root.scaling.set(1.5, 1.5, 1.5); // Ensure they are visible size
