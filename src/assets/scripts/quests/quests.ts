@@ -75,7 +75,7 @@ export const getQuests = (): Quest[] => [
   {
     id: 3,
     title: t("quests.quest3.title"),
-    point: { x: -27.40, z: -32.94 },
+    point: { x: -24.40, z: -34.36 },
     spawn_point: { x: -29.18, z: -17.55 },
     riddle: t("quests.quest3.riddle"),
     successMessage: t("quests.quest3.successMessage"),

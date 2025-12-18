@@ -51,7 +51,7 @@
       "gameOver": "Game Over",
       "congratulations": "CONGRATULATIONS",
       "falseAlarm": "False alarm!",
-      "fail": "❌ Wrong Answer!",
+      "fail": "❌ 😡",
       "incomingCall": "Incoming call",
       "center112": "112 Center",
       "answer": "ANSWER",
@@ -66,7 +66,7 @@
       }
     },
     "messages": {
-      "welcome": "CP Ranger, 112 is overwhelmed with calls: minor accidents, injuries, children needing help!\nOnly you can locate the incidents, arrive at the spots on time, and provide first aid.\nYour mission is to:\n• Solve the riddles to find where in the city each incident occurred.\n• Select the correct spot on the map before time runs out.\n• Answer the first aid questions correctly to save the person in need.\n\nRemember:\n• Don't rush – read every clue carefully.\n• Work with speed and safety!\n• Every correct answer brings you closer to success!\n\nAre you ready to start your mission?\nYou don't have much time... the city needs you now!",
+      "welcome": "CP TEAM, 112 is overwhelmed with calls: minor accidents, injuries, children needing help!\nOnly you can locate the incidents, arrive at the spots on time, and provide first aid.\nYour mission is to:\n• Solve the riddles to find where in the city each incident occurred.\n• Select the correct spot on the map before time runs out.\n• Answer the first aid questions correctly to save the person in need.\n\nRemember:\n• Don't rush – read every clue carefully.\n• Work with speed and safety!\n• Every correct answer brings you closer to success!\n\nAre you ready to start your mission?\nYou don't have much time... the city needs you now!",
       "falseAlarmMessage": "False alarm! No incident here! Try again!",
       "quizFailMessage": "That wasn't the right choice. Think carefully again and give it another try!"
     }
@@ -91,7 +91,7 @@
     },
     "quest2": {
       "title": "Stadium",
-      "riddle": "Alarm! The temperature in the city has risen dangerously. You hear anxious voices on the radio.\n\nGrass without trees,\na crowd shouting loudly.\nA ball rolls and the sun burns.\nWhat place is this where everyone runs but no one leaves?\n\nWhere will you head now, CP Ranger?",
+      "riddle": "Alarm! The temperature in the city has risen dangerously. You hear anxious voices on the radio.\n\nGrass without trees,\na crowd shouting loudly.\nA ball rolls and the sun burns.\nWhat place is this where everyone runs but no one leaves?\n\nWhere will you head now, CP TEAM?",
       "successMessage": "You arrived quickly!",
       "caller": "🌡️ ALARM",
       "quiz": {
@@ -108,7 +108,7 @@
     },
     "quest3": {
       "title": "Pool",
-      "riddle": "You are drinking water to stay hydrated when suddenly a kid on a scooter gives you a message:\n\nWater without waves,\ndives without fish,\nrun to where they guard lives with a whistle!\n\nCP Ranger run!",
+      "riddle": "You are drinking water to stay hydrated when suddenly a kid on a scooter gives you a message:\n\nWater without waves,\ndives without fish,\nrun to where they guard lives with a whistle!\n\nCP TEAM run!",
       "successMessage": "Yes, you arrived correctly. Although it's hot, the child has hypothermia!",
       "caller": "🛹 Message",
       "quiz": {
@@ -126,7 +126,7 @@
     "quest4": {
       "title": "School Yard",
       "riddle": "You receive a message on your mobile:\n\nIt has no desks or blackboard,\nbut every recess a lesson in friendship happens there.\nIn this space, your composure will be tested!",
-      "successMessage": "You arrived in time, CP Ranger!\nYes, a child is lying in the yard. No one knows what to do!",
+      "successMessage": "You arrived in time, CP TEAM!\nYes, a child is lying in the yard. No one knows what to do!",
       "caller": "📱 Message",
       "quiz": {
         "question": "😵 What do you NOT do?",

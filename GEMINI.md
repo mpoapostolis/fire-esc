@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project is a 3D web-based game named "Fire Escape". The player takes on the role of a CP Ranger tasked with saving a city from a series of mysterious fires. The gameplay is riddle-based, where the player must decipher clues to find and extinguish fires on a 3D city map.
+This project is a 3D web-based game named "Fire Escape". The player takes on the role of a CP TEAM tasked with saving a city from a series of mysterious fires. The gameplay is riddle-based, where the player must decipher clues to find and extinguish fires on a 3D city map.
 
 **Key Technologies:**
 

@@ -291,6 +291,7 @@ export class Game {
   private _initializeQuests(): void {
     // Show welcome modal immediately
     this._showWelcomeModal();
+    this._uiManager.showGameHUD();
 
     const firstQuest = this._questManager.getAllQuests()[0];
     if (firstQuest) {

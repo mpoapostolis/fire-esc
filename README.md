@@ -4,7 +4,7 @@
 
 ## 🚒 Project Description
 
-In the heart of the city, an unseen threat flickers to life. A series of mysterious fires are breaking out, and only you, a CP Ranger, can stop the devastation. "Fire Escape: Save the City" is an immersive 3D action game that puts you in the boots of a modern-day hero.
+In the heart of the city, an unseen threat flickers to life. A series of mysterious fires are breaking out, and only you, a CP TEAM, can stop the devastation. "Fire Escape: Save the City" is an immersive 3D action game that puts you in the boots of a modern-day hero.
 
 Your mission is to navigate through the city streets in third-person view, guided by cryptic riddles delivered through phone calls. Each riddle points to a fire location. You must decipher the clues, locate the fire on the map, and race against time to reach it. With realistic physics, smooth character movement, and atmospheric lighting, every second counts as you fight to save the city before it's too late.
 

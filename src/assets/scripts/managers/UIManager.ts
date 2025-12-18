@@ -8,6 +8,8 @@ export class UIManager {
   private _infoButton: HTMLElement;
   private _helpButton: HTMLElement;
   private _mapButton: HTMLElement;
+  private _hudTopBar: HTMLElement;
+  private _hudBottomBar: HTMLElement;
 
   // Instruction Modal
   private _infoModal: any;
@@ -36,6 +38,8 @@ export class UIManager {
     this._infoButton = this._getUIElement("info-button");
     this._helpButton = this._getUIElement("help-button");
     this._mapButton = this._getUIElement("map-button");
+    this._hudTopBar = this._getUIElement("hud-top-bar");
+    this._hudBottomBar = this._getUIElement("hud-bottom-bar");
 
     this._infoModal = this._getUIElement("info-modal");
     this._dialogueModal = this._getUIElement("dialogue_modal");
@@ -113,6 +117,11 @@ export class UIManager {
 
   public showInfoModal() {
     this._infoModal.showModal();
+  }
+
+  public showGameHUD() {
+    this._hudTopBar.style.display = "flex";
+    this._hudBottomBar.style.display = "block";
   }
 
   public showPhoneCallModal(caller: string) {
