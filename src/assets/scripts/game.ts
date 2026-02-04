@@ -26,10 +26,10 @@ export type GameState =
   | "AWAITING_QUEST"
   | "PLAYING"
   | "SHOWING_INSTRUCTIONS"
-  | "SHOWING_REWARD"      // New: Arrived at point, showing scenario description
-  | "PLAYING_QUIZ"        // New: Answering quiz
+  | "SHOWING_REWARD" // New: Arrived at point, showing scenario description
+  | "PLAYING_QUIZ" // New: Answering quiz
   | "SHOWING_QUIZ_RESULT" // New: Correct answer feedback
-  | "SHOWING_QUIZ_FAIL"   // New: Wrong answer feedback
+  | "SHOWING_QUIZ_FAIL" // New: Wrong answer feedback
   | "SHOWING_SUCCESS";
 
 interface GameConfig {
@@ -41,12 +41,12 @@ interface GameConfig {
   readonly onProgress?: (progress: number, status: string) => void;
 }
 
-console.log(window?.location?.search)
+console.log(window?.location?.search);
 const DEFAULT_GAME_CONFIG: GameConfig = {
   gravity: new Vector3(0, -9.81, 0),
   initialQuestDelay: 3000,
   questCompleteAnimationDelay: 2000,
-  questTimeLimit: window?.location?.search === "?test" ? 1_200_000 : 120_000, // 2 minutes per quest
+  questTimeLimit: window?.location?.search === "?test" ? 1_200_000 : 180_000, // 2 minutes per quest
 };
 
 export class Game {
@@ -83,7 +83,7 @@ export class Game {
   private constructor(
     engine: Engine,
     canvas: HTMLCanvasElement,
-    config: Partial<GameConfig> = {}
+    config: Partial<GameConfig> = {},
   ) {
     this._engine = engine;
     this._canvas = canvas;
@@ -98,14 +98,14 @@ export class Game {
 
   public static async CreateAsync(
     canvas: HTMLCanvasElement,
-    config?: Partial<GameConfig>
+    config?: Partial<GameConfig>,
   ): Promise<Game> {
     const engine = await this._createEngine(canvas);
     return new Game(engine, canvas, config);
   }
 
   private static async _createEngine(
-    canvas: HTMLCanvasElement
+    canvas: HTMLCanvasElement,
   ): Promise<Engine> {
     const engineOptions: EngineOptions & IWebGPUEngineOptions = {
       antialias: true,
@@ -161,7 +161,7 @@ export class Game {
     this._canvas.addEventListener(
       "pointerdown",
       this._audioManager.initializeAudio,
-      { once: true }
+      { once: true },
     );
   }
 
@@ -191,7 +191,7 @@ export class Game {
       this._scene,
       this._world,
       this._uiManager,
-      this._player
+      this._player,
     );
   }
 
@@ -255,8 +255,12 @@ export class Game {
         const pos = this._player.capsule.position;
         console.log("======================");
         console.log("📍 POSITION CAPTURED:");
-        console.log(`point: { x: ${pos.x.toFixed(2)}, z: ${pos.z.toFixed(2)} }`);
-        console.log(`spawn_point: { x: ${pos.x.toFixed(2)}, z: ${pos.z.toFixed(2)} }`);
+        console.log(
+          `point: { x: ${pos.x.toFixed(2)}, z: ${pos.z.toFixed(2)} }`,
+        );
+        console.log(
+          `spawn_point: { x: ${pos.x.toFixed(2)}, z: ${pos.z.toFixed(2)} }`,
+        );
         console.log("======================");
 
         // Show on screen notification
@@ -280,7 +284,8 @@ export class Game {
         document.body.appendChild(notification);
 
         const style = document.createElement("style");
-        style.textContent = "@keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; } }";
+        style.textContent =
+          "@keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; } }";
         document.head.appendChild(style);
 
         setTimeout(() => notification.remove(), 2000);
@@ -323,7 +328,7 @@ export class Game {
 
       this._cinematicManager.playCinematic({
         cameraTarget: "skate", // Use skate.glb file
-        spawnPoint: new Vector3(10.50, 2.3, -39.40),
+        spawnPoint: new Vector3(10.5, 2.3, -39.4),
         targetPosition: new Vector3(9, 2.3, -21),
         riddle: quest.riddle,
         onComplete: () => {
@@ -334,9 +339,9 @@ export class Game {
 
           this._uiManager.showInstructionModal(
             quest.caller ?? t("game.modals.message"),
-            quest.riddle
+            quest.riddle,
           );
-        }
+        },
       });
       return; // Stop processing other quest logic
     }
@@ -359,9 +364,9 @@ export class Game {
 
           this._uiManager.showInstructionModal(
             t("game.modals.message"),
-            quest.riddle
+            quest.riddle,
           );
-        }
+        },
       });
     }
     // If quest starts with camera position target
@@ -377,7 +382,7 @@ export class Game {
         this._player.enableControls();
         this._uiManager.showInstructionModal(
           t("game.modals.sign"),
-          quest.riddle
+          quest.riddle,
         );
       }, 3000);
     } else if (quest.trigger === "phonecall") {
@@ -390,17 +395,17 @@ export class Game {
     } else if (quest.id === 5) {
       this._uiManager.showInstructionModal(
         t("game.modals.lastMission"),
-        quest.riddle
+        quest.riddle,
       );
     } else if (quest.id === 6) {
       this._uiManager.showInstructionModal(
         t("game.modals.gameEnd"),
-        quest.riddle
+        quest.riddle,
       );
     } else {
       this._uiManager.showInstructionModal(
         t("game.modals.nextMission"),
-        quest.riddle
+        quest.riddle,
       );
     }
   }
@@ -413,10 +418,9 @@ export class Game {
       // Just show info, no cinematic replay for info press
       this._uiManager.showInstructionModal(
         currentQuest.caller ?? t("game.modals.sign"),
-        currentQuest.riddle
+        currentQuest.riddle,
       );
-    }
-    else if (currentQuest.changeCameraTarget) {
+    } else if (currentQuest.changeCameraTarget) {
       const id = currentQuest.changeCameraTarget as idsOfObjects;
       this._isInCutscene = true;
       this._player.disableControls();
@@ -431,13 +435,13 @@ export class Game {
         this._player.enableControls();
         this._uiManager.showInstructionModal(
           currentQuest.caller ?? t("game.modals.sign"),
-          currentQuest.riddle
+          currentQuest.riddle,
         );
       }, 3000);
     } else {
       this._uiManager.showInstructionModal(
         currentQuest.caller ?? "ΕΠΙΓΡΑΦΗ",
-        currentQuest.riddle
+        currentQuest.riddle,
       );
     }
   };
@@ -456,7 +460,7 @@ export class Game {
     if (this._pendingQuest && this._pendingQuest.id === 2) {
       this._uiManager.showInstructionModal(
         this._pendingQuest.caller ?? t("game.modals.sign"),
-        this._pendingQuest.riddle
+        this._pendingQuest.riddle,
       );
     }
   };
@@ -487,7 +491,7 @@ export class Game {
     if (this._pendingQuest) {
       this._uiManager.showInstructionModal(
         this._pendingQuest.caller ?? "Objective",
-        this._pendingQuest.riddle
+        this._pendingQuest.riddle,
       );
     }
   };
@@ -497,7 +501,7 @@ export class Game {
     if (this._gameState === "SHOWING_INSTRUCTIONS" && this._pendingQuest) {
       this._uiManager.showInstructionModal(
         this._pendingQuest.caller ?? "Objective",
-        this._pendingQuest.riddle
+        this._pendingQuest.riddle,
       );
     } else {
       this._gameState = "PLAYING";
@@ -556,7 +560,7 @@ export class Game {
     this._uiManager.showQuizModal(
       quest.quiz.question,
       quest.quiz.options,
-      (index) => this._onQuizAnswer(index, quest)
+      (index) => this._onQuizAnswer(index, quest),
     );
   }
 
@@ -569,14 +573,14 @@ export class Game {
       this._gameState = "SHOWING_QUIZ_RESULT";
       this._uiManager.showInstructionModal(
         t("game.modals.success"),
-        quest.quiz.feedback
+        quest.quiz.feedback,
       );
     } else {
       // Wrong!
       this._gameState = "SHOWING_QUIZ_FAIL";
       this._uiManager.showInstructionModal(
         t("game.modals.fail"),
-        quest.quiz.failureMessage || t("game.messages.quizFailMessage")
+        quest.quiz.failureMessage || t("game.messages.quizFailMessage"),
       );
     }
   }
@@ -614,7 +618,7 @@ export class Game {
     this._gameState = "AWAITING_QUEST";
     this._uiManager.showInstructionModal(
       t("game.modals.gameOver"),
-      t("game.modals.congratulations")
+      t("game.modals.congratulations"),
     );
   }
 
@@ -653,7 +657,7 @@ export class Game {
           // Show "False alarm!" modal
           this._uiManager.showInstructionModal(
             t("game.modals.falseAlarm"),
-            t("game.messages.falseAlarmMessage")
+            t("game.messages.falseAlarmMessage"),
           );
           this._questStartTime -= 30_000;
         } else {
@@ -698,7 +702,7 @@ export class Game {
     if (this._cachedCurrentQuest?.id !== currentQuest.id) {
       this._cachedCurrentQuest = currentQuest;
       this._cachedObjectivePos = this._world.getFirePointPosition(
-        currentQuest.id
+        currentQuest.id,
       );
     }
 
@@ -707,7 +711,7 @@ export class Game {
     const playerPos = this._player.capsule.position;
     const distanceSquared = Vector3.DistanceSquared(
       playerPos,
-      this._cachedObjectivePos
+      this._cachedObjectivePos,
     );
 
     // Update fire sound volume based on distance (use squared distance to avoid sqrt)
@@ -741,7 +745,7 @@ export class Game {
     // Show reward/arrival success modal
     this._uiManager.showInstructionModal(
       t("game.modals.success"),
-      quest.successMessage
+      quest.successMessage,
     );
   }
 
@@ -794,7 +798,7 @@ export class Game {
     this._gameState = "AWAITING_QUEST";
     this._uiManager.showInstructionModal(
       t("game.modals.timeUp"),
-      t("game.modals.tryAgain")
+      t("game.modals.tryAgain"),
     );
 
     // Add try again button handler
@@ -831,7 +835,10 @@ export class Game {
       if (remainingTime <= 0) {
         callback();
       } else {
-        const timeoutId = window.setTimeout(checkAndExecute, Math.min(100, remainingTime));
+        const timeoutId = window.setTimeout(
+          checkAndExecute,
+          Math.min(100, remainingTime),
+        );
         this._pendingTimeouts.push(timeoutId);
       }
     };
@@ -854,7 +861,7 @@ export class Game {
   }
 
   private _clearAllTimeouts(): void {
-    this._pendingTimeouts.forEach(timeoutId => clearTimeout(timeoutId));
+    this._pendingTimeouts.forEach((timeoutId) => clearTimeout(timeoutId));
     this._pendingTimeouts = [];
   }
 }

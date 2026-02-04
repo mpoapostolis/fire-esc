@@ -74,7 +74,7 @@
   "quests": {
     "quest1": {
       "title": "Park",
-      "riddle": "Someone slipped and hurt their knee! They are where people enjoy the sun lying under thick leafy shade while chatting, where children play after school.",
+      "riddle": "Someone slipped and hurt their knee! They are where people enjoy the sun sitting on the wooden benches while chatting, where children play after school.",
       "successMessage": "You arrived quickly! Little Nick has an abrasion on his knee. That's part of the game!",
       "caller": "Emergency",
       "quiz": {
