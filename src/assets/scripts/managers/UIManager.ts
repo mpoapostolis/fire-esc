@@ -137,19 +137,18 @@ export class UIManager {
     this._quizQuestion.innerText = question;
     this._quizOptions.innerHTML = "";
 
-    const optionLetters = ['Α', 'Β', 'Γ', 'Δ'];
+    const optionNumbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
     options.forEach((option, index) => {
       const btn = document.createElement("button");
-      // Polished RPG Theme for Quiz Buttons
-      btn.className = "quiz-option-btn group relative overflow-hidden w-full text-left p-4 md:p-5 rounded-lg border-2 border-slate-600 bg-slate-800/90 hover:bg-slate-700 hover:border-sky-400 transition-all duration-200 text-slate-200 hover:text-white shadow-md";
+      btn.className = "quiz-option-btn group relative overflow-hidden w-full text-left p-2 md:p-3 rounded-lg border border-slate-600 bg-slate-800/90 hover:bg-slate-700 hover:border-sky-400 transition-all duration-200 text-slate-200 hover:text-white";
 
       btn.innerHTML = `
-        <div class="flex items-center gap-4">
-          <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center font-black text-white text-lg md:text-xl shadow-lg group-hover:scale-110 transition-transform">
-            ${optionLetters[index]}
+        <div class="flex items-center gap-2">
+          <div class="flex-shrink-0 w-6 h-6 md:w-7 md:h-7 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center font-black text-white text-xs md:text-sm">
+            ${optionNumbers[index] || index + 1}
           </div>
-          <span class="flex-1 text-white text-sm md:text-base leading-relaxed">${option}</span>
+          <span class="flex-1 text-white text-[11px] md:text-xs leading-snug">${option}</span>
         </div>
       `;
 

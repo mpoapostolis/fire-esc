@@ -5,8 +5,7 @@ export class QuestManager {
 
   constructor() {
     this._quests = getQuests();
-    // Ενεργοποιούμε το πρώτο quest μόνο αν δεν περιμένει κάποιο trigger
-    if (this._quests.length > 0 && !this._quests[0].trigger) {
+    if (this._quests.length > 0) {
       this._quests[0].status = "active";
     }
   }
@@ -15,22 +14,17 @@ export class QuestManager {
   public getQuestById = (id: number): Quest | undefined =>
     this._quests.find((q) => q.id === id);
   public getCurrentQuest = (): Quest | undefined =>
-    this._quests.find((q) => q.status === "active");
+    this._quests.find((q) => q.status === "active" && !q.isFake);
 
-  /**
-   * Ενεργοποιεί ένα quest με βάση το ID του, αν είναι κλειδωμένο.
-   */
   public activateQuestById = (id: number): void => {
     const quest = this.getQuestById(id);
     if (quest && quest.status === "locked") {
       quest.status = "active";
-      console.log(`Quest "${quest.title}" is now active.`);
     }
   };
 
   /**
-   * Ολοκληρώνει το τρέχον quest και επιστρέφει το επόμενο για να αποφασίσει το Game.ts τι θα κάνει.
-   * @returns Το επόμενο quest αν υπάρχει, αλλιώς null.
+   * Complete current quest and return next non-fake quest.
    */
   public completeCurrentQuestAndGetNext = (): Quest | null => {
     const currentQuest = this.getCurrentQuest();
@@ -38,12 +32,21 @@ export class QuestManager {
 
     currentQuest.status = "completed";
 
-    const nextQuestIndex =
-      this._quests.findIndex((q) => q.id === currentQuest.id) + 1;
-    if (nextQuestIndex < this._quests.length) {
-      return this._quests[nextQuestIndex];
+    const currentIndex = this._quests.findIndex((q) => q.id === currentQuest.id);
+    // Find next non-fake quest
+    for (let i = currentIndex + 1; i < this._quests.length; i++) {
+      if (!this._quests[i].isFake) {
+        return this._quests[i];
+      }
     }
 
-    return null; // Δεν υπάρχουν άλλα quests
+    return null;
+  };
+
+  /**
+   * Get count of completed non-fake quests.
+   */
+  public getCompletedCount = (): number => {
+    return this._quests.filter((q) => q.status === "completed" && !q.isFake).length;
   };
 }

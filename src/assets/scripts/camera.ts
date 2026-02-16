@@ -91,11 +91,30 @@ export class GameCamera {
   public switchToMapView(): void {
     if (this.view === "map_view") return;
     this.map_center = new Vector3(0, 0, 0);
-    this._scene.onPointerDown = (evt, pickInfo) => {
-      if (pickInfo.hit && pickInfo.pickedPoint && evt.button === 2) {
+
+    // Track pointer to distinguish drag (rotate) from click (select)
+    let pointerDownPos: { x: number; y: number } | null = null;
+    const DRAG_THRESHOLD = 10;
+
+    this._scene.onPointerDown = (evt) => {
+      pointerDownPos = { x: evt.clientX, y: evt.clientY };
+    };
+    this._scene.onPointerUp = (evt, pickInfo) => {
+      if (!pointerDownPos) return;
+      const dx = evt.clientX - pointerDownPos.x;
+      const dy = evt.clientY - pointerDownPos.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      pointerDownPos = null;
+
+      // If dragged, it's a rotation - don't select
+      if (dist > DRAG_THRESHOLD) return;
+
+      // Right click - pan to point
+      if (pickInfo && pickInfo.hit && pickInfo.pickedPoint && evt.button === 2) {
         this.setTargetAnimated(pickInfo.pickedPoint);
       }
-      if (this.view === "map_view" && this._onMapClickCallback && pickInfo) {
+      // Left click - select point
+      if (evt.button === 0 && this.view === "map_view" && this._onMapClickCallback && pickInfo) {
         this._onMapClickCallback(pickInfo);
       }
     };
@@ -130,18 +149,20 @@ export class GameCamera {
     this.camera.position.set(-radius, radius, -radius);
     // this.camera.detachControl();
 
-    // Switch to 45-degree angled city view with rotation enabled
-    this.camera.alpha = -Math.PI / 2; // Face north
-    this.camera.beta = Math.PI / 4; // 45 degrees angle
+    // Switch to angled view with full rotation enabled
+    this.camera.alpha = -Math.PI / 2;
+    this.camera.beta = Math.PI / 4;
     this.camera.radius = radius;
     this.camera.lowerRadiusLimit = lowerLimit;
     this.camera.upperRadiusLimit = upperLimit;
+    this.camera.lowerBetaLimit = 0.1;
+    this.camera.upperBetaLimit = Math.PI / 2.2;
 
-    // Set fixed target position at center of city (0, 0, 0)
     this.camera.target = this.map_center;
 
-    // Keep controls attached for rotation
-    // Camera stays attached so user can rotate and zoom
+    // Ensure controls are attached for drag-to-rotate
+    const canvas = this._scene.getEngine().getRenderingCanvas();
+    if (canvas) this.camera.attachControl(canvas, true);
 
     this.view = "map_view";
   }
@@ -169,6 +190,7 @@ export class GameCamera {
   public switchToNormalView(): void {
     if (this.view === "word_view") return;
     this._scene.onPointerDown = undefined;
+    this._scene.onPointerUp = undefined;
 
     // Restore camera position
     this.camera.alpha = this._savedAlpha;
