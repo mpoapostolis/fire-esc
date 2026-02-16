@@ -1,30 +1,34 @@
-# 🔥 Fire Escape: Save the City
+# 🌊 Escape the Flood: Save the City
 
 🎮 **[Play Live Demo](https://fire-esc.vercel.app/)** 🎮
 
 ## 🚒 Project Description
 
-In the heart of the city, an unseen threat flickers to life. A series of mysterious fires are breaking out, and only you, a CP TEAM, can stop the devastation. "Fire Escape: Save the City" is an immersive 3D action game that puts you in the boots of a modern-day hero.
+In the heart of the city, an unseen threat rises. A series of devastating floods are threatening to submerge everything, and only you, a CP TEAM member, can stop the disaster. "Escape the Flood: Save the City" is an immersive 3D educational game that puts you in the boots of a modern-day civil protection hero.
 
-Your mission is to navigate through the city streets in third-person view, guided by cryptic riddles delivered through phone calls. Each riddle points to a fire location. You must decipher the clues, locate the fire on the map, and race against time to reach it. With realistic physics, smooth character movement, and atmospheric lighting, every second counts as you fight to save the city before it's too late.
+Your mission is to navigate through the city streets in third-person view, guided by reports of flood risks hidden in riddles. Each riddle points to a vulnerable location. You must decipher the clues, locate the spot on the map, and propose the correct countermeasure to save the city. With realistic physics, smooth character movement, and atmospheric lighting, every decision counts as you fight to save the city before the next storm hits.
 
 ## 🎮 Screenshots
 
 ### Third-Person Gameplay
+
 ![Gameplay](./public/q1.png)
-*Navigate the city streets in cinematic third-person view with smooth character controls*
+_Navigate the city streets in cinematic third-person view with smooth character controls_
 
 ### Quest Complete
+
 ![Quest Complete](./public/q2.png)
-*Complete objectives and receive new missions through an elegant Elden Ring-inspired UI*
+_Complete objectives and receive new missions through an elegant Elden Ring-inspired UI_
 
 ### Incoming Mission Call
+
 ![Phone Call](./public/q3.png)
-*Receive urgent mission calls with critical information about fire locations*
+_Receive urgent mission calls with critical information about fire locations_
 
 ### Top-Down Map View
+
 ![Map View](./public/q4.png)
-*Switch to tactical map view to get your bearings and teleport across the city*
+_Switch to tactical map view to get your bearings and teleport across the city_
 
 ## ✨ Features
 
@@ -83,18 +87,21 @@ npm run build
 ## 🎨 Game Features
 
 ### Character System
+
 - Smooth physics-based movement with velocity lerping
 - Directional animations (walk, run, sprint, jump, idle)
 - Camera-relative controls for intuitive gameplay
 - Dynamic character rotation based on movement direction
 
 ### Quest Management
+
 - 5 unique quests with cryptic riddles
 - Phone call system for mission delivery
 - Distance tracking to objectives
 - Quest completion cinematics
 
 ### Visual Effects
+
 - Time-based dynamic lighting (changes based on real-world time)
 - Atmospheric fog with distance-based density
 - Glowing sun with bloom effects
@@ -102,6 +109,7 @@ npm run build
 - Fire particle effects with color gradients
 
 ### Audio Design
+
 - Procedural background music with tense cinematic themes
 - Spatial fire sound effects that scale with distance
 - UI sound feedback for buttons and interactions

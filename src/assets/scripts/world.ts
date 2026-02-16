@@ -8,6 +8,7 @@ import {
   DefaultRenderingPipeline,
   DirectionalLight,
   DynamicTexture,
+  GroundMesh,
   Mesh,
   MeshBuilder,
   PhysicsBody,
@@ -38,6 +39,7 @@ export class World {
   private readonly _firePoints = new Map<number, Mesh>();
   private _shadowGenerator?: ShadowGenerator;
   private _pipeline?: DefaultRenderingPipeline;
+  private _ground?: GroundMesh;
   private _isWorldLoaded = false;
 
   constructor(scene: Scene, config: Partial<WorldConfig> = {}) {
@@ -49,8 +51,14 @@ export class World {
     if (this._isWorldLoaded) return;
     this._createLight();
     this._createSkybox();
-    this._createGround();
+    await this._createGround();
     this._isWorldLoaded = true;
+  }
+
+  /** Get the terrain height at world coords. Returns 0 if ground not ready. */
+  public getGroundHeightAt(x: number, z: number): number {
+    if (!this._ground) return 0;
+    return this._ground.getHeightAtCoordinates(x, z) ?? 0;
   }
 
   public setupPostProcessing(): void {
@@ -75,13 +83,16 @@ export class World {
       const cube = MeshBuilder.CreateBox(
         `questCube-${quest.id}`,
         { size: 2.5 },
-        this._scene
+        this._scene,
       );
       cube.position.y = 4;
       cube.parent = parent;
       cube.isPickable = false;
 
-      const cubeMat = new StandardMaterial(`questCubeMat-${quest.id}`, this._scene);
+      const cubeMat = new StandardMaterial(
+        `questCubeMat-${quest.id}`,
+        this._scene,
+      );
       cubeMat.emissiveColor = new Color3(0, 0.5, 1);
       cubeMat.diffuseColor = new Color3(0, 0.3, 1);
       cubeMat.specularColor = new Color3(1, 1, 1);
@@ -92,13 +103,16 @@ export class World {
       const beam = MeshBuilder.CreateCylinder(
         `questBeam-${quest.id}`,
         { height: 30, diameterTop: 0.3, diameterBottom: 1.5, tessellation: 8 },
-        this._scene
+        this._scene,
       );
       beam.position.y = 15;
       beam.parent = parent;
       beam.isPickable = false;
 
-      const beamMat = new StandardMaterial(`questBeamMat-${quest.id}`, this._scene);
+      const beamMat = new StandardMaterial(
+        `questBeamMat-${quest.id}`,
+        this._scene,
+      );
       beamMat.emissiveColor = new Color3(0.2, 0.6, 1);
       beamMat.alpha = 0.4;
       beamMat.disableLighting = true;
@@ -109,13 +123,16 @@ export class World {
       const ring = MeshBuilder.CreateTorus(
         `questRing-${quest.id}`,
         { diameter: 6, thickness: 0.4, tessellation: 32 },
-        this._scene
+        this._scene,
       );
       ring.position.y = 0.2;
       ring.parent = parent;
       ring.isPickable = false;
 
-      const ringMat = new StandardMaterial(`questRingMat-${quest.id}`, this._scene);
+      const ringMat = new StandardMaterial(
+        `questRingMat-${quest.id}`,
+        this._scene,
+      );
       ringMat.emissiveColor = new Color3(0, 0.5, 1);
       ringMat.alpha = 0.8;
       ringMat.disableLighting = true;
@@ -162,7 +179,7 @@ export class World {
       const button = MeshBuilder.CreateBox(
         `teleportButton-${quest.id}`,
         { size: 0.1 },
-        this._scene
+        this._scene,
       );
       button.position.set(quest.spawn_point.x, 0.5, quest.spawn_point.z);
       button.isVisible = false;
@@ -172,7 +189,7 @@ export class World {
       const numberPlane = MeshBuilder.CreatePlane(
         `numberLabel-${quest.id}`,
         { width: 8, height: 8 },
-        this._scene
+        this._scene,
       );
       numberPlane.position.y = 10;
       numberPlane.parent = button;
@@ -186,7 +203,7 @@ export class World {
         `numberTexture-${quest.id}`,
         textureSize,
         this._scene,
-        false
+        false,
       );
 
       const ctx = dynamicTexture.getContext();
@@ -244,7 +261,7 @@ export class World {
 
       const numberMat = new StandardMaterial(
         `numberMat-${quest.id}`,
-        this._scene
+        this._scene,
       );
       numberMat.diffuseTexture = dynamicTexture;
       numberMat.emissiveColor = new Color3(0.8, 0.8, 0.8);
@@ -262,7 +279,7 @@ export class World {
           height: absolutePlaneY,
           diameter: 0.2,
         },
-        this._scene
+        this._scene,
       );
       line.parent = button;
       line.position.y = absolutePlaneY / 2 - button.position.y;
@@ -289,38 +306,146 @@ export class World {
     }
   }
 
-  private _createGround(): void {
-    // Create a flat ground plane
-    const ground = MeshBuilder.CreateGround(
-      "ground",
-      { width: 120, height: 120, subdivisions: 2 },
-      this._scene
-    );
-    ground.position.y = 0;
+  private _createGround(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      // Generate a procedural heightmap texture
+      const heightMapUrl = this._generateHeightMapDataUrl();
 
-    const groundMat = new StandardMaterial("groundMat", this._scene);
-    groundMat.diffuseColor = new Color3(0.35, 0.55, 0.35); // Green-ish ground
-    groundMat.specularColor = Color3.Black();
-    ground.material = groundMat;
-    ground.receiveShadows = true;
+      // Create ground from heightmap
+      MeshBuilder.CreateGroundFromHeightMap(
+        "ground",
+        heightMapUrl,
+        {
+          width: 200,
+          height: 200,
+          subdivisions: 100,
+          minHeight: 0,
+          maxHeight: 10,
+          onReady: (mesh) => {
+            this._ground = mesh as GroundMesh;
+            mesh.receiveShadows = true;
 
-    // Add physics to ground
-    const body = new PhysicsBody(
-      ground,
-      PhysicsMotionType.STATIC,
-      false,
-      this._scene
-    );
-    body.shape = new PhysicsShapeMesh(ground, this._scene);
+            // Create material
+            const groundMat = new StandardMaterial("groundMat", this._scene);
+            groundMat.diffuseColor = new Color3(0.2, 0.25, 0.2);
+            groundMat.specularColor = new Color3(0.05, 0.05, 0.05);
+            groundMat.ambientColor = new Color3(0.1, 0.1, 0.1);
+            mesh.material = groundMat;
 
-    ground.freezeWorldMatrix();
+            // Add Physics AFTER geometry is ready
+            const body = new PhysicsBody(
+              mesh,
+              PhysicsMotionType.STATIC,
+              false,
+              this._scene,
+            );
+            body.shape = new PhysicsShapeMesh(mesh, this._scene);
+
+            mesh.freezeWorldMatrix();
+
+            // Add environment details AFTER ground is ready
+            this._createEnvironmentDetails(this._ground);
+
+            resolve(); // Ground is ready, let the game continue
+          },
+        },
+        this._scene,
+      );
+    });
+  }
+
+  private _generateHeightMapDataUrl(): string {
+    const size = 512;
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return "";
+
+    // Fill with noise
+    const imgData = ctx.createImageData(size, size);
+    const data = imgData.data;
+
+    const noise = (x: number, z: number) => {
+      // Simple pseudo-random noise composition
+      let y = Math.sin(x * 0.02) * Math.cos(z * 0.02) * 50;
+      y += Math.sin(x * 0.05) * Math.cos(z * 0.05) * 20;
+      y += Math.sin(x * 0.1 + z * 0.1) * 10;
+      return Math.max(0, Math.min(255, 128 + y));
+    };
+
+    for (let i = 0; i < size; i++) {
+      for (let j = 0; j < size; j++) {
+        const index = (i * size + j) * 4;
+        const val = noise(j, i);
+        data[index] = val; // R
+        data[index + 1] = val; // G
+        data[index + 2] = val; // B
+        data[index + 3] = 255; // Alpha
+      }
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+    return canvas.toDataURL("image/png");
+  }
+
+  private _createEnvironmentDetails(ground: GroundMesh): void {
+    // Scatter random cubes for "visual interest"
+    const count = 80;
+    const range = 80;
+
+    for (let i = 0; i < count; i++) {
+      const size = 1 + Math.random() * 3;
+      const cube = MeshBuilder.CreateBox(`envCube-${i}`, { size }, this._scene);
+
+      const x = (Math.random() - 0.5) * 2 * range;
+      const z = (Math.random() - 0.5) * 2 * range;
+
+      // Use getHeightAtCoordinates to place on ground
+      const groundY = ground.getHeightAtCoordinates(x, z);
+      const y = (groundY ?? 0) + size / 2;
+
+      cube.position.set(x, y, z);
+      cube.rotation.set(
+        Math.random() * Math.PI,
+        Math.random() * Math.PI,
+        Math.random() * Math.PI,
+      );
+
+      // Random material styling
+      const mat = new StandardMaterial(`envCubeMat-${i}`, this._scene);
+      const shade = Math.random();
+      // Dark metallic/concrete look
+      mat.diffuseColor = new Color3(
+        shade * 0.3,
+        shade * 0.3 + 0.1,
+        shade * 0.3 + 0.2,
+      );
+      mat.specularColor = new Color3(0.5, 0.5, 0.5);
+      cube.material = mat;
+
+      cube.receiveShadows = true;
+
+      // Static obstacles
+      const body = new PhysicsBody(
+        cube,
+        PhysicsMotionType.STATIC,
+        false,
+        this._scene,
+      );
+      body.shape = new PhysicsShapeMesh(cube, this._scene);
+
+      if (this._shadowGenerator) {
+        this._shadowGenerator.addShadowCaster(cube);
+      }
+    }
   }
 
   private _createSkybox(): void {
     const skybox = MeshBuilder.CreateBox(
       "skyBox",
       { size: this._config.skyboxSize },
-      this._scene
+      this._scene,
     );
     skybox.isPickable = false;
     skybox.infiniteDistance = true;
@@ -333,7 +458,7 @@ export class World {
 
     const reflectionTexture = new CubeTexture(
       this._config.skyboxUrl,
-      this._scene
+      this._scene,
     );
     reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
     material.reflectionTexture = reflectionTexture;
@@ -345,7 +470,7 @@ export class World {
     const hemispheric = new HemisphericLight(
       "hemisphericLight",
       Vector3.UpReadOnly,
-      this._scene
+      this._scene,
     );
     hemispheric.intensity = 0.65;
     hemispheric.groundColor = new Color3(0.4, 0.3, 0.2);
@@ -354,7 +479,7 @@ export class World {
     const directional = new DirectionalLight(
       "directionalLight",
       new Vector3(-1, -2, -1),
-      this._scene
+      this._scene,
     );
     directional.position = new Vector3(50, 100, 50);
     directional.intensity = 0.9;
@@ -374,7 +499,7 @@ export class World {
       "pipeline",
       true,
       this._scene,
-      [camera]
+      [camera],
     );
 
     this._pipeline.bloomEnabled = true;

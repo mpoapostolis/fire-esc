@@ -7,68 +7,54 @@ import Layout from "../layouts/Layout.astro";
   <div
     data-theme="dark"
     id="language-selection-screen"
-    class="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0f172a] to-black"
+    class="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-slate-950"
   >
     <!-- Background Effects -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
       <div
-        class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-red-600/10 rounded-full blur-[100px] animate-pulse"
+        class="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-900/20 via-slate-950 to-slate-950"
       >
       </div>
       <div
-        class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[100px] animate-pulse"
-        style="animation-delay: 1s;"
+        class="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-blue-500/50 to-transparent"
+      >
+      </div>
+      <div
+        class="absolute bottom-0 left-0 w-full h-px bg-linear-to-r from-transparent via-blue-500/50 to-transparent"
       >
       </div>
     </div>
 
     <div class="relative z-10 text-center space-y-12 max-w-4xl px-6">
-      <!-- Flood Emblem -->
-      <div class="relative flex justify-center group cursor-default">
-        <div
-          class="absolute inset-0 bg-blue-500/20 rounded-full blur-2xl group-hover:bg-blue-500/30 transition-all duration-700"
-        >
-        </div>
-        <div
-          class="relative w-32 text-6xl h-32 md:w-40 md:h-40 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center shadow-2xl shadow-blue-900/50 border-4 border-white/10 group-hover:scale-105 transition-transform duration-500"
-        >
-          🌊
-          <div
-            class="absolute top-0 left-0 w-full h-full rounded-full bg-gradient-to-b from-white/20 to-transparent pointer-events-none"
-          >
-          </div>
-        </div>
-      </div>
-
       <!-- Title & Subtitle -->
-      <div class="space-y-4">
+      <div class="space-y-2">
         <h1
-          class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400 drop-shadow-2xl tracking-tight"
+          class="text-6xl md:text-8xl font-black text-white tracking-tighter uppercase tech-text-shadow"
         >
-          Escape the <span class="text-blue-500">Flood</span>
+          ESCAPE <span class="text-blue-500">THE FLOOD</span>
         </h1>
         <div
-          class="flex items-center justify-center gap-3 text-lg md:text-xl font-medium text-slate-400"
+          class="flex items-center justify-center gap-3 text-lg font-mono text-blue-400/80 tracking-widest"
         >
-          <span
-            class="px-3 py-1 bg-white/5 rounded-full border border-white/10 tracking-widest text-xs md:text-sm text-blue-400"
-            >Escape Game</span
+          <span data-i18n="ui.loading.subtitle">PROTOCOL: CIVIL PROTECTION</span
           >
-          <span>•</span>
-          <span class="text-slate-200">Σώσε την πόλη!</span>
         </div>
       </div>
 
       <!-- Language Buttons -->
-      <div class="flex flex-col sm:flex-row gap-6 w-full max-w-xl mx-auto pt-4">
+      <div class="flex flex-col sm:flex-row gap-6 w-full max-w-xl mx-auto pt-8">
         <button
           data-lang="el"
-          class="language-btn flex-1 group relative overflow-hidden bg-slate-800/50 hover:bg-blue-600/90 backdrop-blur-md border border-white/10 hover:border-blue-400/50 p-6 rounded-2xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(37,99,235,0.4)] hover:-translate-y-1"
+          class="language-btn group relative overflow-hidden bg-slate-900/80 hover:bg-blue-600 border border-blue-500/30 hover:border-blue-400 p-8 flex-1 transition-all duration-300 transform hover:-translate-y-1"
         >
-          <div class="relative z-10 flex flex-col items-center gap-2">
-            <span class="text-3xl">🇬🇷</span>
+          <div
+            class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+          </div>
+          <div class="relative z-10 flex flex-col items-center gap-3">
+            <span class="text-4xl">🇬🇷</span>
             <span
-              class="text-base font-bold text-white tracking-wider group-hover:text-white"
+              class="text-sm font-bold text-blue-100 tracking-[0.2em] group-hover:text-white"
               >ΕΛΛΗΝΙΚΑ</span
             >
           </div>
@@ -76,485 +62,587 @@ import Layout from "../layouts/Layout.astro";
 
         <button
           data-lang="en"
-          class="language-btn flex-1 group relative overflow-hidden bg-slate-800/50 hover:bg-blue-600/90 backdrop-blur-md border border-white/10 hover:border-blue-400/50 p-6 rounded-2xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(37,99,235,0.4)] hover:-translate-y-1"
+          class="language-btn group relative overflow-hidden bg-slate-900/80 hover:bg-blue-600 border border-blue-500/30 hover:border-blue-400 p-8 flex-1 transition-all duration-300 transform hover:-translate-y-1"
         >
-          <div class="relative z-10 flex flex-col items-center gap-2">
-            <span class="text-3xl">🇬🇧</span>
+          <div
+            class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+          </div>
+          <div class="relative z-10 flex flex-col items-center gap-3">
+            <span class="text-4xl">🇬🇧</span>
             <span
-              class="text-base font-bold text-white tracking-wider group-hover:text-white"
+              class="text-sm font-bold text-blue-100 tracking-[0.2em] group-hover:text-white"
               >ENGLISH</span
             >
           </div>
         </button>
       </div>
 
-      <p class="text-slate-300 text-sm animate-pulse">
-        Select Your Language / Επιλέξτε Γλώσσα
+      <p class="text-slate-500 text-xs font-mono tracking-widest uppercase">
+        Select Language // Επιλέξτε Γλώσσα
       </p>
+    </div>
+  </div>
+
+  <!-- Start Screen -->
+  <div
+    id="start-screen"
+    class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-950"
+    style="display: none;"
+  >
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <!-- Cyber Grid Background -->
+      <div
+        class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-size-[100%_2px,3px_100%] pointer-events-none"
+      >
+      </div>
+      <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-900/20 via-slate-950 to-slate-950"
+      >
+      </div>
+    </div>
+
+    <div class="relative z-20 text-center space-y-12">
+      <div class="space-y-2 animate-pulse">
+        <h1
+          class="text-6xl font-black text-white tracking-tighter uppercase tech-text-shadow"
+        >
+          ESCAPE <span class="text-blue-500">THE FLOOD</span>
+        </h1>
+        <div
+          class="flex items-center justify-center gap-2 text-sm font-mono text-blue-400"
+        >
+          <span class="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></span>
+          <span data-i18n="ui.start.systemOnline">SYSTEMS ONLINE</span>
+        </div>
+      </div>
+
+      <button
+        id="start-game-btn"
+        class="group relative px-12 py-4 bg-transparent border border-blue-500/30 hover:border-blue-400 transition-all duration-300"
+      >
+        <div
+          class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+        </div>
+        <span
+          class="text-xl font-mono font-bold text-white tracking-[0.2em] group-hover:text-blue-200"
+          data-i18n="ui.start.pressStart"
+        >
+          PRESS START
+        </span>
+      </button>
+    </div>
+
+    <!-- Footer Info -->
+    <div
+      class="absolute bottom-8 text-[10px] font-mono text-slate-600 uppercase tracking-widest"
+    >
+      v2.0.4 // TACTICAL INTERFACE // AWAITING INPUT
     </div>
   </div>
 
   <!-- Loading Screen -->
   <div
     id="loading-screen"
-    class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0f172a] to-black"
+    class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-950"
     style="display: none;"
   >
-    <!-- Background Effects -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
       <div
-        class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[100px] animate-pulse"
+        class="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-900/10 via-slate-950 to-slate-950"
       >
       </div>
     </div>
 
-    <div class="relative z-10 text-center space-y-12 max-w-4xl px-6 w-full">
-      <!-- Icon (Smaller) -->
-      <div class="relative flex justify-center opacity-80">
-        <div
-          class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center shadow-2xl border-2 border-white/10 animate-bounce-subtle text-4xl"
-        >
-          🌊
-        </div>
-      </div>
-
+    <div class="relative z-10 text-center space-y-8 max-w-md px-6 w-full">
       <!-- Title -->
-      <div class="space-y-2">
-        <h1 class="text-4xl md:text-5xl font-black text-white drop-shadow-xl">
-          Escape the <span class="text-blue-500">Flood</span>
+      <div class="space-y-1">
+        <h1 class="text-3xl font-black text-white tracking-widest uppercase">
+          INITIALIZING
         </h1>
         <p
           id="loading-subtitle"
-          class="text-lg font-medium text-slate-400 tracking-wide"
+          class="text-sm font-mono text-blue-500/80"
+          data-i18n="ui.loading.subtitle"
         >
-          Σώσε την πόλη!
+          SYSTEM STARTUP SEQUENCE
         </p>
       </div>
 
       <!-- Loading Progress -->
-      <div class="flex flex-col items-center gap-6 w-full max-w-md mx-auto">
-        <!-- Spinner -->
-        <div class="flex items-center justify-center">
-          <div
-            class="w-12 h-12 border-4 border-slate-700 border-t-blue-500 rounded-full animate-spin"
-          >
-          </div>
-        </div>
-
-        <!-- Progress Bar -->
-        <div class="w-full space-y-3">
-          <div class="flex justify-between text-xs tracking-wider font-bold">
-            <p id="loading-text" class="text-slate-400">Φορτωση...</p>
-            <p id="loading-percentage" class="text-blue-400">0%</p>
-          </div>
-          <div
-            class="w-full h-2 bg-slate-800 rounded-full overflow-hidden shadow-inner border border-white/5"
-          >
-            <div
-              id="loading-progress-bar"
-              class="h-full bg-gradient-to-r from-blue-600 to-blue-400 shadow-[0_0_15px_rgba(96,165,250,0.5)] transition-all duration-300 ease-out rounded-full relative"
-              style="width: 0%"
-            >
-              <div class="absolute inset-0 bg-white/20 animate-shimmer"></div>
-            </div>
-          </div>
+      <div class="w-full space-y-2">
+        <div class="flex justify-between text-xs font-mono tracking-wider">
           <p
-            id="loading-status"
-            class="text-slate-300 text-xs text-center font-mono"
+            id="loading-text"
+            class="text-slate-400"
+            data-i18n="ui.loading.loading"
           >
-            Προετοιμασία...
+            LOADING ASSETS...
           </p>
+          <p id="loading-percentage" class="text-blue-400">0%</p>
         </div>
+        <div class="w-full h-1 bg-slate-900 overflow-hidden">
+          <div
+            id="loading-progress-bar"
+            class="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)] transition-all duration-300 ease-out relative"
+            style="width: 0%"
+          >
+          </div>
+        </div>
+        <p
+          id="loading-status"
+          class="text-slate-600 text-[10px] font-mono text-center uppercase"
+          data-i18n="ui.loading.preparing"
+        >
+          Waiting for synchronization...
+        </p>
       </div>
     </div>
   </div>
 
-  <canvas id="renderCanvas" class="h-screen w-screen"></canvas>
+  <!-- CRT Vignette Overlay (Global) -->
+  <div
+    class="fixed inset-0 pointer-events-none z-100 bg-[radial-gradient(circle_at_center,transparent_50%,rgba(0,0,0,0.4)_100%)]"
+  >
+  </div>
+  <div
+    class="fixed inset-0 pointer-events-none z-99 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"
+  >
+  </div>
 
-  <dialog id="phone_call_modal" class="modal pointer-events-auto bg-black/80">
+  <canvas id="renderCanvas" class="h-screen w-screen bg-black"></canvas>
+
+  <!-- Phone Call Modal -->
+  <dialog
+    id="phone_call_modal"
+    class="modal pointer-events-auto bg-black/60 backdrop-blur-sm"
+  >
     <div
-      class="modal-box rpg-panel w-full max-w-sm text-center text-white overflow-hidden relative border-none bg-slate-900"
+      class="modal-box tech-panel max-w-sm w-full p-0 overflow-hidden border-l-4 border-l-emerald-500"
     >
-      <!-- Background Glow -->
+      <!-- Tech Header -->
       <div
-        class="absolute inset-0 bg-gradient-to-b from-slate-800 to-slate-900 z-0"
+        class="bg-slate-900/50 p-4 border-b border-white/5 flex items-center justify-between"
       >
-      </div>
-      <div
-        class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sky-500 to-transparent z-10 animate-pulse"
-      >
+        <div class="flex items-center gap-2">
+          <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+          <span
+            class="text-xs font-mono text-emerald-400 tracking-widest uppercase"
+            data-i18n="game.modals.incomingCall">INCOMING TRANSMISSION</span
+          >
+        </div>
+        <span class="text-[10px] font-mono text-slate-500">SECURE LINE</span>
       </div>
 
-      <div class="relative z-10 flex flex-col items-center gap-6 py-4">
-        <!-- Header -->
-        <div class="flex flex-col items-center gap-1">
-          <span
-            class="text-sky-400 text-xs font-bold tracking-[0.2em] animate-pulse"
-            data-i18n="game.modals.incomingCall">Εισερχομενη Κληση</span
+      <div class="p-8 flex flex-col items-center gap-6">
+        <!-- Caller Info -->
+        <div class="text-center space-y-2">
+          <div
+            class="w-20 h-20 mx-auto bg-slate-800 rounded-full flex items-center justify-center border border-white/10 relative"
           >
+            <div
+              class="absolute inset-0 rounded-full border border-emerald-500/30 animate-ping"
+            >
+            </div>
+            <span class="text-3xl">📞</span>
+          </div>
           <h3
-            class="text-2xl font-black text-white"
+            class="text-2xl font-bold text-white tracking-tight"
             id="phone-caller-name"
             data-i18n="game.modals.center112"
           >
-            Κέντρο 112
+            Center 112
           </h3>
         </div>
 
-        <!-- Caller Avatar -->
-        <div class="relative">
+        <!-- Action -->
+        <button
+          id="answer-call-btn"
+          class="w-full group relative flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-500 text-white py-4 px-6 transition-all duration-200 uppercase font-bold tracking-wider text-sm clip-path-slant"
+        >
           <div
-            class="absolute inset-0 rounded-full border-2 border-sky-400/50 animate-ping opacity-20"
+            class="absolute inset-0 bg-emerald-400/20 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
           >
           </div>
+          <span data-i18n="game.modals.answer">ACCEPT TRANSMISSION</span>
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Instructional / Dialogue Modal -->
+  <dialog
+    id="dialogue_modal"
+    class="modal pointer-events-auto bg-black/40 backdrop-blur-sm"
+  >
+    <div
+      class="modal-box tech-panel w-11/12 max-w-3xl p-0 border-l-4 border-l-amber-400"
+    >
+      <div class="bg-slate-900/80 p-6 md:p-8 flex gap-6">
+        <!-- Avatar Placeholder (Optional) -->
+        <div class="hidden md:flex flex-col items-center justify-start pt-2">
           <div
-            class="absolute inset-[-10px] rounded-full border border-sky-400/30 animate-pulse"
+            class="w-16 h-16 bg-slate-800 border border-amber-500/30 flex items-center justify-center text-2xl"
           >
-          </div>
-          <div
-            class="w-24 h-24 rounded-full bg-slate-800 border-4 border-slate-700 flex items-center justify-center shadow-2xl relative overflow-hidden"
-          >
-            <div
-              class="absolute inset-0 bg-gradient-to-tr from-sky-900/50 to-transparent"
-            >
-            </div>
-            <div class="text-6xl">📞</div>
+            ⚠️
           </div>
         </div>
 
-        <!-- Answer Actions -->
-        <div class="mt-4 flex justify-center w-full">
-          <button
-            id="answer-call-btn"
-            class="group relative flex items-center justify-center gap-3 bg-emerald-500 hover:bg-emerald-400 text-white px-8 py-4 rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] transform hover:scale-105"
+        <div class="flex-1 space-y-4">
+          <div
+            class="flex items-baseline justify-between border-b border-white/5 pb-2"
           >
-            <div
-              class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center"
+            <h3
+              id="dialogue-speaker"
+              class="text-lg font-bold text-amber-400 tracking-widest uppercase"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 fill-current"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+              SYSTEM
+            </h3>
+            <span class="text-[10px] font-mono text-slate-500"
+              >PRIORITY MSG</span
+            >
+          </div>
+
+          <p
+            id="dialogue-text"
+            class="text-base md:text-lg text-slate-200 leading-relaxed font-light"
+          >
+            <!-- Text injected via JS -->
+          </p>
+
+          <div class="modal-action pt-4 flex justify-end">
+            <form method="dialog">
+              <button
+                class="tech-btn-sm text-amber-400 hover:text-amber-300 border border-amber-500/30 hover:border-amber-400/60 px-6 py-2"
               >
-                <path
-                  d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
-                ></path>
-              </svg>
-            </div>
+                <span
+                  class="text-xs font-bold tracking-widest"
+                  data-i18n="ui.buttons.acknowledge">ACKNOWLEDGE</span
+                >
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form method="dialog" class="modal-backdrop"><button>close</button></form>
+  </dialog>
+
+  <!-- Quiz Modal -->
+  <dialog
+    id="quiz_modal"
+    class="modal pointer-events-auto bg-black/80 backdrop-blur-md"
+  >
+    <div
+      class="modal-box tech-panel w-11/12 max-w-5xl p-0 flex flex-col h-[85vh] md:h-auto md:max-h-[85vh]"
+    >
+      <!-- Header -->
+      <div
+        class="bg-slate-900/90 p-6 border-b border-white/10 flex items-center gap-4 shrink-0"
+      >
+        <div
+          class="w-10 h-10 bg-blue-600/20 flex items-center justify-center border border-blue-500/50"
+        >
+          <span class="text-blue-400 text-lg">?</span>
+        </div>
+        <div>
+          <h3
+            class="text-sm text-blue-400 font-mono tracking-widest uppercase mb-1"
+            data-i18n="game.modals.quizTitle"
+          >
+            DECISION REQUIRED
+          </h3>
+          <div class="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+            <div class="h-full w-1/3 bg-blue-500"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="flex-1 overflow-y-auto p-6 md:p-10 bg-slate-950/50">
+        <p
+          id="quiz-question"
+          class="text-lg md:text-2xl text-white font-medium leading-relaxed mb-8 md:mb-12 max-w-4xl"
+        >
+          <!-- Question Text -->
+        </p>
+
+        <!-- Grid for Options -->
+        <div
+          id="quiz-options"
+          class="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4"
+        >
+          <!-- Options injected via JS -->
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Thermometer Alert Modal -->
+  <dialog
+    id="thermometer_modal"
+    class="modal pointer-events-auto bg-red-950/80 backdrop-blur-md"
+  >
+    <div
+      class="modal-box tech-panel w-11/12 max-w-lg p-0 border-l-4 border-l-red-500 border-r-4 border-r-red-500"
+    >
+      <div
+        class="bg-linear-to-b from-red-900/20 to-slate-900 p-8 text-center space-y-6"
+      >
+        <div
+          class="w-20 h-20 mx-auto bg-red-500/10 rounded-full flex items-center justify-center border border-red-500/50 animate-pulse"
+        >
+          <span class="text-4xl">🌡️</span>
+        </div>
+
+        <div class="space-y-2">
+          <h3
+            class="text-2xl font-black text-white tracking-widest uppercase"
+            data-i18n="game.modals.thermometerModal.title"
+          >
+            CRITICAL HEAT
+          </h3>
+          <div class="text-4xl font-mono text-red-500 font-bold">41°C</div>
+          <p
+            class="text-red-400/80 text-sm font-mono uppercase tracking-wider"
+            id="thermometer-level"
+            data-i18n="game.modals.thermometerModal.level"
+          >
+            DANGER LEVEL: HIGH
+          </p>
+        </div>
+
+        <div class="bg-red-950/50 p-4 border border-red-500/20 text-left">
+          <p class="text-sm text-red-200 leading-relaxed">
             <span
-              class="font-bold text-lg tracking-wide"
-              data-i18n="game.modals.answer">ΑΠΑΝΤΗΣΗ</span
+              id="thermometer-msg1"
+              data-i18n="game.modals.thermometerModal.message1"></span>
+            <span
+              id="thermometer-highlight"
+              class="font-bold text-white"
+              data-i18n="game.modals.thermometerModal.messagehighlight"></span>
+            <span
+              id="thermometer-msg2"
+              data-i18n="game.modals.thermometerModal.message2"></span>
+          </p>
+        </div>
+
+        <div class="modal-action justify-center pt-2">
+          <form method="dialog">
+            <button
+              class="tech-btn-sm bg-red-600 hover:bg-red-500 text-white w-full py-3 px-8 uppercase font-bold tracking-widest text-xs"
             >
-          </button>
+              <span data-i18n="ui.buttons.dismiss">DISMISS ALERT</span>
+            </button>
+          </form>
         </div>
       </div>
     </div>
   </dialog>
 </Layout>
 
-<dialog id="dialogue_modal" class="modal pointer-events-auto">
-  <div class="modal-box rpg-panel w-11/12 max-w-md md:max-w-2xl">
-    <div class="p-4 md:p-8">
-      <div class="mb-4 md:mb-6">
-        <h3
-          id="dialogue-speaker"
-          class="text-xl md:text-3xl lg:text-4xl font-black text-yellow-300 mb-2 serious-text-shadow"
+<dialog
+  id="info-modal"
+  class="modal pointer-events-auto bg-black/80 backdrop-blur-sm"
+>
+  <div class="modal-box tech-panel w-11/12 max-w-2xl p-0">
+    <div
+      class="flex items-center justify-between p-4 border-b border-white/10 bg-slate-900/50"
+    >
+      <h3
+        class="text-xs font-mono text-blue-400 uppercase tracking-widest pl-2"
+        id="info-modal-title"
+        data-i18n="ui.infoModal.title"
+      >
+        OPERATIONAL GUIDE
+      </h3>
+      <form method="dialog">
+        <button
+          class="btn btn-sm btn-square btn-ghost text-slate-400 hover:text-white"
+          >✕</button
         >
-        </h3>
-        <div
-          class="h-1 md:h-2 w-16 md:w-24 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"
+      </form>
+    </div>
+
+    <div class="p-6 md:p-8 space-y-8 bg-slate-950/80">
+      <!-- Description -->
+      <div class="flex gap-4">
+        <div class="w-1 bg-blue-500/50 shrink-0"></div>
+        <p
+          id="info-modal-instructions"
+          class="text-sm text-slate-300 leading-relaxed font-light"
+          data-i18n="ui.infoModal.instructions"
         >
-        </div>
+        </p>
       </div>
 
-      <p
-        id="dialogue-text"
-        class="text-sm md:text-lg lg:text-xl text-white leading-relaxed mb-6 md:mb-8 whitespace-pre-line"
-      >
-      </p>
+      <!-- Controls Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="space-y-4">
+          <h4
+            class="text-[10px] font-mono text-slate-500 uppercase tracking-widest border-b border-white/5 pb-2"
+            data-i18n="ui.controls.movement"
+          >
+            Movement Controls
+          </h4>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs text-slate-400 uppercase"
+                data-i18n="ui.controls.moveKeys">Navigate</span
+              >
+              <div class="flex gap-1">
+                <span class="tech-key">W</span>
+                <span class="tech-key">A</span>
+                <span class="tech-key">S</span>
+                <span class="tech-key">D</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs text-slate-400 uppercase"
+                data-i18n="ui.controls.runKey">Sprint</span
+              >
+              <span class="tech-key px-3">SHIFT</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs text-slate-400 uppercase"
+                data-i18n="ui.controls.jumpKey">Jump</span
+              >
+              <span class="tech-key px-4">SPACE</span>
+            </div>
+          </div>
+        </div>
 
-      <div class="modal-action justify-end m-0">
-        <form method="dialog">
-          <button class="rpg-btn-info text-xs md:text-sm">
-            <span class="font-black tracking-wider">Συνεχισε</span>
-          </button>
-        </form>
+        <div class="space-y-4">
+          <h4
+            class="text-[10px] font-mono text-slate-500 uppercase tracking-widest border-b border-white/5 pb-2"
+            data-i18n="ui.controls.camera"
+          >
+            Camera & View
+          </h4>
+          <div class="flex items-center gap-4 text-slate-400 text-sm">
+            <div
+              class="w-8 h-8 rounded border border-white/10 flex items-center justify-center"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                ><path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                ></path></svg
+              >
+            </div>
+            <span data-i18n="ui.controls.mouseDrag"
+              >Drag mouse to look around</span
+            >
+          </div>
+        </div>
       </div>
     </div>
   </div>
   <form method="dialog" class="modal-backdrop"><button>close</button></form>
 </dialog>
 
-<dialog id="quiz_modal" class="modal pointer-events-auto bg-black/80">
-  <div class="modal-box rpg-panel w-11/12 max-w-2xl text-white max-h-[90vh] flex flex-col">
-    <div class="p-4 md:p-6 flex flex-col min-h-0">
-      <h3
-        class="text-xl md:text-2xl font-black text-yellow-300 mb-3 serious-text-shadow text-center flex-shrink-0"
-        data-i18n="game.modals.quizTitle"
-      >
-        🌊 ΠΡΟΤΕΙΝΟΜΕΝΕΣ ΑΛΛΑΓΕΣ
-      </h3>
+<!-- HUD ELEMENTS -->
 
-      <p
-        id="quiz-question"
-        class="text-sm md:text-base mb-4 text-center leading-relaxed flex-shrink-0"
-      >
-        <!-- Question text will be injected here -->
-      </p>
+<!-- HUD ELEMENTS -->
 
-      <div id="quiz-options" class="flex flex-col gap-2 overflow-y-auto flex-1 min-h-0 pr-1 custom-scrollbar">
-        <!-- Options will be injected here -->
-      </div>
-    </div>
-  </div>
-</dialog>
-
-<!-- Thermometer Alert Modal -->
-<dialog id="thermometer_modal" class="modal pointer-events-auto bg-black/80">
-  <div class="modal-box rpg-panel w-11/12 max-w-md text-white">
-    <div class="p-4 md:p-8">
-      <div class="mb-4 md:mb-6 text-center">
-        <!-- Thermometer Icon -->
-        <div class="flex justify-center mb-4">
-          <div class="text-7xl md:text-8xl animate-pulse">🌡️</div>
-        </div>
-
-        <h3
-          id="thermometer-title"
-          class="text-2xl md:text-3xl font-black text-yellow-300 mb-2 serious-text-shadow"
-          data-i18n="game.modals.thermometerModal.title"
-        >
-          <!-- Title -->
-        </h3>
-        <div
-          class="h-1 md:h-2 w-16 md:w-24 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full mx-auto mb-4"
-        >
-        </div>
-      </div>
-
-      <!-- Temperature Reading -->
-      <div class="mb-6 text-center">
-        <div
-          class="inline-block bg-slate-800/60 border-2 border-yellow-400/30 rounded-lg px-8 py-4 mb-4"
-        >
-          <div class="text-5xl md:text-6xl font-bold text-yellow-300">41°C</div>
-          <div
-            id="thermometer-level"
-            class="text-yellow-400/70 text-xs tracking-wider mt-1"
-            data-i18n="game.modals.thermometerModal.level"
-          >
-            <!-- Level -->
-          </div>
-        </div>
-
-        <p class="text-sm md:text-lg text-white leading-relaxed mb-2">
-          <span
-            id="thermometer-msg1"
-            data-i18n="game.modals.thermometerModal.message1"></span>
-          <span
-            id="thermometer-highlight"
-            class="text-yellow-300 font-bold"
-            data-i18n="game.modals.thermometerModal.messagehighlight"></span>
-          <span
-            id="thermometer-msg2"
-            data-i18n="game.modals.thermometerModal.message2"></span>
-        </p>
-        <p
-          id="thermometer-msg3"
-          class="text-sm md:text-base text-white/70"
-          data-i18n="game.modals.thermometerModal.message3"
-        >
-          <!-- Message 3 -->
-        </p>
-      </div>
-
-      <div class="modal-action justify-center m-0">
-        <form method="dialog">
-          <button class="rpg-btn-info text-xs md:text-sm">
-            <span
-              class="font-black tracking-wider"
-              data-i18n="ui.buttons.continue">Συνεχισε</span
-            >
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-</dialog>
-
-<dialog id="info-modal" class="modal pointer-events-auto">
-  <div class="modal-box rpg-panel w-11/12 max-w-md md:max-w-2xl">
-    <form method="dialog">
-      <button
-        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-white hover:bg-white/10"
-        >✕</button
-      >
-    </form>
-    <div class="p-4 md:p-8">
-      <div class="block space-y-6">
-        <div class="space-y-3">
-          <h4
-            id="info-modal-title"
-            class="text-sky-400 text-xs tracking-wider font-semibold mb-3"
-          >
-            ΟΔΗΓΙΕΣ
-          </h4>
-          <p id="info-modal-instructions" class="text-white/50 text-sm">
-            Μόλις πατήσεις το σήμα με τη φωτιά που επέλεξες, μπορείς να
-            μετακινηθείς με τα πλήκτρα WASD. Το πληκτρολόγιο πρέπει να είναι στα
-            αγγλικά για να μετακινηθείς.
-          </p>
-        </div>
-        <div class="space-y-3 hidden md:block">
-          <h3 class="text-sky-400 text-xs tracking-wider font-semibold mb-3">
-            Κίνηση
-          </h3>
-          <div class="grid grid-cols-2 gap-3">
-            <div class="flex items-center gap-3">
-              <div class="rpg-key-box">W A S D</div>
-              <span class="text-white/50 text-sm">Μετακίνηση</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <div class="rpg-key-box">Shift</div>
-              <span class="text-white/50 text-sm">Τρέξιμο</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <div class="rpg-key-box">Space</div>
-              <span class="text-white/50 text-sm">Πήδημα</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="space-y-3">
-          <h3 class="text-sky-400 text-xs tracking-wider font-semibold mb-3">
-            Κάμερα
-          </h3>
-          <div class="flex items-center gap-3">
-            <div class="rpg-key-box">
-              <svg
-                class="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59"
-                ></path>
-              </svg>
-            </div>
-            <span class="text-white/50 text-sm"
-              >Σύρετε το ποντίκι για να κοιτάξετε γύρω</span
-            >
-          </div>
-        </div>
-      </div>
-
-      <div class="md:hidden space-y-6">
-        <div class="space-y-3">
-          <h3 class="text-sky-400 text-xs tracking-wider font-semibold mb-3">
-            Κίνηση
-          </h3>
-          <div class="flex items-center gap-3">
-            <div class="rpg-key-box p-2">
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
-                ></path>
-              </svg>
-            </div>
-            <span class="text-white/50 text-sm"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <form method="dialog" class="modal-backdrop"><button>close</button></form>
-  </div>
-  <!-- End of Instruction Modal -->
-</dialog>
-
-<!-- HUD: Compass and Status (Moved OUT of the modal) -->
-
-<!-- Center Top - Objective and Timer -->
+<!-- Top Stats Bar -->
 <div
   id="hud-top-bar"
   style="display: none;"
-  class="absolute top-4 md:top-6 flex justify-between w-screen px-4 md:px-8 gap-2 md:gap-8 animate-fade-in-down"
+  class="absolute top-0 left-0 w-full p-4 md:p-6 flex justify-between items-start z-40 pointer-events-none"
 >
-  <div></div>
-
-  <!-- Objective -->
-  <div class="text-center">
+  <!-- Distance / Objective -->
+  <div
+    class="bg-slate-900/80 backdrop-blur border-l-2 border-blue-500 px-6 py-3 clip-path-slant-right pointer-events-auto"
+  >
     <div
-      class="text-[8px] md:text-xs text-yellow-300 font-black tracking-widest mb-0.5 md:mb-1"
+      class="text-[10px] font-mono text-blue-400 uppercase tracking-widest mb-1"
+      data-i18n="ui.hud.distance"
     >
-      ΑΠΟΣΤΑΣΗ
+      Target Distance
     </div>
-    <p
+    <div
       id="hud-distance"
-      class="text-xl md:text-3xl lg:text-4xl font-black text-white serious-text-shadow"
+      class="text-3xl font-mono font-bold text-white tracking-tight"
     >
-      ...
-    </p>
+      --
+    </div>
   </div>
 
   <!-- Timer -->
-  <div class="text-center">
+  <div
+    class="bg-slate-900/80 backdrop-blur border-r-2 border-pink-500 px-6 py-3 clip-path-slant-left text-right pointer-events-auto"
+  >
     <div
-      class="text-[8px] md:text-xs text-pink-300 font-black tracking-widest mb-0.5 md:mb-1"
+      class="text-[10px] font-mono text-pink-400 uppercase tracking-widest mb-1"
+      data-i18n="ui.hud.time"
     >
-      ΧΡΟΝΟΣ
+      Time Remaining
     </div>
-    <p
+    <div
       id="hud-timer"
-      class="text-xl md:text-3xl lg:text-4xl font-black text-white serious-text-shadow"
+      class="text-3xl font-mono font-bold text-white tracking-tight"
     >
       --:--
-    </p>
+    </div>
   </div>
 </div>
 
-<!-- Bottom Right Corner - Action Buttons -->
+<!-- Bottom Center Action Bar -->
 <div
   id="hud-bottom-bar"
   style="display: none;"
-  class="absolute bottom-4 w-full left-0 px-4 pointer-events-auto animate-fade-in-right"
+  class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-4 z-40"
 >
-  <div class="flex gap-6 w-full">
-    <button id="help-button" class="mr-auto">
-      <img
-        src="/help.png"
-        alt="Help"
-        class="w-12 h-12 transition-transform group-hover:scale-110"
-      />
-    </button>
-    <button id="info-button">
-      <img
-        src="/info.png"
-        alt="Quests"
-        class="w-12 h-12 transition-transform group-hover:scale-110"
-      />
-    </button>
+  <!-- Help -->
+  <button
+    id="help-button"
+    class="group relative w-14 h-14 bg-slate-900/80 backdrop-blur border border-white/10 hover:border-blue-400 transition-all duration-200 flex items-center justify-center rounded-sm"
+  >
+    <div
+      class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
+    >
+    </div>
+    <span class="text-xl group-hover:scale-110 transition-transform">❓</span>
+  </button>
 
-    <button id="map-button">
-      <img
-        src="/map.png"
-        alt="map"
-        class="w-12 h-12 transition-transform group-hover:scale-110"
-      />
-    </button>
-  </div>
+  <!-- Quests/Info -->
+  <button
+    id="info-button"
+    class="group relative w-14 h-14 bg-slate-900/80 backdrop-blur border border-white/10 hover:border-blue-400 transition-all duration-200 flex items-center justify-center rounded-sm"
+  >
+    <div
+      class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
+    >
+    </div>
+    <span class="text-xl group-hover:scale-110 transition-transform">ℹ️</span>
+  </button>
+
+  <!-- Map -->
+  <button
+    id="map-button"
+    class="group relative w-14 h-14 bg-slate-900/80 backdrop-blur border border-white/10 hover:border-blue-400 transition-all duration-200 flex items-center justify-center rounded-sm"
+  >
+    <div
+      class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
+    >
+    </div>
+    <span class="text-xl group-hover:scale-110 transition-transform">🗺️</span>
+  </button>
 </div>
 
 <script>
@@ -565,819 +653,98 @@ import Layout from "../layouts/Layout.astro";
 </script>
 
 <style is:global>
-  @import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;800;900&display=swap");
 
   body {
-    font-family: "Exo 2", sans-serif;
+    font-family: "Inter", sans-serif;
+    background-color: #020617;
   }
 
-  /* --- POLISHED RPG THEME --- */
-  :root {
-    --rpg-bg: rgba(15, 23, 42, 0.95); /* Slate-900 high opacity */
-    --rpg-border: #334155; /* Slate-600 */
-    --rpg-text: #f1f5f9; /* Slate-100 */
-    --rpg-highlight: #38bdf8; /* Sky-400 */
-    --rpg-success: #10b981; /* Emerald-500 */
-    --rpg-danger: #ef4444; /* Red-500 */
-    --rpg-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  /* --- TECH THEME UTILS --- */
+
+  .tech-panel {
+    background-color: rgba(2, 6, 23, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+    color: #e2e8f0;
+    border-radius: 2px;
   }
 
-  /* Base RPG Panel */
-  .rpg-panel {
-    background-color: var(--rpg-bg);
-    border: 2px solid var(--rpg-border);
-    box-shadow: var(--rpg-shadow);
-    color: var(--rpg-text);
-    border-radius: 12px;
-    backdrop-filter: blur(8px); /* Subtle blur, but mostly opaque */
+  .tech-text-shadow {
+    text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
   }
 
-  /* RPG Key Box (Input Hints) */
-  .rpg-key-box {
-    background: rgba(30, 41, 59, 0.8); /* Slate-800 */
-    border: 1px solid var(--rpg-highlight);
-    border-radius: 6px;
-    padding: 6px 12px;
+  .tech-key {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    padding: 4px 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
     font-weight: 700;
-    color: var(--rpg-highlight);
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
-    font-family: monospace;
+    color: #94a3b8;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
-  /* RPG Action Button (Green/Emerald) */
-  .rpg-btn-action {
-    background: linear-gradient(to bottom, #10b981, #059669);
-    border: 2px solid #047857;
-    color: white;
-    padding: 0.8rem 1.6rem;
-    border-radius: 8px;
-    cursor: pointer;
+  .tech-btn-sm {
     transition: all 0.2s ease;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+  .tech-btn-sm:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   }
 
-  .rpg-btn-action:hover {
-    background: linear-gradient(to bottom, #34d399, #10b981);
-    border-color: #059669;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(16, 185, 129, 0.4);
+  /* Slanted Edges for HUD */
+  .clip-path-slant-right {
+    clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
+  }
+  .clip-path-slant-left {
+    clip-path: polygon(5% 0, 100% 0, 100% 100%, 0% 100%);
+  }
+  .clip-path-slant {
+    clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
   }
 
-  .rpg-btn-action:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0f172a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #334151;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #475569;
   }
 
-  /* RPG Info Button (Blue/Sky) */
-  .rpg-btn-info {
-    background: linear-gradient(to bottom, #38bdf8, #0284c7);
-    border: 2px solid #0369a1;
-    color: white;
-    padding: 10px 24px;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: all 0.2s ease;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  /* Modal Overrides */
+  .modal-box {
+    border-radius: 0 !important; /* Sharp corners for tech feel */
   }
 
-  .rpg-btn-info:hover {
-    background: linear-gradient(to bottom, #7dd3fc, #38bdf8);
-    border-color: #0284c7;
-    transform: translateY(-2px);
-    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
-  }
-
-  .rpg-btn-info:active {
-    transform: translateY(1px);
-  }
-
-  /* Modal Override */
-  #modal-content {
-    background: var(--rpg-bg) !important;
-    border: 2px solid var(--rpg-border) !important;
-    box-shadow: var(--rpg-shadow) !important;
-    border-radius: 16px !important;
-  }
-
-  .serious-text-shadow {
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
-  }
-
-  .serious-key-box {
-    background: rgba(56, 189, 248, 0.05);
-    border: 1px solid rgba(56, 189, 248, 0.2);
-    border-radius: 0.375rem;
-    padding: 0.375rem 0.75rem;
-    font-weight: 600;
-    color: rgba(224, 242, 254, 1);
-  }
-
-  .ui-panel {
-    background-color: rgba(17, 24, 39, 0.7);
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39tbW1+fn5oaGhxcXGnpaWEhISNjY1oampoampaAAAAEnRSTlMAwDDw8K9w8DC/wOCf8NAg4OCf4D01rAAAAIZJREFUeNrtlN0RgkAQBdeuUFxAXDbU/3/B2t1wdqhyAq/f4CxgAAMD025w3k3/WKvbwRfej3gWb6S3a5nO5lNFY+9yGaSxr1zT6k46k8/Yj9cr3MgnDk2hS269T2wX6jP2i4CIowjGWEX4LGX8M1+qgL8a4U2xY61Y7AAAAABJRU5ErkJggg==");
-  }
-  .ui-panel-modal {
-    background-color: rgba(17, 24, 39, 0.9);
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39tbW1+fn5oaGhxcXGnpaWEhISNjY1oampoampaAAAAEnRSTlMAwDDw8K9w8DC/wOCf8NAg4OCf4D01rAAAAIZJREFUeNrtlN0RgkAQBdeuUFxAXDbU/3/B2t1wdqhyAq/f4CxgAAMD025w3k3/WKvbwRfej3gWb6S3a5nO5lNFY+9yGaSxr1zT6k46k8/Yj9cr3MgnDk2hS269T2wX6jP2i4CIowjGWEX4LGX8M1+qgL8a4U2xY61Y7AAAAABJRU5ErkJggg==");
-  }
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #374151;
-    border-radius: 8px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #4b5563;
-  }
-  .holographic-text {
-    text-shadow:
-      0 0 5px rgba(0, 191, 255, 0.3),
-      0 0 10px rgba(0, 191, 255, 0.2);
-  }
-  .text-shadow-sm {
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-  }
-  .quest-item.active {
-    background-color: rgba(55, 65, 81, 0.7);
-    box-shadow:
-      inset 0 0 10px rgba(0, 191, 255, 0.2),
-      0 0 10px rgba(0, 191, 255, 0.2);
-    border-color: rgba(0, 191, 255, 0.5) !important;
-  }
-  .quest-item {
-    border: 1px solid transparent;
-  }
-  @keyframes fade-in-down {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  .animate-fade-in-down {
-    animation: fade-in-down 0.4s ease-out forwards;
-  }
-  @keyframes fade-in-left {
-    from {
-      opacity: 0;
-      transform: translateX(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-  .animate-fade-in-left {
-    animation: fade-in-left 0.6s ease-out forwards;
-  }
-  @keyframes fade-in-right {
-    from {
-      opacity: 0;
-      transform: translateX(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-  /* Bubble Map / Waypoint */
+  /* Waypoint Bubble */
   #waypoint {
     position: absolute;
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    background: radial-gradient(
-      circle at 30% 30%,
-      rgba(255, 255, 255, 0.9),
-      rgba(56, 189, 248, 0.6) 40%,
-      rgba(56, 189, 248, 0.8) 100%
-    );
-    box-shadow:
-      0 0 15px rgba(56, 189, 248, 0.6),
-      inset -2px -2px 6px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(59, 130, 246, 0.9);
+    border: 2px solid white;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
     transform: translate(-50%, -50%);
     pointer-events: none;
     z-index: 50;
-    transition:
-      left 0.1s linear,
-      top 0.1s linear; /* Smooth movement */
-    animation: float-bubble 3s ease-in-out infinite;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-
   #waypoint::after {
     content: "";
-    position: absolute;
-    top: 6px;
-    left: 6px;
-    width: 10px;
-    height: 5px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.8);
-    transform: rotate(-45deg);
-  }
-
-  /* Inner dot for precision */
-  #waypoint::before {
-    content: "";
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     background: white;
     border-radius: 50%;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
-  }
-
-  @keyframes float-bubble {
-    0%,
-    100% {
-      transform: translate(-50%, -50%) translateY(0);
-    }
-    50% {
-      transform: translate(-50%, -50%) translateY(-6px);
-    }
-  }
-  @keyframes pop-in {
-    from {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  @keyframes pop-in {
-    from {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  .animate-pop-in {
-    animation: pop-in 0.3s ease-out forwards;
-  }
-  .tracking-super-wide {
-    letter-spacing: 0.3em;
-  }
-  @keyframes pulse-glow {
-    0%,
-    100% {
-      box-shadow:
-        0 0 10px rgba(251, 191, 36, 0.3),
-        0 0 20px rgba(251, 191, 36, 0.2);
-    }
-    50% {
-      box-shadow:
-        0 0 20px rgba(251, 191, 36, 0.6),
-        0 0 40px rgba(251, 191, 36, 0.4);
-    }
-  }
-  .phone-call-pulse {
-    animation: pulse-glow 2s infinite;
-  }
-
-  /* Clean RPG Styles */
-  .rpg-dialog {
-    background: linear-gradient(
-      135deg,
-      rgba(20, 15, 10, 0.98) 0%,
-      rgba(30, 20, 10, 0.98) 100%
-    );
-    border: 2px solid rgba(217, 119, 6, 0.5);
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.8),
-      inset 0 1px 0 rgba(217, 119, 6, 0.2);
-  }
-
-  .rpg-btn {
-    background: linear-gradient(
-      135deg,
-      rgba(217, 119, 6, 0.3) 0%,
-      rgba(180, 83, 9, 0.3) 100%
-    );
-    border: 1px solid rgba(217, 119, 6, 0.6);
-    color: rgb(252, 211, 77);
-    padding: 0.75rem 2rem;
-    border-radius: 0.375rem;
-    font-weight: 600;
-    transition: all 0.2s;
-  }
-
-  .rpg-btn:hover {
-    background: linear-gradient(
-      135deg,
-      rgba(217, 119, 6, 0.5) 0%,
-      rgba(180, 83, 9, 0.5) 100%
-    );
-    border-color: rgba(217, 119, 6, 0.8);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
-  }
-
-  .rpg-icon-btn {
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 50%;
-    background: linear-gradient(
-      135deg,
-      rgba(20, 15, 10, 0.9) 0%,
-      rgba(30, 20, 10, 0.9) 100%
-    );
-    border: 2px solid rgba(217, 119, 6, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-  }
-
-  .rpg-icon-btn:hover {
-    border-color: rgba(217, 119, 6, 0.8);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(217, 119, 6, 0.4);
-  }
-
-  /* Elden Ring Style HUD */
-  .elden-panel {
-    background: linear-gradient(
-      135deg,
-      rgba(10, 8, 5, 0.85) 0%,
-      rgba(15, 12, 8, 0.85) 100%
-    );
-    border: 1px solid rgba(180, 130, 70, 0.3);
-    box-shadow:
-      inset 0 1px 0 rgba(180, 130, 70, 0.1),
-      0 4px 20px rgba(0, 0, 0, 0.8);
-    min-width: 200px;
-  }
-
-  .elden-text {
-    text-shadow:
-      0 0 10px rgba(251, 191, 36, 0.3),
-      0 2px 4px rgba(0, 0, 0, 0.8);
-  }
-
-  .elden-btn {
-    width: 2.75rem;
-    height: 2.75rem;
-    background: linear-gradient(
-      135deg,
-      rgba(10, 8, 5, 0.7) 0%,
-      rgba(15, 12, 8, 0.7) 100%
-    );
-    border: 1px solid rgba(180, 130, 70, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    box-shadow:
-      inset 0 1px 0 rgba(180, 130, 70, 0.1),
-      0 2px 8px rgba(0, 0, 0, 0.6);
-  }
-
-  .elden-btn:hover {
-    background: linear-gradient(
-      135deg,
-      rgba(15, 12, 8, 0.9) 0%,
-      rgba(20, 16, 10, 0.9) 100%
-    );
-    border-color: rgba(180, 130, 70, 0.5);
-    box-shadow:
-      inset 0 1px 0 rgba(180, 130, 70, 0.2),
-      0 4px 12px rgba(0, 0, 0, 0.8),
-      0 0 12px rgba(180, 130, 70, 0.2);
-  }
-
-  .elden-btn:active {
-    transform: translateY(1px);
-  }
-
-  .elden-dialog {
-    background: linear-gradient(
-      135deg,
-      rgba(10, 8, 5, 0.95) 0%,
-      rgba(15, 12, 8, 0.95) 100%
-    );
-    border: 1px solid rgba(180, 130, 70, 0.3);
-    box-shadow:
-      inset 0 1px 0 rgba(180, 130, 70, 0.1),
-      0 8px 40px rgba(0, 0, 0, 0.9);
-  }
-
-  .elden-btn-large {
-    background: linear-gradient(
-      135deg,
-      rgba(10, 8, 5, 0.7) 0%,
-      rgba(15, 12, 8, 0.7) 100%
-    );
-    border: 1px solid rgba(180, 130, 70, 0.3);
-    padding: 0.75rem 2.5rem;
-    transition: all 0.2s ease;
-    box-shadow:
-      inset 0 1px 0 rgba(180, 130, 70, 0.1),
-      0 2px 8px rgba(0, 0, 0, 0.6);
-  }
-
-  .elden-btn-large:hover {
-    background: linear-gradient(
-      135deg,
-      rgba(15, 12, 8, 0.9) 0%,
-      rgba(20, 16, 10, 0.9) 100%
-    );
-    border-color: rgba(180, 130, 70, 0.5);
-    box-shadow:
-      inset 0 1px 0 rgba(180, 130, 70, 0.2),
-      0 4px 12px rgba(0, 0, 0, 0.8),
-      0 0 12px rgba(180, 130, 70, 0.2);
-  }
-
-  .elden-btn-large:active {
-    transform: translateY(1px);
-  }
-
-  .model-select {
-    outline: none;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23fbbf24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.5rem center;
-    background-size: 1.5em 1.5em;
-    padding-right: 2.5rem;
-  }
-
-  .model-select:focus {
-    border-color: rgba(180, 130, 70, 0.6);
-    box-shadow: 0 0 0 2px rgba(180, 130, 70, 0.1);
-  }
-
-  .model-select option {
-    background: rgba(10, 8, 5, 0.98);
-    color: rgb(252, 211, 77);
-  }
-
-  /* Indie Game Style HUD */
-  .indie-panel {
-    background: rgba(15, 23, 42, 0.75);
-    backdrop-filter: blur(8px);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 12px 16px;
-    box-shadow:
-      0 4px 16px rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    transition: all 0.2s ease;
-  }
-
-  .indie-panel:hover {
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow:
-      0 6px 20px rgba(0, 0, 0, 0.5),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  }
-
-  .indie-btn {
-    width: 2.5rem;
-    height: 2.5rem;
-    background: rgba(15, 23, 42, 0.75);
-    backdrop-filter: blur(8px);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    box-shadow:
-      0 4px 12px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    cursor: pointer;
-  }
-
-  .indie-btn:hover {
-    background: rgba(15, 23, 42, 0.9);
-    border-color: rgba(96, 165, 250, 0.5);
-    transform: translateY(-2px);
-    box-shadow:
-      0 6px 16px rgba(96, 165, 250, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  }
-
-  .indie-btn:active {
-    transform: translateY(0);
-  }
-
-  .indie-text-shadow {
-    text-shadow:
-      0 2px 8px rgba(0, 0, 0, 0.8),
-      0 0 20px rgba(96, 165, 250, 0.3);
-  }
-
-  .indie-select {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  }
-
-  .indie-select option {
-    background: rgba(15, 23, 42, 0.98);
-    color: white;
-  }
-
-  @keyframes indie-pulse {
-    0%,
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.6;
-      transform: scale(0.9);
-    }
-  }
-
-  .indie-pulse {
-    animation: indie-pulse 2s ease-in-out infinite;
-  }
-
-  .indie-waypoint-glow {
-    box-shadow:
-      0 0 20px rgba(34, 211, 238, 0.6),
-      inset 0 0 10px rgba(34, 211, 238, 0.2);
-  }
-
-  /* Cartoonish HUD Styles */
-  .cartoon-hud-panel {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    border: 4px solid #1e40af;
-    border-radius: 12px;
-    padding: 12px 20px;
-    box-shadow:
-      4px 4px 0px #000,
-      0 0 0 2px #60a5fa;
-  }
-
-  .cartoon-icon-btn {
-    width: 56px;
-    height: 56px;
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    border: 4px solid #b45309;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    box-shadow:
-      4px 4px 0px #000,
-      0 0 0 2px #fbbf24;
-  }
-
-  .cartoon-icon-btn:hover {
-    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-    transform: translateY(-2px);
-    box-shadow:
-      6px 6px 0px #000,
-      0 0 0 2px #fbbf24;
-  }
-
-  .cartoon-icon-btn:active {
-    transform: translateY(0);
-    box-shadow:
-      3px 3px 0px #000,
-      0 0 0 2px #fbbf24;
-  }
-
-  /* Cartoonish Modal Styles */
-  .cartoon-modal {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    border: 5px solid #475569;
-    border-radius: 20px;
-    box-shadow:
-      6px 6px 0px #000,
-      0 0 0 3px #94a3b8;
-  }
-
-  .cartoon-btn-green {
-    width: 90px;
-    height: 90px;
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    border: 5px solid #15803d;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    box-shadow:
-      5px 5px 0px #000,
-      0 0 0 3px #4ade80;
-  }
-
-  .cartoon-btn-green:hover {
-    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-    transform: translateY(-3px);
-    box-shadow:
-      7px 7px 0px #000,
-      0 0 0 3px #4ade80;
-  }
-
-  .cartoon-btn-green:active {
-    transform: translateY(0);
-    box-shadow:
-      3px 3px 0px #000,
-      0 0 0 3px #4ade80;
-  }
-
-  .cartoon-btn-blue {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    border: 4px solid #1e40af;
-    border-radius: 12px;
-    padding: 14px 36px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    box-shadow:
-      4px 4px 0px #000,
-      0 0 0 2px #60a5fa;
-  }
-
-  .cartoon-btn-blue:hover {
-    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
-    transform: translateY(-2px);
-    box-shadow:
-      6px 6px 0px #000,
-      0 0 0 2px #60a5fa;
-  }
-
-  .cartoon-btn-blue:active {
-    transform: translateY(0);
-    box-shadow:
-      3px 3px 0px #000,
-      0 0 0 2px #60a5fa;
-  }
-
-  /* HUGE Cartoonish Buttons */
-  .cartoon-btn-green-huge {
-    width: 140px;
-    height: 140px;
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    border: 8px solid #15803d;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow:
-      10px 10px 0px #000,
-      0 0 0 6px #4ade80,
-      0 0 40px rgba(74, 222, 128, 0.4);
-  }
-
-  .cartoon-btn-green-huge:hover {
-    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-    transform: translateY(-6px) scale(1.05);
-    box-shadow:
-      14px 14px 0px #000,
-      0 0 0 6px #4ade80,
-      0 0 60px rgba(74, 222, 128, 0.6);
-    animation: bounce-big 0.5s ease;
-  }
-
-  .cartoon-btn-green-huge:active {
-    transform: translateY(0) scale(0.95);
-    box-shadow:
-      6px 6px 0px #000,
-      0 0 0 6px #4ade80;
-  }
-
-  .cartoon-btn-blue-huge {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    border: 6px solid #1e40af;
-    border-radius: 20px;
-    padding: 24px 64px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow:
-      8px 8px 0px #000,
-      0 0 0 4px #60a5fa,
-      0 0 30px rgba(96, 165, 250, 0.3);
-  }
-
-  .cartoon-btn-blue-huge:hover {
-    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
-    transform: translateY(-4px) scale(1.05);
-    box-shadow:
-      12px 12px 0px #000,
-      0 0 0 4px #60a5fa,
-      0 0 50px rgba(96, 165, 250, 0.5);
-  }
-
-  .cartoon-btn-blue-huge:active {
-    transform: translateY(0) scale(0.98);
-    box-shadow:
-      5px 5px 0px #000,
-      0 0 0 4px #60a5fa;
-  }
-
-  @keyframes bounce-big {
-    0%,
-    100% {
-      transform: translateY(-6px) scale(1.05);
-    }
-    50% {
-      transform: translateY(-10px) scale(1.08);
-    }
-  }
-
-  @keyframes bounce-subtle {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-8px);
-    }
-  }
-
-  .animate-bounce-subtle {
-    animation: bounce-subtle 2s ease-in-out infinite;
-  }
-
-  /* Thermometer pulse animation */
-  .thermometer-reading {
-    animation: thermometer-pulse 1.5s ease-in-out infinite;
-  }
-
-  @keyframes thermometer-pulse {
-    0%,
-    100% {
-      transform: scale(1);
-      text-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
-    }
-    50% {
-      transform: scale(1.05);
-      text-shadow:
-        0 0 40px rgba(239, 68, 68, 1),
-        0 0 60px rgba(239, 68, 68, 0.6);
-    }
-  }
-
-  .thermometer-container {
-    animation: thermometer-glow 2s ease-in-out infinite;
-  }
-
-  @keyframes thermometer-glow {
-    0%,
-    100% {
-      box-shadow:
-        0 0 30px rgba(239, 68, 68, 0.5),
-        inset 0 0 20px rgba(239, 68, 68, 0.3);
-    }
-    50% {
-      box-shadow:
-        0 0 50px rgba(239, 68, 68, 0.8),
-        inset 0 0 30px rgba(239, 68, 68, 0.5);
-    }
-  }
-
-  /* Quiz option styles */
-  .quiz-option-btn {
-    position: relative;
-  }
-
-  .quiz-option-btn::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(56, 189, 248, 0.1),
-      transparent
-    );
-    transform: translateX(-100%);
-    transition: transform 0.6s;
-  }
-
-  .quiz-option-btn:hover::before {
-    transform: translateX(100%);
   }
 </style>

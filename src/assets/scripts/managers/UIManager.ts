@@ -92,7 +92,10 @@ export class UIManager {
       callbacks.onMap();
     });
 
-    this._dialogueModal.addEventListener("close", callbacks.onInstructionModalClose);
+    this._dialogueModal.addEventListener(
+      "close",
+      callbacks.onInstructionModalClose,
+    );
     this._phoneCallModal.addEventListener("close", callbacks.onPhoneModalClose);
 
     if (callbacks.onHelpModalClose) {
@@ -100,7 +103,10 @@ export class UIManager {
     }
 
     if (callbacks.onThermometerModalClose) {
-      this._thermometerModal.addEventListener("close", callbacks.onThermometerModalClose);
+      this._thermometerModal.addEventListener(
+        "close",
+        callbacks.onThermometerModalClose,
+      );
     }
 
     this._answerCallBtn.addEventListener("click", () => {
@@ -121,7 +127,7 @@ export class UIManager {
 
   public showGameHUD() {
     this._hudTopBar.style.display = "flex";
-    this._hudBottomBar.style.display = "block";
+    this._hudBottomBar.style.display = "flex";
   }
 
   public showPhoneCallModal(caller: string) {
@@ -133,23 +139,27 @@ export class UIManager {
     this._phoneCallModal.close();
   }
 
-  public showQuizModal(question: string, options: string[], onSelect: (index: number) => void) {
+  public showQuizModal(
+    question: string,
+    options: string[],
+    onSelect: (index: number) => void,
+  ) {
     this._quizQuestion.innerText = question;
     this._quizOptions.innerHTML = "";
 
-    const optionNumbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+    const optionLetters = ["A", "B", "C", "D", "E", "F"];
 
     options.forEach((option, index) => {
       const btn = document.createElement("button");
-      btn.className = "quiz-option-btn group relative overflow-hidden w-full text-left p-2 md:p-3 rounded-lg border border-slate-600 bg-slate-800/90 hover:bg-slate-700 hover:border-sky-400 transition-all duration-200 text-slate-200 hover:text-white";
+      // New Tech/Tactical Style
+      btn.className =
+        "group relative w-full text-left p-4 bg-slate-900/50 border border-white/10 hover:border-blue-500 hover:bg-slate-800 transition-all duration-200 flex items-start gap-4";
 
       btn.innerHTML = `
-        <div class="flex items-center gap-2">
-          <div class="flex-shrink-0 w-6 h-6 md:w-7 md:h-7 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center font-black text-white text-xs md:text-sm">
-            ${optionNumbers[index] || index + 1}
-          </div>
-          <span class="flex-1 text-white text-[11px] md:text-xs leading-snug">${option}</span>
+        <div class="flex-shrink-0 w-6 h-6 rounded bg-slate-800 border border-white/20 flex items-center justify-center font-mono text-xs font-bold text-blue-400 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-500 transition-colors">
+          ${optionLetters[index] || index + 1}
         </div>
+        <span class="text-sm md:text-base text-slate-300 group-hover:text-white leading-relaxed font-light">${option}</span>
       `;
 
       btn.onclick = () => {
@@ -166,15 +176,15 @@ export class UIManager {
     this._quizModal.close();
   }
 
-
-
   public updateDistance(distance: number | null) {
     if (distance === null) {
       this._hudDistance.innerText = t("ui.status.noObjective");
     } else if (distance < 0) {
       this._hudDistance.innerText = t("ui.status.completed");
     } else {
-      this._hudDistance.innerText = t("ui.status.distanceFormat", { distance: distance.toFixed(0) });
+      this._hudDistance.innerText = t("ui.status.distanceFormat", {
+        distance: distance.toFixed(0),
+      });
     }
   }
 
@@ -182,13 +192,13 @@ export class UIManager {
     const totalSeconds = Math.floor(milliseconds / 1000);
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
-    this._hudTimer.innerText = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    this._hudTimer.innerText = `${minutes}:${seconds.toString().padStart(2, "0")}`;
 
     // Change color when time is running out (less than 30 seconds)
     if (totalSeconds < 30) {
-      this._hudTimer.classList.add('text-red-400');
+      this._hudTimer.classList.add("text-red-400");
     } else {
-      this._hudTimer.classList.remove('text-red-400');
+      this._hudTimer.classList.remove("text-red-400");
     }
   }
 

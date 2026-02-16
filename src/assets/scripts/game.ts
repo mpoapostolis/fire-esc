@@ -230,7 +230,9 @@ export class Game {
     window.addEventListener("keydown", (e) => {
       if (e.key === "p" || e.key === "P") {
         const pos = this._player.capsule.position;
-        console.log(`point: { x: ${pos.x.toFixed(2)}, z: ${pos.z.toFixed(2)} }`);
+        console.log(
+          `point: { x: ${pos.x.toFixed(2)}, z: ${pos.z.toFixed(2)} }`,
+        );
       }
     });
   }
@@ -430,7 +432,8 @@ export class Game {
       !pickedMesh ||
       (!pickedMesh.name.startsWith("teleportButton-") &&
         !pickedMesh.name.startsWith("numberLabel-"))
-    ) return;
+    )
+      return;
 
     const questId = parseInt(pickedMesh.name.split("-")[1]);
     const currentQuest = this._questManager.getCurrentQuest();
@@ -455,7 +458,7 @@ export class Game {
       const angle = Math.random() * Math.PI * 2;
       const targetPos = new Vector3(
         clickedQuest.point.x + Math.cos(angle) * spawnOffset,
-        3,
+        20,
         clickedQuest.point.z + Math.sin(angle) * spawnOffset,
       );
       this._player.capsule.position.copyFrom(targetPos);
@@ -465,7 +468,11 @@ export class Game {
       );
     } else {
       // Wrong point - teleport there, show error
-      const targetPos = new Vector3(clickedQuest.point.x, 3, clickedQuest.point.z);
+      const targetPos = new Vector3(
+        clickedQuest.point.x,
+        20,
+        clickedQuest.point.z,
+      );
       this._player.capsule.position.copyFrom(targetPos);
       this._gameState = "SHOWING_MAP_ERROR";
       this._uiManager.showInstructionModal(
@@ -491,7 +498,9 @@ export class Game {
     // Update cache only when quest changes
     if (this._cachedCurrentQuest?.id !== currentQuest.id) {
       this._cachedCurrentQuest = currentQuest;
-      this._cachedObjectivePos = this._world.getFirePointPosition(currentQuest.id);
+      this._cachedObjectivePos = this._world.getFirePointPosition(
+        currentQuest.id,
+      );
     }
 
     if (!this._cachedObjectivePos) {

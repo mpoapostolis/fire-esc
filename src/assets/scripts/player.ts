@@ -106,7 +106,7 @@ export class Player {
   constructor(
     scene: Scene,
     camera: ArcRotateCamera,
-    config: Partial<PlayerConfig> = {}
+    config: Partial<PlayerConfig> = {},
   ) {
     this._scene = scene;
     this.camera = camera;
@@ -115,33 +115,15 @@ export class Player {
   }
 
   public async load(
-    startPosition: Vector3 = new Vector3(9, 2, -20)
+    startPosition: Vector3 = new Vector3(9, 20, -20),
   ): Promise<AbstractMesh[]> {
     const result = await SceneLoader.ImportMeshAsync(
       "",
       this._config.modelPath,
       this._config.modelFile,
-      this._scene
+      this._scene,
     );
 
-    const kit = await SceneLoader.ImportMeshAsync(
-      "",
-      this._config.modelPath,
-      "aid_kit.glb",
-      this._scene
-    );
-    const hands = result.meshes.find((mesh) => {
-      return mesh.name === "Casual_Body_primitive1";
-    });
-    const kitRoot = kit.meshes.at(0);
-    kitRoot?.scaling.setAll(-0.003)
-    kitRoot?.position.set(0, 0.0033, 0);
-    const hand = this._scene.transformNodes.find((node) => {
-      return node.name === "Wrist.L";
-    });
-    if (kitRoot && hand) {
-      kitRoot.parent = hand;
-    }
     this._heroRoot = result.meshes[0];
     this._heroRoot.position = startPosition;
     const scale = this._config.scaling;
@@ -163,7 +145,7 @@ export class Player {
         height: this._config.capsuleHeight,
         radius: this._config.capsuleRadius,
       },
-      this._scene
+      this._scene,
     );
     this.capsule.position.copyFrom(startPosition);
     this.capsule.isVisible = false;
@@ -175,7 +157,7 @@ export class Player {
       this.capsule,
       PhysicsShapeType.CAPSULE,
       { mass: this._config.mass, restitution: 0, friction: 0.5 },
-      this._scene
+      this._scene,
     );
 
     const body = this._physicsAggregate.body;
@@ -294,7 +276,7 @@ export class Player {
 
   public setJoysticks(
     movementJoystick: JoystickController | null,
-    cameraJoystick: JoystickController | null
+    cameraJoystick: JoystickController | null,
   ): void {
     this._movementJoystick = movementJoystick;
     this._cameraJoystick = cameraJoystick;
@@ -364,14 +346,14 @@ export class Player {
         Scalar.Lerp(
           currentVelocity.x,
           this._targetVelocity.x,
-          Player.VELOCITY_SMOOTHING
+          Player.VELOCITY_SMOOTHING,
         ),
         currentVelocity.y,
         Scalar.Lerp(
           currentVelocity.z,
           this._targetVelocity.z,
-          Player.VELOCITY_SMOOTHING
-        )
+          Player.VELOCITY_SMOOTHING,
+        ),
       );
 
       this._physicsAggregate.body.setLinearVelocity(this._newVelocity);
@@ -385,7 +367,7 @@ export class Player {
       this._newVelocity.set(
         currentVelocity.x * Player.DECELERATION,
         currentVelocity.y,
-        currentVelocity.z * Player.DECELERATION
+        currentVelocity.z * Player.DECELERATION,
       );
 
       this._physicsAggregate.body.setLinearVelocity(this._newVelocity);
@@ -411,7 +393,7 @@ export class Player {
     if (this._movementJoystick?.isPressed()) {
       const movement = this._movementJoystick.getMovement();
       const magnitude = Math.sqrt(
-        movement.x * movement.x + movement.y * movement.y
+        movement.x * movement.x + movement.y * movement.y,
       );
       isSprinting = magnitude > 0.7;
     }
@@ -478,7 +460,7 @@ export class Player {
     this._tempVec.set(
       currentVelocity.x,
       this._config.jumpImpulse,
-      currentVelocity.z
+      currentVelocity.z,
     );
     this._physicsAggregate.body.setLinearVelocity(this._tempVec);
 

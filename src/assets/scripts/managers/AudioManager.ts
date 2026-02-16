@@ -105,7 +105,7 @@ export class AudioManager {
     this._impactSynth.volume.value = -12;
   }
 
-  private _startBackgroundMusic(): void { }
+  private _startBackgroundMusic(): void {}
 
   public playQuestCompleteSound = (): void => {
     if (!this._audioInitialized || !this._fxSynth || !this._impactSynth) return;
@@ -122,6 +122,31 @@ export class AudioManager {
     this._impactSynth?.triggerAttackRelease("C2", "8n", now);
     this._impactSynth?.triggerAttackRelease("C2", "16n", now + 0.24);
     this._impactSynth?.triggerAttackRelease("C1", "8n", now + 0.48);
+  };
+
+  public playHover = (): void => {
+    if (!this._audioInitialized || !this._uiSynth) return;
+    // High-tech tick sound
+    this._uiSynth.triggerAttackRelease("C6", "64n", undefined, 0.1);
+  };
+
+  public playBootSequence = async (): Promise<void> => {
+    if (!this._audioInitialized) return;
+    const now = Tone.now();
+
+    // Deep bass startup thrum
+    this._impactSynth?.triggerAttackRelease("A1", "2n", now);
+
+    // High-pitched data stream sound
+    if (this._fxSynth) {
+      this._fxSynth.triggerAttackRelease("A6", "32n", now + 0.1);
+      this._fxSynth.triggerAttackRelease("C7", "32n", now + 0.2);
+      this._fxSynth.triggerAttackRelease("E7", "32n", now + 0.3);
+      this._fxSynth.triggerAttackRelease("A7", "8n", now + 0.4);
+    }
+
+    // Allow time for sound to finish
+    await new Promise((r) => setTimeout(r, 1000));
   };
 
   public playButtonClick = (): void => {
@@ -151,33 +176,11 @@ export class AudioManager {
   public updateFireVolume(distance: number): void {
     // Fire sounds disabled by request
     return;
-    /* 
-    if (!this._emergencyVolume) return;
-
-    // Max emergency sound at 0-10m, fade out by 50m
-    const maxDistance = 50;
-    const minDistance = 10;
-
-    if (distance <= minDistance) {
-      this._emergencyVolume.volume.value = -15;
-    } else if (distance >= maxDistance) {
-      this._emergencyVolume.volume.value = -60;
-    } else {
-      // Logarithmic falloff for realistic spatial audio
-      const normalized = (distance - minDistance) / (maxDistance - minDistance);
-      this._emergencyVolume.volume.value = -15 - normalized * 45;
-    }
-    */
   }
 
   public stopFireSound(): void {
     // Fire sounds disabled
     return;
-    /*
-    if (this._emergencyVolume) {
-      this._emergencyVolume.volume.value = -60; // Silent
-    }
-    */
   }
 
   public playRingtone = (): void => {
@@ -241,3 +244,5 @@ export class AudioManager {
     this._uiSynth?.dispose();
   }
 }
+
+export const audioManager = new AudioManager();
