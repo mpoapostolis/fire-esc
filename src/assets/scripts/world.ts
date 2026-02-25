@@ -17,7 +17,11 @@ import {
   ShadowGenerator,
   StandardMaterial,
   Texture,
+  SceneLoader,
+  Ray,
+  AbstractMesh,
 } from "@babylonjs/core";
+import "@babylonjs/loaders/glTF";
 import type { Quest } from "./quests/quests";
 
 interface WorldConfig {
@@ -39,7 +43,7 @@ export class World {
   private readonly _firePoints = new Map<number, Mesh>();
   private _shadowGenerator?: ShadowGenerator;
   private _pipeline?: DefaultRenderingPipeline;
-  private _ground?: GroundMesh;
+  private _worldMeshes: AbstractMesh[] = [];
   private _isWorldLoaded = false;
 
   constructor(scene: Scene, config: Partial<WorldConfig> = {}) {
@@ -51,14 +55,24 @@ export class World {
     if (this._isWorldLoaded) return;
     this._createLight();
     this._createSkybox();
-    await this._createGround();
+    await this._loadWorldModel();
     this._isWorldLoaded = true;
   }
 
-  /** Get the terrain height at world coords. Returns 0 if ground not ready. */
+  /** Get the terrain height at world coords. Returns 0 if model not ready. */
   public getGroundHeightAt(x: number, z: number): number {
-    if (!this._ground) return 0;
-    return this._ground.getHeightAtCoordinates(x, z) ?? 0;
+    if (this._worldMeshes.length === 0) return 0;
+
+    // Raycast from sky downwards to find the ground height at (x, z)
+    const ray = new Ray(new Vector3(x, 1000, z), new Vector3(0, -1, 0), 2000);
+    const pickInfo = this._scene.pickWithRay(ray, (m) =>
+      this._worldMeshes.includes(m),
+    );
+
+    if (pickInfo?.hit && pickInfo.pickedPoint) {
+      return pickInfo.pickedPoint.y;
+    }
+    return 0;
   }
 
   public setupPostProcessing(): void {
@@ -271,18 +285,19 @@ export class World {
       numberMat.disableDepthWrite = false;
       numberPlane.material = numberMat;
 
-      // Create vertical line
+      // Create vertical line - stop before reaching the circle to avoid overlapping text
       const absolutePlaneY = button.position.y + numberPlane.position.y;
+      const lineHeight = absolutePlaneY - 6; // Stop ~6 units below the circle center
       const line = MeshBuilder.CreateCylinder(
         `teleportLine-${quest.id}`,
         {
-          height: absolutePlaneY,
+          height: lineHeight,
           diameter: 0.2,
         },
         this._scene,
       );
       line.parent = button;
-      line.position.y = absolutePlaneY / 2 - button.position.y;
+      line.position.y = lineHeight / 2 - button.position.y;
       line.isPickable = false;
       line.isVisible = false;
 
@@ -306,137 +321,32 @@ export class World {
     }
   }
 
-  private _createGround(): Promise<void> {
-    return new Promise<void>((resolve) => {
-      // Generate a procedural heightmap texture
-      const heightMapUrl = this._generateHeightMapDataUrl();
+  private async _loadWorldModel(): Promise<void> {
+    const result = await SceneLoader.ImportMeshAsync(
+      "",
+      "/models/",
+      "island city 3.glb",
+      this._scene,
+    );
 
-      // Create ground from heightmap
-      MeshBuilder.CreateGroundFromHeightMap(
-        "ground",
-        heightMapUrl,
-        {
-          width: 200,
-          height: 200,
-          subdivisions: 100,
-          minHeight: 0,
-          maxHeight: 10,
-          onReady: (mesh) => {
-            this._ground = mesh as GroundMesh;
-            mesh.receiveShadows = true;
+    this._worldMeshes = result.meshes;
 
-            // Create material
-            const groundMat = new StandardMaterial("groundMat", this._scene);
-            groundMat.diffuseColor = new Color3(0.2, 0.25, 0.2);
-            groundMat.specularColor = new Color3(0.05, 0.05, 0.05);
-            groundMat.ambientColor = new Color3(0.1, 0.1, 0.1);
-            mesh.material = groundMat;
+    for (const mesh of this._worldMeshes) {
+      mesh.receiveShadows = true;
+      mesh.isPickable = true;
 
-            // Add Physics AFTER geometry is ready
-            const body = new PhysicsBody(
-              mesh,
-              PhysicsMotionType.STATIC,
-              false,
-              this._scene,
-            );
-            body.shape = new PhysicsShapeMesh(mesh, this._scene);
+      if (mesh.getTotalVertices() > 0) {
+        const body = new PhysicsBody(
+          mesh,
+          PhysicsMotionType.STATIC,
+          false,
+          this._scene,
+        );
+        body.shape = new PhysicsShapeMesh(mesh as Mesh, this._scene);
 
-            mesh.freezeWorldMatrix();
-
-            // Add environment details AFTER ground is ready
-            this._createEnvironmentDetails(this._ground);
-
-            resolve(); // Ground is ready, let the game continue
-          },
-        },
-        this._scene,
-      );
-    });
-  }
-
-  private _generateHeightMapDataUrl(): string {
-    const size = 512;
-    const canvas = document.createElement("canvas");
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return "";
-
-    // Fill with noise
-    const imgData = ctx.createImageData(size, size);
-    const data = imgData.data;
-
-    const noise = (x: number, z: number) => {
-      // Simple pseudo-random noise composition
-      let y = Math.sin(x * 0.02) * Math.cos(z * 0.02) * 50;
-      y += Math.sin(x * 0.05) * Math.cos(z * 0.05) * 20;
-      y += Math.sin(x * 0.1 + z * 0.1) * 10;
-      return Math.max(0, Math.min(255, 128 + y));
-    };
-
-    for (let i = 0; i < size; i++) {
-      for (let j = 0; j < size; j++) {
-        const index = (i * size + j) * 4;
-        const val = noise(j, i);
-        data[index] = val; // R
-        data[index + 1] = val; // G
-        data[index + 2] = val; // B
-        data[index + 3] = 255; // Alpha
-      }
-    }
-
-    ctx.putImageData(imgData, 0, 0);
-    return canvas.toDataURL("image/png");
-  }
-
-  private _createEnvironmentDetails(ground: GroundMesh): void {
-    // Scatter random cubes for "visual interest"
-    const count = 80;
-    const range = 80;
-
-    for (let i = 0; i < count; i++) {
-      const size = 1 + Math.random() * 3;
-      const cube = MeshBuilder.CreateBox(`envCube-${i}`, { size }, this._scene);
-
-      const x = (Math.random() - 0.5) * 2 * range;
-      const z = (Math.random() - 0.5) * 2 * range;
-
-      // Use getHeightAtCoordinates to place on ground
-      const groundY = ground.getHeightAtCoordinates(x, z);
-      const y = (groundY ?? 0) + size / 2;
-
-      cube.position.set(x, y, z);
-      cube.rotation.set(
-        Math.random() * Math.PI,
-        Math.random() * Math.PI,
-        Math.random() * Math.PI,
-      );
-
-      // Random material styling
-      const mat = new StandardMaterial(`envCubeMat-${i}`, this._scene);
-      const shade = Math.random();
-      // Dark metallic/concrete look
-      mat.diffuseColor = new Color3(
-        shade * 0.3,
-        shade * 0.3 + 0.1,
-        shade * 0.3 + 0.2,
-      );
-      mat.specularColor = new Color3(0.5, 0.5, 0.5);
-      cube.material = mat;
-
-      cube.receiveShadows = true;
-
-      // Static obstacles
-      const body = new PhysicsBody(
-        cube,
-        PhysicsMotionType.STATIC,
-        false,
-        this._scene,
-      );
-      body.shape = new PhysicsShapeMesh(cube, this._scene);
-
-      if (this._shadowGenerator) {
-        this._shadowGenerator.addShadowCaster(cube);
+        if (this._shadowGenerator) {
+          this._shadowGenerator.addShadowCaster(mesh);
+        }
       }
     }
   }

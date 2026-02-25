@@ -371,6 +371,7 @@ export class Game {
       quest.quiz.question,
       quest.quiz.options,
       (index) => this._onQuizAnswer(index, quest),
+      quest.riddle,
     );
   }
 
@@ -453,7 +454,7 @@ export class Game {
     this._world.showFirePoint(currentQuest.id);
 
     if (questId === currentQuest.id) {
-      // Correct point! Teleport nearby so player walks to the marker
+      // Correct point! Teleport nearby and immediately trigger the quiz flow
       const spawnOffset = 15;
       const angle = Math.random() * Math.PI * 2;
       const targetPos = new Vector3(
@@ -462,6 +463,13 @@ export class Game {
         clickedQuest.point.z + Math.sin(angle) * spawnOffset,
       );
       this._player.capsule.position.copyFrom(targetPos);
+
+      // Set state to SHOWING_REWARD so quiz follows when modal closes
+      this._gameState = "SHOWING_REWARD";
+      this._completedQuest = currentQuest;
+      this._audioManager.stopFireSound();
+      this._audioManager.playQuestCompleteSound();
+
       this._uiManager.showInstructionModal(
         t("game.modals.success"),
         t("game.messages.correctPoint"),

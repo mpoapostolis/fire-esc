@@ -28,6 +28,7 @@ export class UIManager {
   private _quizModal: any;
   private _quizQuestion: HTMLElement;
   private _quizOptions: HTMLElement;
+  private _quizRiddle: HTMLElement;
 
   // Thermometer Modal
   private _thermometerModal: any;
@@ -53,6 +54,7 @@ export class UIManager {
     this._quizModal = this._getUIElement("quiz_modal");
     this._quizQuestion = this._getUIElement("quiz-question");
     this._quizOptions = this._getUIElement("quiz-options");
+    this._quizRiddle = this._getUIElement("quiz-riddle");
 
     this._thermometerModal = this._getUIElement("thermometer_modal");
   }
@@ -143,9 +145,17 @@ export class UIManager {
     question: string,
     options: string[],
     onSelect: (index: number) => void,
+    riddle?: string,
   ) {
     this._quizQuestion.innerText = question;
     this._quizOptions.innerHTML = "";
+
+    if (riddle) {
+      this._quizRiddle.innerText = riddle;
+      this._quizRiddle.classList.remove("hidden");
+    } else {
+      this._quizRiddle.classList.add("hidden");
+    }
 
     const optionLetters = ["A", "B", "C", "D", "E", "F"];
 

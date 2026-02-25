@@ -11,9 +11,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   ) as HTMLSelectElement;
 
   // UI Screens
-  const languageSelectionScreen = document.getElementById(
-    "language-selection-screen",
-  ) as HTMLDivElement;
   const startScreen = document.getElementById("start-screen") as HTMLDivElement;
   const loadingScreen = document.getElementById(
     "loading-screen",
@@ -31,38 +28,9 @@ window.addEventListener("DOMContentLoaded", async () => {
   ) as HTMLParagraphElement;
 
   if (canvas) {
-    // --- 1. LANGUAGE SELECTION ---
-    if (languageSelectionScreen) {
-      languageSelectionScreen.style.display = "flex";
-    }
-
-    // Wait for language selection
-    await new Promise<void>((resolve) => {
-      const languageButtons = document.querySelectorAll(".language-btn");
-      languageButtons.forEach((btn) => {
-        // Add hover sound for fun
-        btn.addEventListener("mouseenter", () => audioManager.playHover());
-
-        btn.addEventListener("click", async (e) => {
-          audioManager.playButtonClick();
-          const target = e.currentTarget as HTMLButtonElement;
-          const selectedLang = target.getAttribute("data-lang") || "el";
-
-          // Load translations
-          await i18n.loadTranslations(selectedLang);
-          initUITranslations();
-
-          // Transition to Start Screen
-          if (languageSelectionScreen) {
-            languageSelectionScreen.style.opacity = "0";
-            setTimeout(() => {
-              languageSelectionScreen.style.display = "none";
-              resolve(); // Language chosen
-            }, 500);
-          }
-        });
-      });
-    });
+    // --- 1. LOAD GREEK TRANSLATIONS ---
+    await i18n.loadTranslations("el");
+    initUITranslations();
 
     // --- 2. START SCREEN (Audio Init) ---
     if (startScreen) {
