@@ -2,7 +2,8 @@
   "ui": {
     "buttons": {
       "continue": "Επόμενο",
-      "acknowledge": "Έλαβα το μήνυμα!"
+      "acknowledge": "Έλαβα το μήνυμα!",
+      "dismiss": "Κλείσε"
     },
     "start": {
       "pressStart": "ΠΑΤΗΣΕ ΕΝΑΡΞΗ",

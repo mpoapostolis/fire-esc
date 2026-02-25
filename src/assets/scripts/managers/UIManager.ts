@@ -33,6 +33,10 @@ export class UIManager {
   // Thermometer Modal
   private _thermometerModal: any;
 
+  // Proximity panel
+  private _proximityPanel: HTMLElement;
+  private _proximityRiddleText: HTMLElement;
+
   constructor() {
     this._hudDistance = this._getUIElement("hud-distance");
     this._hudTimer = this._getUIElement("hud-timer");
@@ -57,6 +61,8 @@ export class UIManager {
     this._quizRiddle = this._getUIElement("quiz-riddle");
 
     this._thermometerModal = this._getUIElement("thermometer_modal");
+    this._proximityPanel = this._getUIElement("proximity-panel");
+    this._proximityRiddleText = this._getUIElement("proximity-riddle-text");
   }
 
   public setAudioManager(audioManager: AudioManager): void {
@@ -141,6 +147,15 @@ export class UIManager {
     this._phoneCallModal.close();
   }
 
+  public showProximityPanel(riddle: string): void {
+    this._proximityRiddleText.innerText = riddle;
+    this._proximityPanel.style.display = "block";
+  }
+
+  public hideProximityPanel(): void {
+    this._proximityPanel.style.display = "none";
+  }
+
   public showQuizModal(
     question: string,
     options: string[],
@@ -151,25 +166,19 @@ export class UIManager {
     this._quizOptions.innerHTML = "";
 
     if (riddle) {
-      this._quizRiddle.innerText = riddle;
+      this._quizRiddle.innerHTML = `<div class="quiz-riddle-tag">📖 ΓΡΙΦΟΣ</div>`;
+      this._quizRiddle.appendChild(document.createTextNode(riddle));
       this._quizRiddle.classList.remove("hidden");
     } else {
       this._quizRiddle.classList.add("hidden");
     }
 
-    const optionLetters = ["A", "B", "C", "D", "E", "F"];
-
     options.forEach((option, index) => {
       const btn = document.createElement("button");
-      // New Tech/Tactical Style
-      btn.className =
-        "group relative w-full text-left p-4 bg-slate-900/50 border border-white/10 hover:border-blue-500 hover:bg-slate-800 transition-all duration-200 flex items-start gap-4";
-
+      btn.className = "quiz-option-btn";
       btn.innerHTML = `
-        <div class="flex-shrink-0 w-6 h-6 rounded bg-slate-800 border border-white/20 flex items-center justify-center font-mono text-xs font-bold text-blue-400 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-500 transition-colors">
-          ${optionLetters[index] || index + 1}
-        </div>
-        <span class="text-sm md:text-base text-slate-300 group-hover:text-white leading-relaxed font-light">${option}</span>
+        <span class="quiz-option-letter">${index + 1}</span>
+        <span class="quiz-option-text">${option}</span>
       `;
 
       btn.onclick = () => {

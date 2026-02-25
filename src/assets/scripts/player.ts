@@ -85,7 +85,7 @@ export class Player {
   private _marker: AbstractMesh;
   private _controlsEnabled = true;
   private _spawnPosition: Vector3;
-  private readonly _deathPlaneY = -10; // Fall death threshold
+  private readonly _deathPlaneY = -30; // Fall death threshold - generous to avoid accidental deaths
   private _movementJoystick: JoystickController | null = null;
   private _cameraJoystick: JoystickController | null = null;
 
@@ -99,8 +99,8 @@ export class Player {
   private readonly _tempVec2 = Vector3.Zero();
 
   // Movement constants
-  private static readonly VELOCITY_SMOOTHING = 0.2;
-  private static readonly DECELERATION = 0.85;
+  private static readonly VELOCITY_SMOOTHING = 0.3;
+  private static readonly DECELERATION = 0.82;
   private static readonly GROUND_CHECK_EPSILON = 0.1;
 
   constructor(
@@ -115,7 +115,7 @@ export class Player {
   }
 
   public async load(
-    startPosition: Vector3 = new Vector3(9, 20, -20),
+    startPosition: Vector3 = new Vector3(9, 10, -20),
   ): Promise<AbstractMesh[]> {
     const result = await SceneLoader.ImportMeshAsync(
       "",
@@ -162,7 +162,7 @@ export class Player {
 
     const body = this._physicsAggregate.body;
     body.setAngularDamping(1);
-    body.setLinearDamping(0.95);
+    body.setLinearDamping(0.97);
     body.setMassProperties({ inertia: Vector3.ZeroReadOnly });
     body.setGravityFactor(1);
     body.disablePreStep = false;
@@ -194,12 +194,6 @@ export class Player {
           this._keyInputMap.set(code, true);
           if (code === "Space" && !this._isJumping) {
             this._jump();
-          }
-          if (code === "KeyP") {
-            console.log({
-              x: this.capsule.position._x,
-              z: this.capsule.position._z,
-            });
           }
           break;
 

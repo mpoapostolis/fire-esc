@@ -3,18 +3,15 @@ import {
   Vector3,
   HemisphericLight,
   Color3,
-  Color4,
   CubeTexture,
   DefaultRenderingPipeline,
   DirectionalLight,
   DynamicTexture,
-  GroundMesh,
   Mesh,
   MeshBuilder,
   PhysicsBody,
   PhysicsMotionType,
   PhysicsShapeMesh,
-  ShadowGenerator,
   StandardMaterial,
   Texture,
   SceneLoader,
@@ -41,7 +38,6 @@ export class World {
   private readonly _config: WorldConfig;
   private readonly _teleportButtons = new Map<number, Mesh>();
   private readonly _firePoints = new Map<number, Mesh>();
-  private _shadowGenerator?: ShadowGenerator;
   private _pipeline?: DefaultRenderingPipeline;
   private _worldMeshes: AbstractMesh[] = [];
   private _isWorldLoaded = false;
@@ -93,26 +89,6 @@ export class World {
       parent.isPickable = false;
       parent.setEnabled(false);
 
-      // Big glowing cube - the main point of interest marker
-      const cube = MeshBuilder.CreateBox(
-        `questCube-${quest.id}`,
-        { size: 2.5 },
-        this._scene,
-      );
-      cube.position.y = 4;
-      cube.parent = parent;
-      cube.isPickable = false;
-
-      const cubeMat = new StandardMaterial(
-        `questCubeMat-${quest.id}`,
-        this._scene,
-      );
-      cubeMat.emissiveColor = new Color3(0, 0.5, 1);
-      cubeMat.diffuseColor = new Color3(0, 0.3, 1);
-      cubeMat.specularColor = new Color3(1, 1, 1);
-      cubeMat.disableLighting = true;
-      cube.material = cubeMat;
-
       // Vertical beam shooting up from the ground
       const beam = MeshBuilder.CreateCylinder(
         `questBeam-${quest.id}`,
@@ -155,9 +131,6 @@ export class World {
       // Animate
       this._scene.registerBeforeRender(() => {
         if (!parent.isEnabled()) return;
-        cube.rotation.y += 0.02;
-        cube.rotation.x += 0.01;
-        cube.position.y = 4 + Math.sin(Date.now() * 0.002) * 0.8;
         ring.rotation.y += 0.01;
       });
 
@@ -195,17 +168,21 @@ export class World {
         { size: 0.1 },
         this._scene,
       );
-      button.position.set(quest.spawn_point.x, 0.5, quest.spawn_point.z);
+      button.position.set(
+        quest.spawn_point.x * 1.05,
+        0.5,
+        quest.spawn_point.z * 1.05,
+      );
       button.isVisible = false;
       button.isPickable = false;
 
       // Create label plane - this is the actual clickable button
       const numberPlane = MeshBuilder.CreatePlane(
         `numberLabel-${quest.id}`,
-        { width: 8, height: 8 },
+        { width: 4, height: 4 },
         this._scene,
       );
-      numberPlane.position.y = 10;
+      numberPlane.position.y = 22;
       numberPlane.parent = button;
       numberPlane.billboardMode = 7; // Always face camera
       numberPlane.isVisible = false;
@@ -287,7 +264,7 @@ export class World {
 
       // Create vertical line - stop before reaching the circle to avoid overlapping text
       const absolutePlaneY = button.position.y + numberPlane.position.y;
-      const lineHeight = absolutePlaneY - 6; // Stop ~6 units below the circle center
+      const lineHeight = absolutePlaneY; // Stop ~6 units below the circle center
       const line = MeshBuilder.CreateCylinder(
         `teleportLine-${quest.id}`,
         {
@@ -325,7 +302,7 @@ export class World {
     const result = await SceneLoader.ImportMeshAsync(
       "",
       "/models/",
-      "island city 3.glb",
+      "city2.glb",
       this._scene,
     );
 
@@ -335,7 +312,9 @@ export class World {
       mesh.receiveShadows = true;
       mesh.isPickable = true;
 
-      if (mesh.getTotalVertices() > 0) {
+      const verts = mesh.getTotalVertices();
+      // Only add physics to substantial meshes (skips tiny decorative objects)
+      if (verts > 50) {
         const body = new PhysicsBody(
           mesh,
           PhysicsMotionType.STATIC,
@@ -343,10 +322,6 @@ export class World {
           this._scene,
         );
         body.shape = new PhysicsShapeMesh(mesh as Mesh, this._scene);
-
-        if (this._shadowGenerator) {
-          this._shadowGenerator.addShadowCaster(mesh);
-        }
       }
     }
   }
@@ -395,10 +370,7 @@ export class World {
     directional.intensity = 0.9;
     directional.diffuse = new Color3(1, 0.95, 0.85);
 
-    this._shadowGenerator = new ShadowGenerator(1024, directional);
-    this._shadowGenerator.useBlurExponentialShadowMap = true;
-    this._shadowGenerator.blurKernel = 16;
-    this._shadowGenerator.darkness = 0.4;
+    // No shadow generator - shadows disabled for performance
   }
 
   private _setupPostProcessing(): void {
@@ -412,21 +384,15 @@ export class World {
       [camera],
     );
 
-    this._pipeline.bloomEnabled = true;
-    this._pipeline.bloomThreshold = 0.75;
-    this._pipeline.bloomWeight = 0.25;
-    this._pipeline.bloomKernel = 32;
-    this._pipeline.bloomScale = 0.5;
+    this._pipeline.bloomEnabled = false;
 
     this._pipeline.imageProcessingEnabled = true;
     if (this._pipeline.imageProcessing) {
-      this._pipeline.imageProcessing.colorCurvesEnabled = true;
       this._pipeline.imageProcessing.vignetteEnabled = true;
-      this._pipeline.imageProcessing.vignetteWeight = 0.3;
-      this._pipeline.imageProcessing.vignetteStretch = 0.5;
+      this._pipeline.imageProcessing.vignetteWeight = 0.2;
     }
 
     this._pipeline.fxaaEnabled = true;
-    this._pipeline.samples = 2;
+    this._pipeline.samples = 1;
   }
 }

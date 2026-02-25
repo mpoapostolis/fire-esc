@@ -61,6 +61,7 @@ export class Game {
   private _movementJoystick: JoystickController | null = null;
   private _pendingQuest: Quest | null = null;
   private _completedQuest: Quest | null = null;
+  private _posCapureIndex = 0; // dev tool: tracks which quest to update on P press
   private _gameState: GameState = "SHOWING_WELCOME";
   private _questTimer: number | null = null;
   private _questStartTime: number = 0;
@@ -193,8 +194,7 @@ export class Game {
       this._player.enableControls();
       this._player.update(this._gameState);
 
-      const view = this._camera.getView;
-      if (view === "word_view") {
+      if (this._camera.getView === "word_view") {
         this._camera.camera.target.copyFrom(this._player.capsule.position);
       }
 
@@ -226,13 +226,15 @@ export class Game {
     // Setup click for map view
     this._camera.onMapClick(this._handleMapClick.bind(this));
 
-    // Position capture tool
+    let arr = [];
     window.addEventListener("keydown", (e) => {
       if (e.key === "p" || e.key === "P") {
         const pos = this._player.capsule.position;
-        console.log(
-          `point: { x: ${pos.x.toFixed(2)}, z: ${pos.z.toFixed(2)} }`,
-        );
+        const x = parseFloat(pos.x.toFixed(2));
+        const z = parseFloat(pos.z.toFixed(2));
+        arr.push({ point: { x, z }, spawn_point: { x: x, z: z } });
+
+        console.log(arr);
       }
     });
   }
@@ -454,33 +456,19 @@ export class Game {
     this._world.showFirePoint(currentQuest.id);
 
     if (questId === currentQuest.id) {
-      // Correct point! Teleport nearby and immediately trigger the quiz flow
-      const spawnOffset = 15;
-      const angle = Math.random() * Math.PI * 2;
-      const targetPos = new Vector3(
-        clickedQuest.point.x + Math.cos(angle) * spawnOffset,
-        20,
-        clickedQuest.point.z + Math.sin(angle) * spawnOffset,
-      );
+      // Teleport player to spawn_point (set separately from fire point in quests.ts)
+      const spawnX = clickedQuest.spawn_point.x;
+      const spawnZ = clickedQuest.spawn_point.z;
+      const groundY = this._world.getGroundHeightAt(spawnX, spawnZ);
+      const targetPos = new Vector3(spawnX, groundY + 2, spawnZ);
       this._player.capsule.position.copyFrom(targetPos);
-
-      // Set state to SHOWING_REWARD so quiz follows when modal closes
-      this._gameState = "SHOWING_REWARD";
-      this._completedQuest = currentQuest;
-      this._audioManager.stopFireSound();
-      this._audioManager.playQuestCompleteSound();
-
-      this._uiManager.showInstructionModal(
-        t("game.modals.success"),
-        t("game.messages.correctPoint"),
-      );
+      this._player.enableControls();
     } else {
       // Wrong point - teleport there, show error
-      const targetPos = new Vector3(
-        clickedQuest.point.x,
-        20,
-        clickedQuest.point.z,
-      );
+      const wrongX = clickedQuest.point.x;
+      const wrongZ = clickedQuest.point.z;
+      const wrongGroundY = this._world.getGroundHeightAt(wrongX, wrongZ);
+      const targetPos = new Vector3(wrongX, wrongGroundY + 2, wrongZ);
       this._player.capsule.position.copyFrom(targetPos);
       this._gameState = "SHOWING_MAP_ERROR";
       this._uiManager.showInstructionModal(
@@ -526,24 +514,27 @@ export class Game {
 
     this._uiManager.updateDistance(distance);
     this._audioManager.updateFireVolume(distance);
-    const distanceSquared = dx * dx + dz * dz;
 
-    if (distanceSquared < 9) {
+    const distanceSquared = dx * dx + dz * dz;
+    if (distanceSquared < 16) {
       this._completeActiveQuest(currentQuest);
     }
   }
 
   private _completeActiveQuest(quest: Quest): void {
-    this._gameState = "SHOWING_REWARD";
     this._completedQuest = quest;
     this._audioManager.stopFireSound();
     this._audioManager.playQuestCompleteSound();
 
-    // Show reward - then proposals will follow
-    this._uiManager.showInstructionModal(
-      t("game.modals.success"),
-      quest.successMessage,
-    );
+    if (quest.quiz) {
+      this._startQuiz(quest);
+    } else {
+      this._gameState = "SHOWING_REWARD";
+      this._uiManager.showInstructionModal(
+        t("game.modals.success"),
+        quest.successMessage,
+      );
+    }
   }
 
   // Timer management

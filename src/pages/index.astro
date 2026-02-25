@@ -193,56 +193,38 @@ import Layout from "../layouts/Layout.astro";
   <!-- Instructional / Dialogue Modal -->
   <dialog
     id="dialogue_modal"
-    class="modal pointer-events-auto bg-black/40 backdrop-blur-sm"
+    class="modal pointer-events-auto bg-black/50 backdrop-blur-sm"
   >
     <div
-      class="modal-box tech-panel w-11/12 max-w-3xl p-0 border-l-4 border-l-amber-400"
+      class="modal-box w-[95vw] max-w-2xl p-0 bg-[#0b1120] border border-white/10 border-l-4 border-l-amber-400 max-h-[85dvh] flex flex-col"
     >
-      <div class="bg-slate-900/80 p-6 md:p-8 flex gap-6">
-        <!-- Avatar Placeholder (Optional) -->
-        <div class="hidden md:flex flex-col items-center justify-start pt-2">
-          <div
-            class="w-16 h-16 bg-slate-800 border border-amber-500/30 flex items-center justify-center text-2xl"
-          >
-            ⚠️
-          </div>
+      <!-- Speaker bar -->
+      <div class="flex items-center justify-between px-5 py-3 border-b border-white/5 shrink-0 bg-slate-900/60">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">⚠️</span>
+          <h3 id="dialogue-speaker" class="text-sm font-bold text-amber-400 tracking-wider uppercase">SYSTEM</h3>
         </div>
+        <span class="text-[10px] font-mono text-slate-500 hidden sm:block">ΕΠΕΙΓΟΝ ΜΗΝΥΜΑ</span>
+      </div>
 
-        <div class="flex-1 space-y-4">
-          <div
-            class="flex items-baseline justify-between border-b border-white/5 pb-2"
+      <!-- Body -->
+      <div class="flex-1 overflow-y-auto px-5 py-5">
+        <p
+          id="dialogue-text"
+          class="text-[15px] sm:text-base text-slate-200 leading-relaxed whitespace-pre-line"
+        ></p>
+      </div>
+
+      <!-- Action -->
+      <div class="px-5 py-4 border-t border-white/5 flex justify-end shrink-0">
+        <form method="dialog">
+          <button
+            class="px-6 py-2.5 border border-amber-500/40 text-amber-400 hover:text-amber-300 hover:border-amber-400 text-xs font-bold tracking-widest uppercase transition-all active:scale-95"
+            data-i18n="ui.buttons.acknowledge"
           >
-            <h3
-              id="dialogue-speaker"
-              class="text-lg font-bold text-amber-400 tracking-widest uppercase"
-            >
-              SYSTEM
-            </h3>
-            <span class="text-[10px] font-mono text-slate-500"
-              >ΕΠΕΙΓΟΝ ΜΗΝΥΜΑ</span
-            >
-          </div>
-
-          <p
-            id="dialogue-text"
-            class="text-base md:text-lg text-slate-200 leading-relaxed font-light"
-          >
-            <!-- Text injected via JS -->
-          </p>
-
-          <div class="modal-action pt-4 flex justify-end">
-            <form method="dialog">
-              <button
-                class="tech-btn-sm text-amber-400 hover:text-amber-300 border border-amber-500/30 hover:border-amber-400/60 px-6 py-2"
-              >
-                <span
-                  class="text-xs font-bold tracking-widest"
-                  data-i18n="ui.buttons.acknowledge">ACKNOWLEDGE</span
-                >
-              </button>
-            </form>
-          </div>
-        </div>
+            Έλαβα το μήνυμα!
+          </button>
+        </form>
       </div>
     </div>
     <form method="dialog" class="modal-backdrop"><button>close</button></form>
@@ -251,57 +233,33 @@ import Layout from "../layouts/Layout.astro";
   <!-- Quiz Modal -->
   <dialog
     id="quiz_modal"
-    class="modal pointer-events-auto bg-black/80 backdrop-blur-md"
+    class="modal quiz-fullscreen pointer-events-auto"
   >
-    <div
-      class="modal-box tech-panel w-11/12 max-w-5xl p-0 flex flex-col h-[85vh] md:h-auto md:max-h-[85vh]"
-    >
-      <!-- Header -->
-      <div
-        class="bg-slate-900/90 p-6 border-b border-white/10 flex items-center gap-4 shrink-0"
-      >
-        <div
-          class="w-10 h-10 bg-blue-600/20 flex items-center justify-center border border-blue-500/50"
-        >
-          <span class="text-blue-400 text-lg">?</span>
-        </div>
-        <div>
-          <h3
-            class="text-sm text-blue-400 font-mono tracking-widest uppercase mb-1"
-            data-i18n="game.modals.quizTitle"
-          >
-            DECISION REQUIRED
-          </h3>
-          <div class="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
-            <div class="h-full w-1/3 bg-blue-500"></div>
-          </div>
+    <div class="quiz-card">
+
+      <!-- ── Header ── -->
+      <div class="quiz-header">
+        <div class="quiz-header-icon">?</div>
+        <div class="flex-1 min-w-0">
+          <p class="quiz-header-label" data-i18n="game.modals.quizTitle">ΠΡΟΤΕΙΝΟΜΕΝΕΣ ΑΛΛΑΓΕΣ</p>
+          <p class="quiz-header-sub">Επέλεξε τη σωστή απάντηση</p>
         </div>
       </div>
 
-      <!-- Content -->
-      <div class="flex-1 overflow-y-auto p-6 md:p-10 bg-slate-950/50">
-        <!-- Riddle context (shown above the question) -->
-        <div
-          id="quiz-riddle"
-          class="hidden mb-6 p-4 bg-slate-900/60 border-l-2 border-amber-500/60 text-sm text-slate-300 whitespace-pre-line leading-relaxed max-w-4xl"
-        >
-        </div>
-
-        <p
-          id="quiz-question"
-          class="text-lg md:text-2xl text-white font-medium leading-relaxed mb-8 md:mb-12 max-w-4xl"
-        >
-          <!-- Question Text -->
-        </p>
-
-        <!-- Grid for Options -->
-        <div
-          id="quiz-options"
-          class="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4"
-        >
-          <!-- Options injected via JS -->
-        </div>
+      <!-- ── Riddle (scrollable, capped height) ── -->
+      <div id="quiz-riddle" class="quiz-riddle hidden">
+        <div class="quiz-riddle-tag">📖 ΓΡΙΦΟΣ</div>
       </div>
+
+      <!-- ── Scrollable body (question + options) ── -->
+      <div class="quiz-body">
+        <!-- Question -->
+        <p id="quiz-question" class="quiz-question"></p>
+
+        <!-- Options -->
+        <div id="quiz-options" class="quiz-options"></div>
+      </div>
+
     </div>
   </dialog>
 
@@ -528,6 +486,42 @@ import Layout from "../layouts/Layout.astro";
   </div>
 </div>
 
+<!-- Position capture toast (dev tool — press P) -->
+<div
+  id="pos-toast"
+  class="pos-toast-hidden fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
+>
+  <div class="bg-emerald-950 border border-emerald-500/60 rounded-lg px-5 py-4 shadow-2xl shadow-emerald-900/40 min-w-[280px]">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-emerald-400 text-sm font-bold">📍 Position copied!</span>
+    </div>
+    <pre id="pos-toast-text" class="text-emerald-200 text-xs font-mono leading-relaxed whitespace-pre"></pre>
+  </div>
+</div>
+
+<!-- Proximity Panel: shows riddle when player is near a quest point -->
+<div
+  id="proximity-panel"
+  style="display: none;"
+  class="fixed bottom-28 left-1/2 -translate-x-1/2 w-full max-w-lg px-4 z-40 pointer-events-none"
+>
+  <div
+    class="bg-slate-900/95 backdrop-blur border border-blue-500/50 border-l-4 border-l-blue-500 p-4 rounded-sm shadow-2xl shadow-blue-900/40"
+  >
+    <div class="flex items-center gap-2 mb-2">
+      <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+      <span class="text-xs font-mono text-blue-400 uppercase tracking-widest"
+        >Σημείο Ενδιαφέροντος — Πλησίασε για να απαντήσεις!</span
+      >
+    </div>
+    <p
+      id="proximity-riddle-text"
+      class="text-sm text-slate-100 leading-relaxed"
+    >
+    </p>
+  </div>
+</div>
+
 <!-- Bottom Center Action Bar -->
 <div
   id="hud-bottom-bar"
@@ -632,22 +626,215 @@ import Layout from "../layouts/Layout.astro";
   }
 
   /* Scrollbar */
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #0f172a;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #334151;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #475569;
-  }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #0f172a; }
+  ::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
   /* Modal Overrides */
-  .modal-box {
-    border-radius: 0 !important; /* Sharp corners for tech feel */
+  .modal-box { border-radius: 0 !important; }
+
+  /* ═══════════════════════════════════════
+     QUIZ MODAL — mobile-first redesign
+  ═══════════════════════════════════════ */
+
+  /* backdrop */
+  .quiz-fullscreen {
+    display: flex;
+    align-items: flex-end;        /* slide up from bottom on mobile */
+    justify-content: center;
+    padding: 0;
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(8px);
+  }
+  @media (min-width: 640px) {
+    .quiz-fullscreen { align-items: center; padding: 1rem; }
+  }
+
+  /* card */
+  .quiz-card {
+    width: 100%;
+    max-width: 680px;
+    height: 100dvh;               /* full height on mobile */
+    max-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: #0b1120;
+    border: 1px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+  }
+  @media (min-width: 640px) {
+    .quiz-card {
+      height: auto;
+      max-height: 88vh;
+      border-radius: 4px;
+      border-top: 3px solid #3b82f6;
+    }
+  }
+
+  /* header */
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #1e3a5f 0%, #0f2040 100%);
+    border-bottom: 1px solid rgba(59,130,246,0.3);
+    flex-shrink: 0;
+  }
+  .quiz-header-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(59,130,246,0.25);
+    border: 2px solid rgba(59,130,246,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 900;
+    color: #93c5fd;
+    flex-shrink: 0;
+  }
+  .quiz-header-label {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #60a5fa;
+    margin-bottom: 2px;
+  }
+  .quiz-header-sub {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f1f5f9;
+  }
+
+  /* riddle */
+  .quiz-riddle {
+    padding: 12px 20px;
+    background: rgba(180,140,30,0.08);
+    border-bottom: 1px solid rgba(251,191,36,0.2);
+    max-height: 28vh;
+    overflow-y: auto;
+    flex-shrink: 0;
+    font-size: 13px;
+    color: #fde68a;
+    line-height: 1.65;
+    white-space: pre-line;
+  }
+  .quiz-riddle-tag {
+    display: block;
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fbbf24;
+    margin-bottom: 8px;
+    white-space: normal;
+  }
+
+  /* scrollable body */
+  .quiz-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  @media (min-width: 640px) {
+    .quiz-body { padding: 24px 28px 28px; }
+  }
+
+  /* question */
+  .quiz-question {
+    font-size: clamp(13px, 3vw, 16px);
+    font-weight: 700;
+    color: #ffffff;
+    text-align: center;
+    line-height: 1.3;
+    padding: 10px 12px;
+    background: rgba(59,130,246,0.07);
+    border-radius: 6px;
+    border: 1px solid rgba(59,130,246,0.15);
+  }
+
+  /* options grid */
+  .quiz-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  /* individual option button — set via JS */
+  .quiz-option-btn {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    padding: 8px 8px 10px;
+    background: rgba(30,41,59,0.8);
+    border: 1px solid rgba(71,85,105,0.6);
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 0;
+  }
+  .quiz-option-btn:hover,
+  .quiz-option-btn:focus-visible {
+    border-color: #3b82f6;
+    background: rgba(37,99,235,0.15);
+    outline: none;
+  }
+  .quiz-option-btn:active {
+    transform: scale(0.97);
+    background: rgba(37,99,235,0.25);
+  }
+  .quiz-option-letter {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(15,23,42,0.8);
+    border: 1px solid rgba(71,85,105,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 10px;
+    color: #60a5fa;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .quiz-option-btn:hover .quiz-option-letter,
+  .quiz-option-btn:focus-visible .quiz-option-letter {
+    background: #2563eb;
+    border-color: #3b82f6;
+    color: #fff;
+  }
+  .quiz-option-text {
+    font-size: 11px;
+    color: #cbd5e1;
+    line-height: 1.3;
+    transition: color 0.15s;
+  }
+  .quiz-option-btn:hover .quiz-option-text,
+  .quiz-option-btn:focus-visible .quiz-option-text {
+    color: #fff;
+  }
+
+  /* Position toast */
+  #pos-toast {
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .pos-toast-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(-8px);
   }
 
   /* Waypoint Bubble */
