@@ -168,11 +168,7 @@ export class World {
         { size: 0.1 },
         this._scene,
       );
-      button.position.set(
-        quest.spawn_point.x * 1.05,
-        0.5,
-        quest.spawn_point.z * 1.05,
-      );
+      button.position.set(quest.spawn_point.x, 0.5, quest.spawn_point.z);
       button.isVisible = false;
       button.isPickable = false;
 
@@ -182,7 +178,7 @@ export class World {
         { width: 4, height: 4 },
         this._scene,
       );
-      numberPlane.position.y = 22;
+      numberPlane.position.y = 15;
       numberPlane.parent = button;
       numberPlane.billboardMode = 7; // Always face camera
       numberPlane.isVisible = false;
@@ -200,7 +196,7 @@ export class World {
       const ctx = dynamicTexture.getContext();
       const centerX = textureSize / 2;
       const centerY = textureSize / 2;
-      const radius = textureSize / 2 - 20;
+      const radius = textureSize / 2;
 
       // Shadow
       ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
@@ -274,7 +270,7 @@ export class World {
         this._scene,
       );
       line.parent = button;
-      line.position.y = lineHeight / 2 - button.position.y;
+      line.position.y = lineHeight / 2.3 - button.position.y;
       line.isPickable = false;
       line.isVisible = false;
 
