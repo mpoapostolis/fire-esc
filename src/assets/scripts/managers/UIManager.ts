@@ -16,6 +16,7 @@ export class UIManager {
   private _dialogueModal: any;
   private _dialogueSpeaker: HTMLElement;
   private _dialogueText: HTMLElement;
+  private _dialogueUrgent: HTMLElement;
 
   // Phone Modal
   private _phoneCallModal: any;
@@ -50,6 +51,7 @@ export class UIManager {
     this._dialogueModal = this._getUIElement("dialogue_modal");
     this._dialogueSpeaker = this._getUIElement("dialogue-speaker");
     this._dialogueText = this._getUIElement("dialogue-text");
+    this._dialogueUrgent = this._getUIElement("dialogue-urgent");
 
     this._phoneCallModal = this._getUIElement("phone_call_modal");
     this._phoneCallerName = this._getUIElement("phone-caller-name");
@@ -123,9 +125,10 @@ export class UIManager {
     });
   }
 
-  public showInstructionModal(speaker: string, text: string) {
+  public showInstructionModal(speaker: string, text: string, showUrgent = true) {
     this._dialogueSpeaker.innerText = speaker;
     this._dialogueText.innerText = text;
+    this._dialogueUrgent.style.display = showUrgent ? "" : "none";
     this._dialogueModal.showModal();
   }
 

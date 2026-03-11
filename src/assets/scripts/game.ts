@@ -338,7 +338,7 @@ export class Game {
 
   private _handleWelcomeClosed(): void {
     this._gameState = "SHOWING_GAME_INSTRUCTIONS";
-    this._uiManager.showInstructionModal("", t("game.messages.gameInstructions"));
+    this._uiManager.showInstructionModal("", t("game.messages.gameInstructions"), false);
   }
 
   private _handleGameInstructionsClosed(): void {
