@@ -20,6 +20,7 @@ import { t } from "./i18n";
 
 export type GameState =
   | "SHOWING_WELCOME"
+  | "SHOWING_GAME_INSTRUCTIONS"
   | "AWAITING_QUEST"
   | "PLAYING"
   | "SHOWING_INSTRUCTIONS"
@@ -317,6 +318,8 @@ export class Game {
   private _onInstructionModalClosed = (): void => {
     if (this._gameState === "SHOWING_WELCOME") {
       this._handleWelcomeClosed();
+    } else if (this._gameState === "SHOWING_GAME_INSTRUCTIONS") {
+      this._handleGameInstructionsClosed();
     } else if (this._gameState === "SHOWING_INSTRUCTIONS") {
       this._handleInstructionsClosed();
     } else if (this._gameState === "SHOWING_REWARD") {
@@ -334,6 +337,11 @@ export class Game {
   };
 
   private _handleWelcomeClosed(): void {
+    this._gameState = "SHOWING_GAME_INSTRUCTIONS";
+    this._uiManager.showInstructionModal("", t("game.messages.gameInstructions"));
+  }
+
+  private _handleGameInstructionsClosed(): void {
     this._gameState = "AWAITING_QUEST";
     // Start the global timer once
     this._startQuestTimer();
