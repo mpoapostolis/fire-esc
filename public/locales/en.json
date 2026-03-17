@@ -42,7 +42,11 @@
       "noObjective": "—",
       "completed": "✓",
       "distanceFormat": "{distance}m"
-    }
+    },
+    "urgentMessage": "URGENT MESSAGE",
+    "quizSelectAnswer": "Select the correct answer",
+    "riddleTag": "📖 RIDDLE",
+    "proximityLabel": "Point of Interest — Get closer to answer!"
   },
   "game": {
     "proposals": {
@@ -77,6 +81,8 @@
     "modals": {
       "message": "MESSAGE",
       "sign": "RIDDLE",
+      "scene": "SCENE",
+      "riddle": "RIDDLE",
       "nextMission": "NEXT SCENE",
       "lastMission": "LAST SCENE",
       "gameEnd": "MISSION COMPLETE",
@@ -101,6 +107,7 @@
       }
     },
     "messages": {
+      "gameInstructions": "Instructions\n\nRead the riddle and try to figure out which spot in the city you need to go to. Once you find it, click on the correct sign to teleport quickly to that spot.\n\nIf you've chosen the right spot, there will be a blue light nearby. Move towards the light.\n\nSelect the correct answer from the list that appears. If you choose correctly, a success message appears followed by the next riddle. You must solve 10 riddles to save the city.\n\nA tip! If a riddle is too difficult, you can walk around the city to reach the spot with the blue light.\n\nGood luck!",
       "welcome": "CP TEAM member, it's time to act!\n\nIn recent months your city has been 'drowning' many times. Roads have turned into rivers, homes have been at risk, shops have stopped operating... The residents are asking for help!\n\nThe services have exhausted every solution and are turning to the experts of experts: the CP TEAM members!\n\nThey sent you secret reports documenting real flood events but... the information is hidden in riddles and challenges.\n\nWhat is your mission?\n• Solve the riddles and find the correct spots on the map.\n• Suggest smart changes that will reduce flood risk.\n\nTime is pressing... The next big storm is approaching...\nWill you manage to save the city before it floods again?\n\nThe mission starts now! Are you ready?",
       "falseAlarmMessage": "You reached the spot but... you can't change anything here. Try again!",
       "correctPoint": "Well done! You reached the right spot! What change do you suggest here?",

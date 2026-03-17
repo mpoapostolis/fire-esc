@@ -42,7 +42,11 @@
       "noObjective": "—",
       "completed": "✓",
       "distanceFormat": "{distance}m"
-    }
+    },
+    "urgentMessage": "ΕΠΕΙΓΟΝ ΜΗΝΥΜΑ",
+    "quizSelectAnswer": "Επίλεξε τη σωστή απάντηση",
+    "riddleTag": "📖 ΓΡΙΦΟΣ",
+    "proximityLabel": "Σημείο Ενδιαφέροντος — Πλησίασε για να απαντήσεις!"
   },
   "game": {
     "proposals": {
@@ -77,6 +81,8 @@
     "modals": {
       "message": "ΜΗΝΥΜΑ",
       "sign": "ΓΡΙΦΟΣ",
+      "scene": "ΣΚΗΝΗ",
+      "riddle": "ΓΡΙΦΟΣ",
       "nextMission": "ΕΠΟΜΕΝΗ ΣΚΗΝΗ",
       "lastMission": "ΤΕΛΕΥΤΑΙΑ ΣΚΗΝΗ",
       "gameEnd": "ΤΕΛΟΣ ΑΠΟΣΤΟΛΗΣ",

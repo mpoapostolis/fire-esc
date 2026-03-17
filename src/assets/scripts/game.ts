@@ -44,7 +44,7 @@ const DEFAULT_GAME_CONFIG: GameConfig = {
   gravity: new Vector3(0, -9.81, 0),
   initialQuestDelay: 3000,
   questCompleteAnimationDelay: 2000,
-  questTimeLimit: window?.location?.search === "?test" ? 1_200_000 : 300_000,
+  questTimeLimit: Number.MAX_SAFE_INTEGER,
 };
 
 export class Game {
@@ -264,7 +264,7 @@ export class Game {
     this._cachedObjectivePos = null;
 
     const sceneNum = quest.id;
-    const speaker = `ΣΚΗΝΗ ${sceneNum} - ΓΡΙΦΟΣ ${sceneNum}`;
+    const speaker = `${t('game.modals.scene')} ${sceneNum} - ${t('game.modals.riddle')} ${sceneNum}`;
     this._uiManager.showInstructionModal(speaker, quest.riddle);
   }
 
@@ -272,7 +272,7 @@ export class Game {
     const currentQuest = this._questManager.getCurrentQuest();
     if (!currentQuest) return;
     this._uiManager.showInstructionModal(
-      `ΓΡΙΦΟΣ ${currentQuest.id}`,
+      `${t('game.modals.riddle')} ${currentQuest.id}`,
       currentQuest.riddle,
     );
   };

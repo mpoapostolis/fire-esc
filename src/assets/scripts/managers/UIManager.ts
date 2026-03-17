@@ -4,7 +4,7 @@ import { t } from "../i18n";
 export class UIManager {
   // --- UI Elements ---
   private _hudDistance: HTMLElement;
-  private _hudTimer: HTMLElement;
+  private _hudTimer: HTMLElement | null;
   private _infoButton: HTMLElement;
   private _helpButton: HTMLElement;
   private _mapButton: HTMLElement;
@@ -40,7 +40,7 @@ export class UIManager {
 
   constructor() {
     this._hudDistance = this._getUIElement("hud-distance");
-    this._hudTimer = this._getUIElement("hud-timer");
+    this._hudTimer = document.getElementById("hud-timer");
     this._infoButton = this._getUIElement("info-button");
     this._helpButton = this._getUIElement("help-button");
     this._mapButton = this._getUIElement("map-button");
@@ -169,7 +169,7 @@ export class UIManager {
     this._quizOptions.innerHTML = "";
 
     if (riddle) {
-      this._quizRiddle.innerHTML = `<div class="quiz-riddle-tag">📖 ΓΡΙΦΟΣ</div>`;
+      this._quizRiddle.innerHTML = `<div class="quiz-riddle-tag">${t('ui.riddleTag')}</div>`;
       this._quizRiddle.appendChild(document.createTextNode(riddle));
       this._quizRiddle.classList.remove("hidden");
     } else {
@@ -211,6 +211,7 @@ export class UIManager {
   }
 
   public updateTimer(milliseconds: number) {
+    if (!this._hudTimer) return;
     const totalSeconds = Math.floor(milliseconds / 1000);
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;

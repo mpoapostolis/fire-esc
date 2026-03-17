@@ -28,8 +28,24 @@ window.addEventListener("DOMContentLoaded", async () => {
   ) as HTMLParagraphElement;
 
   if (canvas) {
-    // --- 1. LOAD GREEK TRANSLATIONS ---
-    await i18n.loadTranslations("el");
+    // --- 1. LANGUAGE SELECTION ---
+    const languageScreen = document.getElementById("language-screen") as HTMLDivElement;
+    const selectedLocale = await new Promise<string>((resolve) => {
+      const enBtn = document.getElementById("lang-en-btn");
+      const elBtn = document.getElementById("lang-el-btn");
+      const pick = (locale: string) => {
+        if (languageScreen) {
+          languageScreen.style.opacity = "0";
+          languageScreen.style.transition = "opacity 0.4s";
+          setTimeout(() => { languageScreen.style.display = "none"; }, 400);
+        }
+        resolve(locale);
+      };
+      enBtn?.addEventListener("click", () => pick("en"));
+      elBtn?.addEventListener("click", () => pick("el"));
+    });
+
+    await i18n.loadTranslations(selectedLocale);
     initUITranslations();
 
     // --- 2. START SCREEN (Audio Init) ---

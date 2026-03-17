@@ -3,6 +3,40 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
+  <!-- Language Selection Screen -->
+  <div
+    id="language-screen"
+    class="fixed inset-0 z-60 flex flex-col items-center justify-center bg-slate-950"
+  >
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-900/20 via-slate-950 to-slate-950"></div>
+    </div>
+    <div class="relative z-20 text-center space-y-10">
+      <h1 class="text-4xl font-black text-white tracking-tighter uppercase tech-text-shadow">
+        ESCAPE <span class="text-blue-500">THE FLOOD</span>
+      </h1>
+      <p class="text-sm font-mono text-slate-400 uppercase tracking-widest">Select Language / Επιλέξτε Γλώσσα</p>
+      <div class="flex gap-6 justify-center">
+        <button
+          id="lang-en-btn"
+          class="group relative flex flex-col items-center gap-3 px-10 py-6 bg-transparent border border-blue-500/30 hover:border-blue-400 transition-all duration-300 min-w-[140px]"
+        >
+          <div class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <span class="text-4xl">🇬🇧</span>
+          <span class="text-sm font-mono font-bold text-white tracking-[0.15em] group-hover:text-blue-200">ENGLISH</span>
+        </button>
+        <button
+          id="lang-el-btn"
+          class="group relative flex flex-col items-center gap-3 px-10 py-6 bg-transparent border border-blue-500/30 hover:border-blue-400 transition-all duration-300 min-w-[140px]"
+        >
+          <div class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <span class="text-4xl">🇬🇷</span>
+          <span class="text-sm font-mono font-bold text-white tracking-[0.15em] group-hover:text-blue-200">ΕΛΛΗΝΙΚΑ</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Start Screen -->
   <div
     id="start-screen"
@@ -204,7 +238,7 @@ import Layout from "../layouts/Layout.astro";
           <span class="text-lg">⚠️</span>
           <h3 id="dialogue-speaker" class="text-sm font-bold text-amber-400 tracking-wider uppercase">SYSTEM</h3>
         </div>
-        <span id="dialogue-urgent" class="text-[10px] font-mono text-slate-500 hidden sm:block">ΕΠΕΙΓΟΝ ΜΗΝΥΜΑ</span>
+        <span id="dialogue-urgent" class="text-[10px] font-mono text-slate-500 hidden sm:block" data-i18n="ui.urgentMessage">URGENT MESSAGE</span>
       </div>
 
       <!-- Body -->
@@ -242,13 +276,13 @@ import Layout from "../layouts/Layout.astro";
         <div class="quiz-header-icon">?</div>
         <div class="flex-1 min-w-0">
           <p class="quiz-header-label" data-i18n="game.modals.quizTitle">ΠΡΟΤΕΙΝΟΜΕΝΕΣ ΑΛΛΑΓΕΣ</p>
-          <p class="quiz-header-sub">Επέλεξε τη σωστή απάντηση</p>
+          <p class="quiz-header-sub" data-i18n="ui.quizSelectAnswer">Select the correct answer</p>
         </div>
       </div>
 
       <!-- ── Riddle (scrollable, capped height) ── -->
       <div id="quiz-riddle" class="quiz-riddle hidden">
-        <div class="quiz-riddle-tag">📖 ΓΡΙΦΟΣ</div>
+        <div class="quiz-riddle-tag" data-i18n="ui.riddleTag">📖 RIDDLE</div>
       </div>
 
       <!-- ── Scrollable body (question + options) ── -->
@@ -467,23 +501,6 @@ import Layout from "../layouts/Layout.astro";
     </div>
   </div>
 
-  <!-- Timer -->
-  <div
-    class="bg-slate-900/80 backdrop-blur border-r-2 border-pink-500 px-6 py-3 clip-path-slant-left text-right pointer-events-auto"
-  >
-    <div
-      class="text-[10px] font-mono text-pink-400 uppercase tracking-widest mb-1"
-      data-i18n="ui.hud.time"
-    >
-      Time Remaining
-    </div>
-    <div
-      id="hud-timer"
-      class="text-3xl font-mono font-bold text-white tracking-tight"
-    >
-      --:--
-    </div>
-  </div>
 </div>
 
 <!-- Position capture toast (dev tool — press P) -->
@@ -510,8 +527,8 @@ import Layout from "../layouts/Layout.astro";
   >
     <div class="flex items-center gap-2 mb-2">
       <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-      <span class="text-xs font-mono text-blue-400 uppercase tracking-widest"
-        >Σημείο Ενδιαφέροντος — Πλησίασε για να απαντήσεις!</span
+      <span class="text-xs font-mono text-blue-400 uppercase tracking-widest" data-i18n="ui.proximityLabel"
+        >Point of Interest — Get closer to answer!</span
       >
     </div>
     <p
