@@ -9,29 +9,48 @@ import Layout from "../layouts/Layout.astro";
     class="fixed inset-0 z-60 flex flex-col items-center justify-center bg-slate-950"
   >
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-900/20 via-slate-950 to-slate-950"></div>
+      <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-900/20 via-slate-950 to-slate-950"
+      >
+      </div>
     </div>
     <div class="relative z-20 text-center space-y-10">
-      <h1 class="text-4xl font-black text-white tracking-tighter uppercase tech-text-shadow">
+      <h1
+        class="text-4xl font-black text-white tracking-tighter uppercase tech-text-shadow"
+      >
         ESCAPE <span class="text-blue-500">THE FLOOD</span>
       </h1>
-      <p class="text-sm font-mono text-slate-400 uppercase tracking-widest">Select Language / Επιλέξτε Γλώσσα</p>
+      <p class="text-sm font-mono text-slate-400 uppercase tracking-widest">
+        Select Language / Επιλέξτε Γλώσσα
+      </p>
       <div class="flex gap-6 justify-center">
-        <button
-          id="lang-en-btn"
-          class="group relative flex flex-col items-center gap-3 px-10 py-6 bg-transparent border border-blue-500/30 hover:border-blue-400 transition-all duration-300 min-w-[140px]"
-        >
-          <div class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <span class="text-4xl">🇬🇧</span>
-          <span class="text-sm font-mono font-bold text-white tracking-[0.15em] group-hover:text-blue-200">ENGLISH</span>
-        </button>
         <button
           id="lang-el-btn"
           class="group relative flex flex-col items-center gap-3 px-10 py-6 bg-transparent border border-blue-500/30 hover:border-blue-400 transition-all duration-300 min-w-[140px]"
         >
-          <div class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div
+            class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+          </div>
           <span class="text-4xl">🇬🇷</span>
-          <span class="text-sm font-mono font-bold text-white tracking-[0.15em] group-hover:text-blue-200">ΕΛΛΗΝΙΚΑ</span>
+          <span
+            class="text-sm font-mono font-bold text-white tracking-[0.15em] group-hover:text-blue-200"
+            >ΕΛΛΗΝΙΚΑ</span
+          >
+        </button>
+        <button
+          id="lang-en-btn"
+          class="group relative flex flex-col items-center gap-3 px-10 py-6 bg-transparent border border-blue-500/30 hover:border-blue-400 transition-all duration-300 min-w-[140px]"
+        >
+          <div
+            class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+          </div>
+          <span class="text-4xl">🇬🇧</span>
+          <span
+            class="text-sm font-mono font-bold text-white tracking-[0.15em] group-hover:text-blue-200"
+            >ENGLISH</span
+          >
         </button>
       </div>
     </div>
@@ -233,12 +252,23 @@ import Layout from "../layouts/Layout.astro";
       class="modal-box w-[95vw] max-w-2xl p-0 bg-[#0b1120] border border-white/10 border-l-4 border-l-amber-400 max-h-[85dvh] flex flex-col"
     >
       <!-- Speaker bar -->
-      <div class="flex items-center justify-between px-5 py-3 border-b border-white/5 shrink-0 bg-slate-900/60">
+      <div
+        class="flex items-center justify-between px-5 py-3 border-b border-white/5 shrink-0 bg-slate-900/60"
+      >
         <div class="flex items-center gap-2">
           <span class="text-lg">⚠️</span>
-          <h3 id="dialogue-speaker" class="text-sm font-bold text-amber-400 tracking-wider uppercase">SYSTEM</h3>
+          <h3
+            id="dialogue-speaker"
+            class="text-sm font-bold text-amber-400 tracking-wider uppercase"
+          >
+            SYSTEM
+          </h3>
         </div>
-        <span id="dialogue-urgent" class="text-[10px] font-mono text-slate-500 hidden sm:block" data-i18n="ui.urgentMessage">URGENT MESSAGE</span>
+        <span
+          id="dialogue-urgent"
+          class="text-[10px] font-mono text-slate-500 hidden sm:block"
+          data-i18n="ui.urgentMessage">URGENT MESSAGE</span
+        >
       </div>
 
       <!-- Body -->
@@ -246,7 +276,8 @@ import Layout from "../layouts/Layout.astro";
         <p
           id="dialogue-text"
           class="text-[15px] sm:text-base text-slate-200 leading-relaxed whitespace-pre-line"
-        ></p>
+        >
+        </p>
       </div>
 
       <!-- Action -->
@@ -265,18 +296,18 @@ import Layout from "../layouts/Layout.astro";
   </dialog>
 
   <!-- Quiz Modal -->
-  <dialog
-    id="quiz_modal"
-    class="modal quiz-fullscreen pointer-events-auto"
-  >
+  <dialog id="quiz_modal" class="modal quiz-fullscreen pointer-events-auto">
     <div class="quiz-card">
-
       <!-- ── Header ── -->
       <div class="quiz-header">
         <div class="quiz-header-icon">?</div>
         <div class="flex-1 min-w-0">
-          <p class="quiz-header-label" data-i18n="game.modals.quizTitle">ΠΡΟΤΕΙΝΟΜΕΝΕΣ ΑΛΛΑΓΕΣ</p>
-          <p class="quiz-header-sub" data-i18n="ui.quizSelectAnswer">Select the correct answer</p>
+          <p class="quiz-header-label" data-i18n="game.modals.quizTitle">
+            ΠΡΟΤΕΙΝΟΜΕΝΕΣ ΑΛΛΑΓΕΣ
+          </p>
+          <p class="quiz-header-sub" data-i18n="ui.quizSelectAnswer">
+            Select the correct answer
+          </p>
         </div>
       </div>
 
@@ -293,7 +324,6 @@ import Layout from "../layouts/Layout.astro";
         <!-- Options -->
         <div id="quiz-options" class="quiz-options"></div>
       </div>
-
     </div>
   </dialog>
 
@@ -500,7 +530,6 @@ import Layout from "../layouts/Layout.astro";
       --
     </div>
   </div>
-
 </div>
 
 <!-- Position capture toast (dev tool — press P) -->
@@ -508,11 +537,17 @@ import Layout from "../layouts/Layout.astro";
   id="pos-toast"
   class="pos-toast-hidden fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
 >
-  <div class="bg-emerald-950 border border-emerald-500/60 rounded-lg px-5 py-4 shadow-2xl shadow-emerald-900/40 min-w-[280px]">
+  <div
+    class="bg-emerald-950 border border-emerald-500/60 rounded-lg px-5 py-4 shadow-2xl shadow-emerald-900/40 min-w-[280px]"
+  >
     <div class="flex items-center gap-2 mb-2">
-      <span class="text-emerald-400 text-sm font-bold">📍 Position copied!</span>
+      <span class="text-emerald-400 text-sm font-bold">📍 Position copied!</span
+      >
     </div>
-    <pre id="pos-toast-text" class="text-emerald-200 text-xs font-mono leading-relaxed whitespace-pre"></pre>
+    <pre
+      id="pos-toast-text"
+      class="text-emerald-200 text-xs font-mono leading-relaxed whitespace-pre">
+    </pre>
   </div>
 </div>
 
@@ -527,7 +562,9 @@ import Layout from "../layouts/Layout.astro";
   >
     <div class="flex items-center gap-2 mb-2">
       <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-      <span class="text-xs font-mono text-blue-400 uppercase tracking-widest" data-i18n="ui.proximityLabel"
+      <span
+        class="text-xs font-mono text-blue-400 uppercase tracking-widest"
+        data-i18n="ui.proximityLabel"
         >Point of Interest — Get closer to answer!</span
       >
     </div>
@@ -643,13 +680,24 @@ import Layout from "../layouts/Layout.astro";
   }
 
   /* Scrollbar */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: #0f172a; }
-  ::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
-  ::-webkit-scrollbar-thumb:hover { background: #475569; }
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0f172a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+  }
 
   /* Modal Overrides */
-  .modal-box { border-radius: 0 !important; }
+  .modal-box {
+    border-radius: 0 !important;
+  }
 
   /* ═══════════════════════════════════════
      QUIZ MODAL — mobile-first redesign
@@ -658,26 +706,29 @@ import Layout from "../layouts/Layout.astro";
   /* backdrop */
   .quiz-fullscreen {
     display: flex;
-    align-items: flex-end;        /* slide up from bottom on mobile */
+    align-items: flex-end; /* slide up from bottom on mobile */
     justify-content: center;
     padding: 0;
-    background: rgba(0,0,0,0.65);
+    background: rgba(0, 0, 0, 0.65);
     backdrop-filter: blur(8px);
   }
   @media (min-width: 640px) {
-    .quiz-fullscreen { align-items: center; padding: 1rem; }
+    .quiz-fullscreen {
+      align-items: center;
+      padding: 1rem;
+    }
   }
 
   /* card */
   .quiz-card {
     width: 100%;
     max-width: 680px;
-    height: 100dvh;               /* full height on mobile */
+    height: 100dvh; /* full height on mobile */
     max-height: 100dvh;
     display: flex;
     flex-direction: column;
     background: #0b1120;
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     overflow: hidden;
   }
   @media (min-width: 640px) {
@@ -696,15 +747,15 @@ import Layout from "../layouts/Layout.astro";
     gap: 12px;
     padding: 16px 20px;
     background: linear-gradient(135deg, #1e3a5f 0%, #0f2040 100%);
-    border-bottom: 1px solid rgba(59,130,246,0.3);
+    border-bottom: 1px solid rgba(59, 130, 246, 0.3);
     flex-shrink: 0;
   }
   .quiz-header-icon {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: rgba(59,130,246,0.25);
-    border: 2px solid rgba(59,130,246,0.6);
+    background: rgba(59, 130, 246, 0.25);
+    border: 2px solid rgba(59, 130, 246, 0.6);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -715,7 +766,7 @@ import Layout from "../layouts/Layout.astro";
   }
   .quiz-header-label {
     font-size: 10px;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: #60a5fa;
@@ -730,8 +781,8 @@ import Layout from "../layouts/Layout.astro";
   /* riddle */
   .quiz-riddle {
     padding: 12px 20px;
-    background: rgba(180,140,30,0.08);
-    border-bottom: 1px solid rgba(251,191,36,0.2);
+    background: rgba(180, 140, 30, 0.08);
+    border-bottom: 1px solid rgba(251, 191, 36, 0.2);
     max-height: 28vh;
     overflow-y: auto;
     flex-shrink: 0;
@@ -743,7 +794,7 @@ import Layout from "../layouts/Layout.astro";
   .quiz-riddle-tag {
     display: block;
     font-size: 10px;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: #fbbf24;
@@ -761,7 +812,9 @@ import Layout from "../layouts/Layout.astro";
     gap: 20px;
   }
   @media (min-width: 640px) {
-    .quiz-body { padding: 24px 28px 28px; }
+    .quiz-body {
+      padding: 24px 28px 28px;
+    }
   }
 
   /* question */
@@ -772,9 +825,9 @@ import Layout from "../layouts/Layout.astro";
     text-align: center;
     line-height: 1.3;
     padding: 10px 12px;
-    background: rgba(59,130,246,0.07);
+    background: rgba(59, 130, 246, 0.07);
     border-radius: 6px;
-    border: 1px solid rgba(59,130,246,0.15);
+    border: 1px solid rgba(59, 130, 246, 0.15);
   }
 
   /* options grid */
@@ -793,39 +846,45 @@ import Layout from "../layouts/Layout.astro";
     justify-content: flex-start;
     gap: 4px;
     padding: 8px 8px 10px;
-    background: rgba(30,41,59,0.8);
-    border: 1px solid rgba(71,85,105,0.6);
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(71, 85, 105, 0.6);
     border-radius: 6px;
     text-align: center;
     cursor: pointer;
-    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    transition:
+      border-color 0.15s,
+      background 0.15s,
+      transform 0.1s;
     -webkit-tap-highlight-color: transparent;
     min-height: 0;
   }
   .quiz-option-btn:hover,
   .quiz-option-btn:focus-visible {
     border-color: #3b82f6;
-    background: rgba(37,99,235,0.15);
+    background: rgba(37, 99, 235, 0.15);
     outline: none;
   }
   .quiz-option-btn:active {
     transform: scale(0.97);
-    background: rgba(37,99,235,0.25);
+    background: rgba(37, 99, 235, 0.25);
   }
   .quiz-option-letter {
     flex-shrink: 0;
     width: 22px;
     height: 22px;
     border-radius: 50%;
-    background: rgba(15,23,42,0.8);
-    border: 1px solid rgba(71,85,105,0.7);
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(71, 85, 105, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
     font-size: 10px;
     color: #60a5fa;
-    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    transition:
+      background 0.15s,
+      border-color 0.15s,
+      color 0.15s;
   }
   .quiz-option-btn:hover .quiz-option-letter,
   .quiz-option-btn:focus-visible .quiz-option-letter {
@@ -846,7 +905,9 @@ import Layout from "../layouts/Layout.astro";
 
   /* Position toast */
   #pos-toast {
-    transition: opacity 0.2s, transform 0.2s;
+    transition:
+      opacity 0.2s,
+      transform 0.2s;
   }
   .pos-toast-hidden {
     opacity: 0;
