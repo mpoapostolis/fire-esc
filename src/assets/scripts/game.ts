@@ -170,6 +170,7 @@ export class Game {
     await this._world.load();
     this._world.createQuestFirePoints(this._questManager.getAllQuests());
     this._world.createTeleportButtons(this._questManager.getAllQuests());
+    this._world.createPointLabels(this._questManager.getAllQuests());
   }
 
   private async _setupPlayerAndCamera(): Promise<void> {

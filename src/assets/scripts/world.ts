@@ -159,6 +159,78 @@ export class World {
     return firePoint.position.clone();
   }
 
+  public createPointLabels(quests: Quest[]): void {
+    const labels: Record<number, string> = {
+      1: "Δημαρχείο",
+      2: "Μ",
+      3: "Κ",
+      4: "Δρόμος\nΒουνού",
+      5: "Γειτονιά\nΗφαιστείου",
+      6: "Λ",
+      7: "Αυλή\nΣπιτιού",
+      8: "Εργοστάσιο",
+      9: "Β",
+      10: "Δρόμος\nΓειτονιάς",
+    };
+
+    for (const quest of quests) {
+      if (quest.isFake) continue;
+      const label = labels[quest.id] || quest.title;
+
+      const groundY = this.getGroundHeightAt(quest.point.x, quest.point.z);
+
+      // Floating text - no background, just text with shadow
+      const isShort = label.length <= 2;
+      const signW = isShort ? 1.2 : 3;
+      const signH = label.includes("\n") ? 1.8 : 1;
+      const sign = MeshBuilder.CreatePlane(
+        `signBoard-${quest.id}`,
+        { width: signW, height: signH },
+        this._scene,
+      );
+      sign.position.set(quest.point.x, groundY + 4, quest.point.z);
+      sign.billboardMode = 7;
+      sign.isPickable = false;
+
+      const texW = 256;
+      const texH = label.includes("\n") ? 160 : 80;
+      const tex = new DynamicTexture(`signTex-${quest.id}`, { width: texW, height: texH }, this._scene, true);
+      const ctx = tex.getContext();
+
+      ctx.clearRect(0, 0, texW, texH);
+
+      const lines = label.split("\n");
+      const fontSize = isShort ? 80 : 40;
+      ctx.font = `bold ${fontSize}px Arial, sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.shadowColor = "rgba(0,0,0,0.8)";
+      ctx.shadowBlur = 8;
+      ctx.shadowOffsetX = 3;
+      ctx.shadowOffsetY = 3;
+      ctx.fillStyle = "#ffffff";
+
+      if (lines.length > 1) {
+        const lineH = texH / (lines.length + 1);
+        lines.forEach((line, i) => {
+          ctx.fillText(line, texW / 2, lineH * (i + 1));
+        });
+      } else {
+        ctx.fillText(label, texW / 2, texH / 2);
+      }
+
+      tex.update();
+      tex.hasAlpha = true;
+
+      const signMat = new StandardMaterial(`signMat-${quest.id}`, this._scene);
+      signMat.diffuseTexture = tex;
+      signMat.emissiveColor = new Color3(1, 1, 1);
+      signMat.backFaceCulling = false;
+      signMat.useAlphaFromDiffuseTexture = true;
+      sign.material = signMat;
+    }
+  }
+
   public createTeleportButtons(quests: Quest[]): void {
     quests.forEach((quest) => {
       // Create invisible parent mesh for positioning
