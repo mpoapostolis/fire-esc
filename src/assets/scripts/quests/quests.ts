@@ -44,12 +44,12 @@ const buildQuestQuiz = (questNum: number, correctIndex: number): Quiz => {
 };
 
 export const getQuests = (): Quest[] => [
-  // ===== ΚΛΗΣΗ 1: Δημαρχείο (Town Hall) - Earthquake drill =====
+  // ===== ΚΛΗΣΗ 1: Δημαρχείο - Earthquake drill =====
   {
     id: 1,
-    title: t("quests.quest1.title"),
-    point: { x: -20.72, z: 55.7 },
-    spawn_point: { x: -15.15, z: 52.36 },
+    title: "Δημαρχείο",
+    point: { x: 4.15, z: 4.73 },
+    spawn_point: { x: 3.82, z: -3.84 },
     riddle: t("quests.quest1.riddle"),
     successMessage: t("quests.quest1.successMessage"),
     status: "active",
@@ -57,12 +57,16 @@ export const getQuests = (): Quest[] => [
     caller: t("quests.quest1.caller"),
     quiz: buildQuestQuiz(1, 0),
   },
-  // ===== ΚΛΗΣΗ 2: Σπίτι Μαρίας (Maria's House) - Earthquake protection =====
+  // ===== ΚΛΗΣΗ 2: Σπίτι Μαρίας - Earthquake protection =====
+
   {
     id: 2,
-    title: t("quests.quest2.title"),
-    point: { x: 5.58, z: 1.92 },
-    spawn_point: { x: 9.74, z: -6.23 },
+    title: "Σπίτι Μαρίας",
+    point: { x: -0.19, z: 26.28 },
+    spawn_point: {
+      x: -10.24,
+      z: 10.98,
+    },
     riddle: t("quests.quest2.riddle"),
     successMessage: t("quests.quest2.successMessage"),
     status: "locked",
@@ -73,9 +77,9 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 3: Σπίτι Κωνσταντίνου - Furniture securing =====
   {
     id: 3,
-    title: t("quests.quest3.title"),
-    point: { x: 19.25, z: -13.32 },
-    spawn_point: { x: 20.45, z: -20.49 },
+    title: "Σπίτι Κων/νου",
+    point: { x: 35.62, z: 39.97 },
+    spawn_point: { x: 29.77, z: 35.9 },
     riddle: t("quests.quest3.riddle"),
     successMessage: t("quests.quest3.successMessage"),
     status: "locked",
@@ -86,9 +90,9 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 4: Δρόμος βουνού - Landslide =====
   {
     id: 4,
-    title: t("quests.quest4.title"),
-    point: { x: 1.52, z: 20.31 },
-    spawn_point: { x: 8.29, z: 17.48 },
+    title: "Δρόμος Βουνού",
+    point: { x: -10.83, z: 23.14 },
+    spawn_point: { x: 1.72, z: 19.98 },
     riddle: t("quests.quest4.riddle"),
     successMessage: t("quests.quest4.successMessage"),
     status: "locked",
@@ -99,9 +103,9 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 5: Γειτονιά ηφαιστείου - Evacuation =====
   {
     id: 5,
-    title: t("quests.quest5.title"),
-    point: { x: 10.9, z: 35.45 },
-    spawn_point: { x: 10.83, z: 28.19 },
+    title: "Γειτονιά Ηφαιστείου",
+    point: { x: 8.22, z: -30.49 },
+    spawn_point: { x: 1.49, z: -30.65 },
     riddle: t("quests.quest5.riddle"),
     successMessage: t("quests.quest5.successMessage"),
     status: "locked",
@@ -112,9 +116,9 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 6: Σπίτι Λουκίας - Volcano safety =====
   {
     id: 6,
-    title: t("quests.quest6.title"),
-    point: { x: -40.25, z: -45.3 },
-    spawn_point: { x: -31.26, z: -44.36 },
+    title: "Σπίτι Λουκίας",
+    point: { x: -38.03, z: -21.88 },
+    spawn_point: { x: -41.81, z: -10.01 },
     riddle: t("quests.quest6.riddle"),
     successMessage: t("quests.quest6.successMessage"),
     status: "locked",
@@ -125,9 +129,9 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 7: Αυλή σπιτιού - Post-earthquake safety =====
   {
     id: 7,
-    title: t("quests.quest7.title"),
-    point: { x: -18.11, z: 17.29 },
-    spawn_point: { x: -20.69, z: 10.82 },
+    title: "Αυλή Σπιτιού",
+    point: { x: -30.48, z: 1.25 },
+    spawn_point: { x: -19.03, z: -6.54 },
     riddle: t("quests.quest7.riddle"),
     successMessage: t("quests.quest7.successMessage"),
     status: "locked",
@@ -138,9 +142,9 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 8: Εργοστάσιο - Gas leak after earthquake =====
   {
     id: 8,
-    title: t("quests.quest8.title"),
-    point: { x: 42.66, z: 54.11 },
-    spawn_point: { x: 35.39, z: 53.93 },
+    title: "Εργοστάσιο",
+    point: { x: 33.61, z: 12.5 },
+    spawn_point: { x: 23.28, z: 14.72 },
     riddle: t("quests.quest8.riddle"),
     successMessage: t("quests.quest8.successMessage"),
     status: "locked",
@@ -151,9 +155,9 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 9: Σπίτι Βασιλικής - Emergency kit =====
   {
     id: 9,
-    title: t("quests.quest9.title"),
-    point: { x: -44.88, z: -0.41 },
-    spawn_point: { x: -39.61, z: 6.03 },
+    title: "Σπίτι Βασιλικής",
+    point: { x: -15.23, z: -44.09 },
+    spawn_point: { x: -7.57, z: -44.32 },
     riddle: t("quests.quest9.riddle"),
     successMessage: t("quests.quest9.successMessage"),
     status: "locked",
@@ -164,103 +168,14 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 10: Δρόμος γειτονιάς - Downed power lines =====
   {
     id: 10,
-    title: t("quests.quest10.title"),
-    point: { x: 40.93, z: 1 },
-    spawn_point: { x: 39.62, z: -5.8 },
+    title: "Δρόμος Γειτονιάς",
+    point: { x: -10.33, z: 3.29 },
+    spawn_point: { x: -8.97, z: -9.01 },
     riddle: t("quests.quest10.riddle"),
     successMessage: t("quests.quest10.successMessage"),
     status: "locked",
     mapq: 10,
     caller: t("quests.quest10.caller"),
     quiz: buildQuestQuiz(10, 2),
-  },
-  // ===== FAKE POINTS =====
-  {
-    id: 11,
-    title: t("quests.quest11.title"),
-    point: { x: 21.31, z: 13.38 },
-    spawn_point: { x: 21.31, z: 13.38 },
-    riddle: "",
-    successMessage: "",
-    status: "locked",
-    isFake: true,
-    mapq: 11,
-  },
-  {
-    id: 12,
-    title: t("quests.quest12.title"),
-    point: { x: 33.91, z: 6.52 },
-    spawn_point: { x: 33.91, z: 6.52 },
-    riddle: "",
-    successMessage: "",
-    status: "locked",
-    isFake: true,
-    mapq: 12,
-  },
-  {
-    id: 13,
-    title: t("quests.quest13.title"),
-    point: { x: 35.16, z: -41.93 },
-    spawn_point: { x: 35.16, z: -41.93 },
-    riddle: "",
-    successMessage: "",
-    status: "locked",
-    isFake: true,
-    mapq: 13,
-  },
-  {
-    id: 14,
-    title: t("quests.quest14.title"),
-    point: { x: -4.56, z: 46.73 },
-    spawn_point: { x: -4.56, z: 46.73 },
-    riddle: "",
-    successMessage: "",
-    status: "locked",
-    isFake: true,
-    mapq: 14,
-  },
-  {
-    id: 15,
-    title: t("quests.quest15.title"),
-    point: { x: -4.56, z: 46.73 },
-    spawn_point: { x: -4.56, z: 46.73 },
-    riddle: "",
-    successMessage: "",
-    status: "locked",
-    isFake: true,
-    mapq: 15,
-  },
-  {
-    id: 16,
-    title: t("quests.quest16.title"),
-    point: { x: 32.51, z: -25.58 },
-    spawn_point: { x: 32.51, z: -25.58 },
-    riddle: "",
-    successMessage: "",
-    status: "locked",
-    isFake: true,
-    mapq: 16,
-  },
-  {
-    id: 17,
-    title: t("quests.quest17.title"),
-    point: { x: 3.52, z: -23.56 },
-    spawn_point: { x: 5.52, z: -21.56 },
-    riddle: "",
-    successMessage: "",
-    status: "locked",
-    isFake: true,
-    mapq: 17,
-  },
-  {
-    id: 18,
-    title: t("quests.quest18.title"),
-    point: { x: -19.31, z: -27.39 },
-    spawn_point: { x: -19.31, z: -27.39 },
-    riddle: "",
-    successMessage: "",
-    status: "locked",
-    isFake: true,
-    mapq: 18,
   },
 ];

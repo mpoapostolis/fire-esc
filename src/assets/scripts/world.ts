@@ -9,9 +9,8 @@ import {
   DynamicTexture,
   Mesh,
   MeshBuilder,
-  PhysicsBody,
-  PhysicsMotionType,
-  PhysicsShapeMesh,
+  PhysicsAggregate,
+  PhysicsShapeType,
   StandardMaterial,
   Texture,
   SceneLoader,
@@ -85,17 +84,17 @@ export class World {
 
       // Parent container - hidden by default
       const parent = new Mesh(`firePoint-${quest.id}`, this._scene);
-      parent.position.set(quest.point.x, 0, quest.point.z);
+      parent.position.set(quest.point.x, -1, quest.point.z);
       parent.isPickable = false;
       parent.setEnabled(false);
 
       // Vertical beam shooting up from the ground
       const beam = MeshBuilder.CreateCylinder(
         `questBeam-${quest.id}`,
-        { height: 30, diameterTop: 0.3, diameterBottom: 1.5, tessellation: 8 },
+        { height: 15, diameterTop: 0.2, diameterBottom: 1, tessellation: 8 },
         this._scene,
       );
-      beam.position.y = 15;
+      beam.position.y = 7.5;
       beam.parent = parent;
       beam.isPickable = false;
 
@@ -104,7 +103,7 @@ export class World {
         this._scene,
       );
       beamMat.emissiveColor = new Color3(1, 0.5, 0.1);
-      beamMat.alpha = 0.4;
+      beamMat.alpha = 0.7;
       beamMat.disableLighting = true;
       beamMat.backFaceCulling = false;
       beam.material = beamMat;
@@ -112,10 +111,10 @@ export class World {
       // Ground ring
       const ring = MeshBuilder.CreateTorus(
         `questRing-${quest.id}`,
-        { diameter: 6, thickness: 0.4, tessellation: 32 },
+        { diameter: 3, thickness: 0.2, tessellation: 32 },
         this._scene,
       );
-      ring.position.y = 0.2;
+      ring.position.y = -0.5;
       ring.parent = parent;
       ring.isPickable = false;
 
@@ -175,10 +174,10 @@ export class World {
       // Create label plane - this is the actual clickable button
       const numberPlane = MeshBuilder.CreatePlane(
         `numberLabel-${quest.id}`,
-        { width: 4, height: 4 },
+        { width: 6, height: 6 },
         this._scene,
       );
-      numberPlane.position.y = 15;
+      numberPlane.position.y = 20;
       numberPlane.parent = button;
       numberPlane.billboardMode = 7; // Always face camera
       numberPlane.isVisible = false;
@@ -303,21 +302,21 @@ export class World {
     );
 
     this._worldMeshes = result.meshes;
+    const root = result.meshes[0];
+    root.scaling.set(-0.5, 0.5, 0.5);
 
     for (const mesh of this._worldMeshes) {
       mesh.receiveShadows = true;
       mesh.isPickable = true;
+      mesh.checkCollisions = true;
 
-      const verts = mesh.getTotalVertices();
-      // Only add physics to substantial meshes (skips tiny decorative objects)
-      if (verts > 50) {
-        const body = new PhysicsBody(
+      if (mesh.getTotalVertices() > 0) {
+        new PhysicsAggregate(
           mesh,
-          PhysicsMotionType.STATIC,
-          false,
+          PhysicsShapeType.MESH,
+          { mass: 0 },
           this._scene,
         );
-        body.shape = new PhysicsShapeMesh(mesh as Mesh, this._scene);
       }
     }
   }
