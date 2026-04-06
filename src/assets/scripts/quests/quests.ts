@@ -24,6 +24,7 @@ export interface Quest {
   isFake?: boolean;
   mapq?: number;
   quiz?: Quiz;
+  quizContext?: string;
   character?: string;
 }
 
@@ -51,6 +52,7 @@ export const getQuests = (): Quest[] => [
     point: { x: 4.15, z: 4.73 },
     spawn_point: { x: 3.82, z: -3.84 },
     riddle: t("quests.quest1.riddle"),
+    quizContext: t("quests.quest1.quizContext"),
     successMessage: t("quests.quest1.successMessage"),
     status: "active",
     mapq: 1,
@@ -68,6 +70,7 @@ export const getQuests = (): Quest[] => [
       z: 10.98,
     },
     riddle: t("quests.quest2.riddle"),
+    quizContext: t("quests.quest2.quizContext"),
     successMessage: t("quests.quest2.successMessage"),
     status: "locked",
     mapq: 2,
@@ -81,6 +84,7 @@ export const getQuests = (): Quest[] => [
     point: { x: 35.62, z: 39.97 },
     spawn_point: { x: 29.77, z: 35.9 },
     riddle: t("quests.quest3.riddle"),
+    quizContext: t("quests.quest3.quizContext"),
     successMessage: t("quests.quest3.successMessage"),
     status: "locked",
     mapq: 3,
@@ -94,6 +98,7 @@ export const getQuests = (): Quest[] => [
     point: { x: -10.83, z: 23.14 },
     spawn_point: { x: 1.72, z: 19.98 },
     riddle: t("quests.quest4.riddle"),
+    quizContext: t("quests.quest4.quizContext"),
     successMessage: t("quests.quest4.successMessage"),
     status: "locked",
     mapq: 4,
@@ -107,6 +112,7 @@ export const getQuests = (): Quest[] => [
     point: { x: 8.22, z: -30.49 },
     spawn_point: { x: 1.49, z: -30.65 },
     riddle: t("quests.quest5.riddle"),
+    quizContext: t("quests.quest5.quizContext"),
     successMessage: t("quests.quest5.successMessage"),
     status: "locked",
     mapq: 5,
@@ -120,6 +126,7 @@ export const getQuests = (): Quest[] => [
     point: { x: -38.03, z: -21.88 },
     spawn_point: { x: -41.81, z: -10.01 },
     riddle: t("quests.quest6.riddle"),
+    quizContext: t("quests.quest6.quizContext"),
     successMessage: t("quests.quest6.successMessage"),
     status: "locked",
     mapq: 6,
@@ -133,6 +140,7 @@ export const getQuests = (): Quest[] => [
     point: { x: -30.48, z: 1.25 },
     spawn_point: { x: -19.03, z: -6.54 },
     riddle: t("quests.quest7.riddle"),
+    quizContext: t("quests.quest7.quizContext"),
     successMessage: t("quests.quest7.successMessage"),
     status: "locked",
     mapq: 7,
@@ -146,6 +154,7 @@ export const getQuests = (): Quest[] => [
     point: { x: 33.61, z: 12.5 },
     spawn_point: { x: 23.28, z: 14.72 },
     riddle: t("quests.quest8.riddle"),
+    quizContext: t("quests.quest8.quizContext"),
     successMessage: t("quests.quest8.successMessage"),
     status: "locked",
     mapq: 8,
@@ -159,6 +168,7 @@ export const getQuests = (): Quest[] => [
     point: { x: -15.23, z: -44.09 },
     spawn_point: { x: -7.57, z: -44.32 },
     riddle: t("quests.quest9.riddle"),
+    quizContext: t("quests.quest9.quizContext"),
     successMessage: t("quests.quest9.successMessage"),
     status: "locked",
     mapq: 9,
@@ -172,6 +182,7 @@ export const getQuests = (): Quest[] => [
     point: { x: -10.33, z: 3.29 },
     spawn_point: { x: -8.97, z: -9.01 },
     riddle: t("quests.quest10.riddle"),
+    quizContext: t("quests.quest10.quizContext"),
     successMessage: t("quests.quest10.successMessage"),
     status: "locked",
     mapq: 10,

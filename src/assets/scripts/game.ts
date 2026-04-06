@@ -397,7 +397,7 @@ export class Game {
       quest.quiz.question,
       quest.quiz.options,
       (index) => this._onQuizAnswer(index, quest),
-      quest.riddle,
+      quest.quizContext || quest.riddle,
     );
   }
 
