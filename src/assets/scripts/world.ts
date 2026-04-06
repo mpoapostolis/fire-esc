@@ -179,32 +179,29 @@ export class World {
       sign.billboardMode = 7;
       sign.isPickable = false;
 
-      const texW = 256;
-      const texH = label.includes("\n") ? 160 : 80;
+      const texW = 512;
+      const texH = 128;
       const tex = new DynamicTexture(`signTex-${quest.id}`, { width: texW, height: texH }, this._scene, true);
       const ctx = tex.getContext();
 
       ctx.clearRect(0, 0, texW, texH);
-
-      const lines = label.split("\n");
-      const fontSize = isShort ? 80 : 40;
-      ctx.font = `bold ${fontSize}px Arial, sans-serif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.shadowColor = "rgba(0,0,0,0.8)";
-      ctx.shadowBlur = 8;
+      ctx.shadowColor = "rgba(0,0,0,0.9)";
+      ctx.shadowBlur = 10;
       ctx.shadowOffsetX = 3;
       ctx.shadowOffsetY = 3;
       ctx.fillStyle = "#ffffff";
 
-      if (lines.length > 1) {
-        const lineH = texH / (lines.length + 1);
-        lines.forEach((line, i) => {
-          ctx.fillText(line, texW / 2, lineH * (i + 1));
-        });
-      } else {
-        ctx.fillText(label, texW / 2, texH / 2);
+      // Auto-size font to fit
+      let fontSize = isShort ? 90 : 52;
+      ctx.font = `bold ${fontSize}px Arial, sans-serif`;
+      while (ctx.measureText(label).width > texW - 20 && fontSize > 16) {
+        fontSize -= 2;
+        ctx.font = `bold ${fontSize}px Arial, sans-serif`;
       }
+
+      ctx.fillText(label, texW / 2, texH / 2);
 
       tex.update();
       tex.hasAlpha = true;
