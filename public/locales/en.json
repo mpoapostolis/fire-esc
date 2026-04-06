@@ -89,7 +89,8 @@
     "quest1": {
       "title": "Town Hall",
       "caller": "Mayor's Call",
-      "riddle": "Scientists inform the mayor that a nearby fault in the city has been activated, increasing the probability of an earthquake in the coming days.\n\nAdvisor 1: An earthquake drill must be conducted in schools and all services.\n\nAdvisor 2: We don't need to do anything, we'll worry people.\n\nAdvisor 3: Let's wait and see if an earthquake happens first.",
+      "riddle": "Scientists inform the mayor that a nearby fault in the city has been activated, increasing the probability of an earthquake in the coming days.",
+      "quizContext": "Advisor 1: An earthquake drill must be conducted in schools and all services.\n\nAdvisor 2: We don't need to do anything, we'll worry people.\n\nAdvisor 3: Let's wait and see if an earthquake happens first.",
       "successMessage": "Well done! You reached the right spot!",
       "quiz": {
         "question": "Who do you agree with?",
@@ -109,7 +110,8 @@
     "quest2": {
       "title": "Maria's House",
       "caller": "Maria's Call",
-      "riddle": "A small earthquake just occurred. Maria and her friends disagree about what to do.\n\nMaria: Let's run outside the house immediately.\n\nNikos: Let's protect ourselves under a sturdy table until it stops.\n\nYiannis: Let's stand on the balcony.",
+      "riddle": "A small earthquake just occurred. Maria and her friends disagree about what to do.",
+      "quizContext": "Maria: Let's run outside the house immediately.\n\nNikos: Let's protect ourselves under a sturdy table until it stops.\n\nYiannis: Let's stand on the balcony.",
       "successMessage": "Well done! You reached the right spot!",
       "quiz": {
         "question": "Who do you agree with?",
@@ -129,7 +131,8 @@
     "quest3": {
       "title": "Konstantinos's House",
       "caller": "Konstantinos's Call",
-      "riddle": "Konstantinos's family discusses what measures to take to be ready for a possible earthquake.\n\nKonstantinos's Mom: Let's secure the heavy furniture to the wall.\n\nKonstantinos's Grandpa: We don't need to do anything.\n\nKonstantinos: Let's move the furniture to the middle of the room.",
+      "riddle": "Konstantinos's family discusses what measures to take to be ready for a possible earthquake.",
+      "quizContext": "Konstantinos's Mom: Let's secure the heavy furniture to the wall.\n\nKonstantinos's Grandpa: We don't need to do anything.\n\nKonstantinos: Let's move the furniture to the middle of the room.",
       "successMessage": "Well done! You reached the right spot!",
       "quiz": {
         "question": "Who do you agree with?",
@@ -149,7 +152,8 @@
     "quest4": {
       "title": "Mountain Road",
       "caller": "Stelios's Call",
-      "riddle": "Three friends are on the road outside the city leading to the mountain. It has rained heavily and they see a sign 'Caution: rock falls'.\n\nPanos: Let's pass quickly before rocks fall.\n\nGeorge: Let's change route for safety.\n\nStelios: Let's stop to take photos.",
+      "riddle": "Three friends are on the road outside the city leading to the mountain. It has rained heavily and they see a sign 'Caution: rock falls'.",
+      "quizContext": "Panos: Let's pass quickly before rocks fall.\n\nGeorge: Let's change route for safety.\n\nStelios: Let's stop to take photos.",
       "successMessage": "Well done! You reached the right spot!",
       "quiz": {
         "question": "Who do you agree with?",
@@ -169,7 +173,8 @@
     "quest5": {
       "title": "Volcano Neighborhood",
       "caller": "Polyvotis Neighborhood Call",
-      "riddle": "The local volcano has been showing active activity in recent days. Civil Protection sends an evacuation message to residents living near it.\n\nResident 1: There's nothing to fear! We're used to this…\n\nResident 2: I'm not leaving my house.\n\nResident 3: Let's follow the evacuation instructions.",
+      "riddle": "The local volcano has been showing active activity in recent days. Civil Protection sends an evacuation message to residents living near it.",
+      "quizContext": "Resident 1: There's nothing to fear! We're used to this…\n\nResident 2: I'm not leaving my house.\n\nResident 3: Let's follow the evacuation instructions.",
       "successMessage": "Well done! You reached the right spot!",
       "quiz": {
         "question": "Who do you agree with?",
@@ -189,7 +194,8 @@
     "quest6": {
       "title": "Loukia's House",
       "caller": "Loukia's Call",
-      "riddle": "Visitors from another city came to Loukia's house. They really want to go on a trip to the volcano near the crater.\n\nMaria: What do you say? Shall we get ready?\n\nLoukia: Let's check the safety guidelines first.\n\nStavros: There's no danger at all.",
+      "riddle": "Visitors from another city came to Loukia's house. They really want to go on a trip to the volcano near the crater.",
+      "quizContext": "Maria: What do you say? Shall we get ready?\n\nLoukia: Let's check the safety guidelines first.\n\nStavros: There's no danger at all.",
       "successMessage": "Well done! You reached the right spot!",
       "quiz": {
         "question": "Who do you agree with?",
@@ -209,7 +215,8 @@
     "quest7": {
       "title": "House Yard",
       "caller": "House Yard Call",
-      "riddle": "After the earthquake, the children want to enter the house.\n\nAnna: Let's wait first for the house to be checked.\n\nKostas: Let's go in normally.\n\nStavroula: Let's go get our toys.",
+      "riddle": "After the earthquake, the children want to enter the house.",
+      "quizContext": "Anna: Let's wait first for the house to be checked.\n\nKostas: Let's go in normally.\n\nStavroula: Let's go get our toys.",
       "successMessage": "Well done! You reached the right spot!",
       "quiz": {
         "question": "Who do you agree with?",
@@ -229,7 +236,8 @@
     "quest8": {
       "title": "Factory",
       "caller": "Factory Call",
-      "riddle": "After an earthquake there is a gas leak at the factory.\n\nWorker 1: Let's turn on the lights to see better and locate the leak.\n\nWorker 2: Let's evacuate immediately and notify the authorities.\n\nWorker 3: Let's try to fix the leak ourselves.",
+      "riddle": "After an earthquake there is a gas leak at the factory.",
+      "quizContext": "Worker 1: Let's turn on the lights to see better and locate the leak.\n\nWorker 2: Let's evacuate immediately and notify the authorities.\n\nWorker 3: Let's try to fix the leak ourselves.",
       "successMessage": "Well done! You reached the right spot!",
       "quiz": {
         "question": "Who do you agree with?",
@@ -249,7 +257,8 @@
     "quest9": {
       "title": "Vasiliki's House",
       "caller": "Vasiliki's Call",
-      "riddle": "The family is preparing an emergency backpack.\n\nVasiliki: Let's put our toys in the backpack to pass the time.\n\nAntonis: Let's put water, a flashlight, a radio, a can of food and a first aid kit in the backpack.\n\nThanos: Let's put warm clothes in the backpack.",
+      "riddle": "The family is preparing an emergency backpack.",
+      "quizContext": "Vasiliki: Let's put our toys in the backpack to pass the time.\n\nAntonis: Let's put water, a flashlight, a radio, a can of food and a first aid kit in the backpack.\n\nThanos: Let's put warm clothes in the backpack.",
       "successMessage": "Well done! You reached the right spot!",
       "quiz": {
         "question": "Who do you agree with?",
@@ -269,7 +278,8 @@
     "quest10": {
       "title": "Neighborhood Street",
       "caller": "Street Call",
-      "riddle": "After an earthquake, the CP Team goes outside and notices that poles have fallen and there are bare electrical cables on the ground.\n\nFriends discuss what to do:\n\nFriend 1: Let's approach to see what's happening.\n\nFriend 2: Let's step on them carefully to pass.\n\nFriend 3: Let's move away and notify the authorities.",
+      "riddle": "After an earthquake, the CP Team goes outside and notices that poles have fallen and there are bare electrical cables on the ground. The friends discuss what to do.",
+      "quizContext": "Friend 1: Let's approach to see what's happening.\n\nFriend 2: Let's step on them carefully to pass.\n\nFriend 3: Let's move away and notify the authorities.",
       "successMessage": "Well done! You reached the right spot!",
       "quiz": {
         "question": "Who do you agree with?",
