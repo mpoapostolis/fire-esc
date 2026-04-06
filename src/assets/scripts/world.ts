@@ -167,7 +167,7 @@ export class World {
         { size: 0.1 },
         this._scene,
       );
-      button.position.set(quest.spawn_point.x, 0.5, quest.spawn_point.z);
+      button.position.set(quest.point.x, 0.5, quest.point.z);
       button.isVisible = false;
       button.isPickable = false;
 

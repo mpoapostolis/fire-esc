@@ -115,7 +115,7 @@ export class Player {
   }
 
   public async load(
-    startPosition: Vector3 = new Vector3(9, 10, -20),
+    startPosition: Vector3 = new Vector3(0, 5, 0),
   ): Promise<AbstractMesh[]> {
     const result = await SceneLoader.ImportMeshAsync(
       "",
