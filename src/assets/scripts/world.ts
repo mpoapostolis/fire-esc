@@ -160,22 +160,9 @@ export class World {
   }
 
   public createPointLabels(quests: Quest[]): void {
-    const labels: Record<number, string> = {
-      1: "Δημαρχείο",
-      2: "Μ",
-      3: "Κ",
-      4: "Δρόμος\nΒουνού",
-      5: "Γειτονιά\nΗφαιστείου",
-      6: "Λ",
-      7: "Αυλή\nΣπιτιού",
-      8: "Εργοστάσιο",
-      9: "Β",
-      10: "Δρόμος\nΓειτονιάς",
-    };
-
     for (const quest of quests) {
       if (quest.isFake) continue;
-      const label = labels[quest.id] || quest.title;
+      const label = quest.title;
 
       const groundY = this.getGroundHeightAt(quest.point.x, quest.point.z);
 

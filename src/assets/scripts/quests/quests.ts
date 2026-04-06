@@ -47,7 +47,7 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 1: Δημαρχείο - Earthquake drill =====
   {
     id: 1,
-    title: "Δημαρχείο",
+    title: t("quests.quest1.title"),
     point: { x: 4.15, z: 4.73 },
     spawn_point: { x: 3.82, z: -3.84 },
     riddle: t("quests.quest1.riddle"),
@@ -61,7 +61,7 @@ export const getQuests = (): Quest[] => [
 
   {
     id: 2,
-    title: "Σπίτι Μαρίας",
+    title: t("quests.quest2.title"),
     point: { x: -0.19, z: 26.28 },
     spawn_point: {
       x: -10.24,
@@ -77,7 +77,7 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 3: Σπίτι Κωνσταντίνου - Furniture securing =====
   {
     id: 3,
-    title: "Σπίτι Κων/νου",
+    title: t("quests.quest3.title"),
     point: { x: 35.62, z: 39.97 },
     spawn_point: { x: 29.77, z: 35.9 },
     riddle: t("quests.quest3.riddle"),
@@ -90,7 +90,7 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 4: Δρόμος βουνού - Landslide =====
   {
     id: 4,
-    title: "Δρόμος Βουνού",
+    title: t("quests.quest4.title"),
     point: { x: -10.83, z: 23.14 },
     spawn_point: { x: 1.72, z: 19.98 },
     riddle: t("quests.quest4.riddle"),
@@ -103,7 +103,7 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 5: Γειτονιά ηφαιστείου - Evacuation =====
   {
     id: 5,
-    title: "Γειτονιά Ηφαιστείου",
+    title: t("quests.quest5.title"),
     point: { x: 8.22, z: -30.49 },
     spawn_point: { x: 1.49, z: -30.65 },
     riddle: t("quests.quest5.riddle"),
@@ -116,7 +116,7 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 6: Σπίτι Λουκίας - Volcano safety =====
   {
     id: 6,
-    title: "Σπίτι Λουκίας",
+    title: t("quests.quest6.title"),
     point: { x: -38.03, z: -21.88 },
     spawn_point: { x: -41.81, z: -10.01 },
     riddle: t("quests.quest6.riddle"),
@@ -129,7 +129,7 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 7: Αυλή σπιτιού - Post-earthquake safety =====
   {
     id: 7,
-    title: "Αυλή Σπιτιού",
+    title: t("quests.quest7.title"),
     point: { x: -30.48, z: 1.25 },
     spawn_point: { x: -19.03, z: -6.54 },
     riddle: t("quests.quest7.riddle"),
@@ -142,7 +142,7 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 8: Εργοστάσιο - Gas leak after earthquake =====
   {
     id: 8,
-    title: "Εργοστάσιο",
+    title: t("quests.quest8.title"),
     point: { x: 33.61, z: 12.5 },
     spawn_point: { x: 23.28, z: 14.72 },
     riddle: t("quests.quest8.riddle"),
@@ -155,7 +155,7 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 9: Σπίτι Βασιλικής - Emergency kit =====
   {
     id: 9,
-    title: "Σπίτι Βασιλικής",
+    title: t("quests.quest9.title"),
     point: { x: -15.23, z: -44.09 },
     spawn_point: { x: -7.57, z: -44.32 },
     riddle: t("quests.quest9.riddle"),
@@ -168,7 +168,7 @@ export const getQuests = (): Quest[] => [
   // ===== ΚΛΗΣΗ 10: Δρόμος γειτονιάς - Downed power lines =====
   {
     id: 10,
-    title: "Δρόμος Γειτονιάς",
+    title: t("quests.quest10.title"),
     point: { x: -10.33, z: 3.29 },
     spawn_point: { x: -8.97, z: -9.01 },
     riddle: t("quests.quest10.riddle"),
