@@ -6,6 +6,8 @@ export interface Quiz {
   correctIndex: number;
   feedback: string;
   failureMessage: string;
+  optionFeedback?: string[];
+  conclusion?: string;
 }
 
 export interface Quest {
@@ -25,25 +27,24 @@ export interface Quest {
   character?: string;
 }
 
-const buildProposalQuiz = (
-  correctIndex: number,
-  useVariant: boolean = false,
-): Quiz => {
-  const optionsKey = useVariant
-    ? "game.proposals.optionsVariant"
-    : "game.proposals.options";
-  const options = getObject<string[]>(optionsKey) || [];
+const buildQuestQuiz = (questNum: number, correctIndex: number): Quiz => {
+  const key = `quests.quest${questNum}.quiz`;
+  const options = getObject<string[]>(`${key}.options`) || [];
+  const optionFeedback = getObject<string[]>(`${key}.optionFeedback`) || [];
+  const conclusion = t(`${key}.conclusion`);
   return {
-    question: t("game.proposals.question"),
+    question: t(`${key}.question`),
     options,
     correctIndex,
-    feedback: t("game.proposals.feedback"),
-    failureMessage: t("game.proposals.failureMessage"),
+    feedback: optionFeedback[correctIndex] || "",
+    failureMessage: t("game.messages.quizFailMessage"),
+    optionFeedback,
+    conclusion: conclusion !== `${key}.conclusion` ? conclusion : undefined,
   };
 };
 
 export const getQuests = (): Quest[] => [
-  // ===== SCENE 1: Coast (Ακτή) =====
+  // ===== ΚΛΗΣΗ 1: Δημαρχείο (Town Hall) - Earthquake drill =====
   {
     id: 1,
     title: t("quests.quest1.title"),
@@ -53,9 +54,10 @@ export const getQuests = (): Quest[] => [
     successMessage: t("quests.quest1.successMessage"),
     status: "active",
     mapq: 1,
-    quiz: buildProposalQuiz(5),
+    caller: t("quests.quest1.caller"),
+    quiz: buildQuestQuiz(1, 0),
   },
-  // ===== SCENE 2: River (Ποτάμι) =====
+  // ===== ΚΛΗΣΗ 2: Σπίτι Μαρίας (Maria's House) - Earthquake protection =====
   {
     id: 2,
     title: t("quests.quest2.title"),
@@ -65,9 +67,10 @@ export const getQuests = (): Quest[] => [
     successMessage: t("quests.quest2.successMessage"),
     status: "locked",
     mapq: 2,
-    quiz: buildProposalQuiz(6),
+    caller: t("quests.quest2.caller"),
+    quiz: buildQuestQuiz(2, 1),
   },
-  // ===== SCENE 3: Concrete (Τσιμέντο) =====
+  // ===== ΚΛΗΣΗ 3: Σπίτι Κωνσταντίνου - Furniture securing =====
   {
     id: 3,
     title: t("quests.quest3.title"),
@@ -77,9 +80,10 @@ export const getQuests = (): Quest[] => [
     successMessage: t("quests.quest3.successMessage"),
     status: "locked",
     mapq: 3,
-    quiz: buildProposalQuiz(1),
+    caller: t("quests.quest3.caller"),
+    quiz: buildQuestQuiz(3, 0),
   },
-  // ===== SCENE 4: River vegetation (Βλάστηση ποταμού) =====
+  // ===== ΚΛΗΣΗ 4: Δρόμος βουνού - Landslide =====
   {
     id: 4,
     title: t("quests.quest4.title"),
@@ -89,9 +93,10 @@ export const getQuests = (): Quest[] => [
     successMessage: t("quests.quest4.successMessage"),
     status: "locked",
     mapq: 4,
-    quiz: buildProposalQuiz(7),
+    caller: t("quests.quest4.caller"),
+    quiz: buildQuestQuiz(4, 1),
   },
-  // ===== SCENE 5: Old sewer (Παλιός υπόνομος) =====
+  // ===== ΚΛΗΣΗ 5: Γειτονιά ηφαιστείου - Evacuation =====
   {
     id: 5,
     title: t("quests.quest5.title"),
@@ -101,9 +106,10 @@ export const getQuests = (): Quest[] => [
     successMessage: t("quests.quest5.successMessage"),
     status: "locked",
     mapq: 5,
-    quiz: buildProposalQuiz(4),
+    caller: t("quests.quest5.caller"),
+    quiz: buildQuestQuiz(5, 2),
   },
-  // ===== SCENE 6: Blocked sewer (Φραγμένος υπόνομος) =====
+  // ===== ΚΛΗΣΗ 6: Σπίτι Λουκίας - Volcano safety =====
   {
     id: 6,
     title: t("quests.quest6.title"),
@@ -113,9 +119,10 @@ export const getQuests = (): Quest[] => [
     successMessage: t("quests.quest6.successMessage"),
     status: "locked",
     mapq: 6,
-    quiz: buildProposalQuiz(3),
+    caller: t("quests.quest6.caller"),
+    quiz: buildQuestQuiz(6, 1),
   },
-  // ===== SCENE 7: Ruined buildings (Ερείπια κτιρίων) =====
+  // ===== ΚΛΗΣΗ 7: Αυλή σπιτιού - Post-earthquake safety =====
   {
     id: 7,
     title: t("quests.quest7.title"),
@@ -125,9 +132,10 @@ export const getQuests = (): Quest[] => [
     successMessage: t("quests.quest7.successMessage"),
     status: "locked",
     mapq: 7,
-    quiz: buildProposalQuiz(0),
+    caller: t("quests.quest7.caller"),
+    quiz: buildQuestQuiz(7, 0),
   },
-  // ===== SCENE 8: Trees near sea (Δέντρα θάλασσας) =====
+  // ===== ΚΛΗΣΗ 8: Εργοστάσιο - Gas leak after earthquake =====
   {
     id: 8,
     title: t("quests.quest8.title"),
@@ -137,9 +145,10 @@ export const getQuests = (): Quest[] => [
     successMessage: t("quests.quest8.successMessage"),
     status: "locked",
     mapq: 8,
-    quiz: buildProposalQuiz(8),
+    caller: t("quests.quest8.caller"),
+    quiz: buildQuestQuiz(8, 1),
   },
-  // ===== SCENE 9: River banks (Όχθες ποταμού) =====
+  // ===== ΚΛΗΣΗ 9: Σπίτι Βασιλικής - Emergency kit =====
   {
     id: 9,
     title: t("quests.quest9.title"),
@@ -149,9 +158,10 @@ export const getQuests = (): Quest[] => [
     successMessage: t("quests.quest9.successMessage"),
     status: "locked",
     mapq: 9,
-    quiz: buildProposalQuiz(2, true),
+    caller: t("quests.quest9.caller"),
+    quiz: buildQuestQuiz(9, 1),
   },
-  // ===== SCENE 10: Sewer grates (Σχάρες υπονόμων) =====
+  // ===== ΚΛΗΣΗ 10: Δρόμος γειτονιάς - Downed power lines =====
   {
     id: 10,
     title: t("quests.quest10.title"),
@@ -161,7 +171,8 @@ export const getQuests = (): Quest[] => [
     successMessage: t("quests.quest10.successMessage"),
     status: "locked",
     mapq: 10,
-    quiz: buildProposalQuiz(9, true),
+    caller: t("quests.quest10.caller"),
+    quiz: buildQuestQuiz(10, 2),
   },
   // ===== FAKE POINTS =====
   {
@@ -211,7 +222,7 @@ export const getQuests = (): Quest[] => [
   {
     id: 15,
     title: t("quests.quest15.title"),
-    point: { x: -4.56, z: 46.73 }, // Διπλότυπο όπως στο raw array σου
+    point: { x: -4.56, z: 46.73 },
     spawn_point: { x: -4.56, z: 46.73 },
     riddle: "",
     successMessage: "",

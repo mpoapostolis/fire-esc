@@ -192,7 +192,12 @@ export class Game {
 
   private _startRenderLoop(): void {
     this._engine.runRenderLoop(() => {
-      this._player.enableControls();
+      const anyModalOpen = !!document.querySelector("dialog[open]");
+      if (anyModalOpen) {
+        this._player.disableControls();
+      } else if (this._gameState === "PLAYING" || this._gameState === "AWAITING_QUEST") {
+        this._player.enableControls();
+      }
       this._player.update(this._gameState);
 
       if (this._camera.getView === "word_view") {
@@ -257,15 +262,16 @@ export class Game {
 
   private _startQuest(quest: Quest): void {
     this._pendingQuest = quest;
-    this._gameState = "SHOWING_INSTRUCTIONS";
 
     // Invalidate cache for distance
     this._cachedCurrentQuest = null;
     this._cachedObjectivePos = null;
 
-    const sceneNum = quest.id;
-    const speaker = `${t('game.modals.scene')} ${sceneNum} - ${t('game.modals.riddle')} ${sceneNum}`;
-    this._uiManager.showInstructionModal(speaker, quest.riddle);
+    // Phone rings first, then scenario shown after answering
+    this._gameState = "AWAITING_QUEST";
+    this._audioManager.playRingtone();
+    const callerName = quest.caller || quest.title;
+    this._uiManager.showPhoneCallModal(callerName);
   }
 
   private _onInfoPressed = (): void => {
@@ -312,7 +318,16 @@ export class Game {
 
   private _onPhoneModalClosed = (): void => {
     this._audioManager.stopRingtone();
-    this._gameState = "PLAYING";
+
+    // After answering the call, show the scenario
+    if (this._pendingQuest) {
+      this._gameState = "SHOWING_INSTRUCTIONS";
+      const sceneNum = this._pendingQuest.id;
+      const speaker = `${t('game.modals.scene')} ${sceneNum} - ${this._pendingQuest.title}`;
+      this._uiManager.showInstructionModal(speaker, this._pendingQuest.riddle);
+    } else {
+      this._gameState = "PLAYING";
+    }
   };
 
   private _onInstructionModalClosed = (): void => {
@@ -389,17 +404,21 @@ export class Game {
     if (!quest.quiz) return;
     this._uiManager.hideQuizModal();
 
+    const feedbackText = quest.quiz.optionFeedback?.[index] ||
+      (index === quest.quiz.correctIndex ? quest.quiz.feedback : quest.quiz.failureMessage);
+
     if (index === quest.quiz.correctIndex) {
       this._gameState = "SHOWING_QUIZ_RESULT";
+      const conclusion = quest.quiz.conclusion ? `\n\n${quest.quiz.conclusion}` : "";
       this._uiManager.showInstructionModal(
         t("game.modals.success"),
-        quest.quiz.feedback,
+        feedbackText + conclusion,
       );
     } else {
       this._gameState = "SHOWING_QUIZ_FAIL";
       this._uiManager.showInstructionModal(
         t("game.modals.fail"),
-        quest.quiz.failureMessage || t("game.messages.quizFailMessage"),
+        feedbackText,
       );
     }
   }

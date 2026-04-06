@@ -1,27 +1,27 @@
 {
   "ui": {
     "buttons": {
-      "continue": "ACKNOWLEDGE",
-      "dismiss": "DISMISS ALERT",
+      "continue": "NEXT",
+      "dismiss": "DISMISS",
       "acknowledge": "ACKNOWLEDGE"
     },
     "loading": {
-      "subtitle": "PROTOCOL: CIVIL PROTECTION",
-      "loading": "LOADING ASSETS...",
-      "preparing": "Waiting for synchronization..."
+      "subtitle": "Make the Right Decision!",
+      "loading": "LOADING...",
+      "preparing": "Please wait..."
     },
     "start": {
       "pressStart": "PRESS START",
       "systemOnline": "SYSTEMS ONLINE"
     },
     "infoModal": {
-      "title": "OPERATIONAL GUIDE",
-      "instructions": "Read the intel and locate the target on the map. Verify the sector and propose necessary countermeasures."
+      "title": "INSTRUCTIONS",
+      "instructions": "Answer the call, read the situation and make the right decision to protect people!"
     },
     "controls": {
-      "movement": "MOVEMENT CONTROLS",
-      "camera": "CAMERA & VIEW",
-      "moveKeys": "Navigate",
+      "movement": "MOVEMENT",
+      "camera": "CAMERA",
+      "moveKeys": "Forward, Left, Back, Right Movement",
       "runKey": "Sprint",
       "jumpKey": "Jump",
       "mouseDrag": "Drag mouse to look around",
@@ -29,8 +29,8 @@
       "touchDrag": "Drag screen to look around"
     },
     "hud": {
-      "distance": "TARGET DISTANCE",
-      "time": "TIME REMAINING"
+      "distance": "STATION",
+      "time": "TIME"
     },
     "compass": {
       "north": "N",
@@ -45,58 +45,29 @@
     },
     "urgentMessage": "URGENT MESSAGE",
     "quizSelectAnswer": "Select the correct answer",
-    "riddleTag": "📖 RIDDLE",
+    "riddleTag": "📖 SITUATION",
     "proximityLabel": "Point of Interest — Get closer to answer!"
   },
   "game": {
-    "proposals": {
-      "question": "What change do you suggest here?",
-      "options": [
-        "I suggest replacing them with green spaces.",
-        "I suggest replacing impermeable surfaces with permeable ones.",
-        "I suggest restoring the natural flow of the river.",
-        "I suggest cleaning and maintaining the drainage pipes.",
-        "I suggest upgrading the drainage network.",
-        "I suggest building embankments and protective barriers along the coast.",
-        "I suggest building proper barriers along the river.",
-        "I suggest preserving the greenery around the river.",
-        "I suggest preserving the coastal green zones that absorb water.",
-        "I suggest improving the stormwater network to have greater drainage capacity."
-      ],
-      "optionsVariant": [
-        "I suggest replacing them with green spaces.",
-        "I suggest replacing impermeable surfaces with permeable ones.",
-        "I suggest not building anything there and preserving the natural river banks.",
-        "I suggest cleaning and maintaining the drainage pipes.",
-        "I suggest upgrading the drainage network.",
-        "I suggest building embankments and protective barriers along the coast.",
-        "I suggest building proper barriers along the river.",
-        "I suggest preserving the greenery around the river.",
-        "I suggest preserving the coastal green zones that absorb water.",
-        "I suggest improving the stormwater network to have greater drainage capacity."
-      ],
-      "feedback": "Correct choice! Your suggestion will help the city protect itself from future floods!",
-      "failureMessage": "That's not the right change. Think again about what this spot needs!"
-    },
     "modals": {
       "message": "MESSAGE",
-      "sign": "RIDDLE",
-      "scene": "SCENE",
-      "riddle": "RIDDLE",
-      "nextMission": "NEXT SCENE",
-      "lastMission": "LAST SCENE",
+      "sign": "SITUATION",
+      "scene": "CALL",
+      "riddle": "SITUATION",
+      "nextMission": "NEXT CALL",
+      "lastMission": "LAST CALL",
       "gameEnd": "MISSION COMPLETE",
       "success": "WELL DONE!",
       "timeUp": "TIME'S UP!",
       "tryAgain": "TRY AGAIN",
       "gameOver": "THE END",
-      "congratulations": "Congratulations, CP TEAM member! With the changes you suggested, you reduced the risk of future floods. Your city is grateful! You've been trained very well!\n\nYour mission continues…\nCan you design a new city that is protected from floods? Get ready for your next mission!",
+      "congratulations": "Congratulations, CP TEAM member!\n\nYou made the right choices and learned how to protect people from geophysical hazards.\n\nKnowledge, preparation and proper information can save lives.\n\nYour mission continues…",
       "falseAlarm": "WRONG SPOT",
       "fail": "WRONG CHOICE",
       "incomingCall": "Incoming Call",
       "center112": "112 Center",
       "answer": "ANSWER",
-      "quizTitle": "SUGGESTED CHANGES",
+      "quizTitle": "MAKE THE RIGHT DECISION",
       "thermometerModal": {
         "title": "⚠️ WARNING",
         "level": "DANGEROUS LEVEL",
@@ -107,63 +78,213 @@
       }
     },
     "messages": {
-      "gameInstructions": "Instructions\n\nRead the riddle and try to figure out which spot in the city you need to go to. Once you find it, click on the correct sign to teleport quickly to that spot.\n\nIf you've chosen the right spot, there will be a blue light nearby. Move towards the light.\n\nSelect the correct answer from the list that appears. If you choose correctly, a success message appears followed by the next riddle. You must solve 10 riddles to save the city.\n\nA tip! If a riddle is too difficult, you can walk around the city to reach the spot with the blue light.\n\nGood luck!",
-      "welcome": "CP TEAM member, it's time to act!\n\nIn recent months your city has been 'drowning' many times. Roads have turned into rivers, homes have been at risk, shops have stopped operating... The residents are asking for help!\n\nThe services have exhausted every solution and are turning to the experts of experts: the CP TEAM members!\n\nThey sent you secret reports documenting real flood events but... the information is hidden in riddles and challenges.\n\nWhat is your mission?\n• Solve the riddles and find the correct spots on the map.\n• Suggest smart changes that will reduce flood risk.\n\nTime is pressing... The next big storm is approaching...\nWill you manage to save the city before it floods again?\n\nThe mission starts now! Are you ready?",
-      "falseAlarmMessage": "You reached the spot but... you can't change anything here. Try again!",
-      "correctPoint": "Well done! You reached the right spot! What change do you suggest here?",
-      "quizFailMessage": "That's not the right change. Think again!"
+      "gameInstructions": "Instructions\n\nWelcome to the CP TEAM game!\n\nYour goal is to make the right decisions to protect the people of the city from geophysical hazards.\n\nHow to play:\n\nThe game has 10 stations that you need to find on the map. To find a station you receive a call that names it. At each station a situation will appear. You need to choose the correct answer. Every correct decision brings you closer to completing the mission.\n\nTips:\nBefore making a decision:\n- Always think about people's safety.\n- Prioritize decisions that prevent danger.\n\nGood luck!",
+      "welcome": "CP TEAM member, it's time to act!\n\nYour name is called at the CP TEAM operations center. Your city needs you!\n\nYour role is important! You must help your fellow citizens make the right decisions to avoid geophysical hazards and stay safe.\n\nWhat actions would you suggest to reduce geophysical risks?\n\nThe mission starts now! Are you ready?",
+      "falseAlarmMessage": "You reached the spot but... this isn't it! Try again!",
+      "correctPoint": "Well done! You reached the right spot!",
+      "quizFailMessage": "That's not the right choice. Think again!"
     }
   },
   "quests": {
     "quest1": {
-      "title": "Coast",
-      "riddle": "You pick up the phone. A voice recites a passage from the poem 'The Flood' by Kostis Palamas. Where in the city does the voice send you?\n\nThe Flood\nRain, you keep crying, and you, silent south wind!\nWater everywhere, the flood is the victor;\nin the teeth of a monstrous cup\nthe houses, the streets, the piers, the land, there!\n\nFlood, you will drink everything down here;\nyour mouth, we too await it.\nFrom the sea we came, to the sea\nwe shall go. It is the law of life.",
-      "successMessage": "Well done! You found the right spot!"
+      "title": "Town Hall",
+      "caller": "Mayor's Call",
+      "riddle": "Scientists inform the mayor that a nearby fault in the city has been activated, increasing the probability of an earthquake in the coming days.\n\nAdvisor 1: An earthquake drill must be conducted in schools and all services.\n\nAdvisor 2: We don't need to do anything, we'll worry people.\n\nAdvisor 3: Let's wait and see if an earthquake happens first.",
+      "successMessage": "Well done! You reached the right spot!",
+      "quiz": {
+        "question": "Who do you agree with?",
+        "options": [
+          "Advisor 1",
+          "Advisor 2",
+          "Advisor 3"
+        ],
+        "optionFeedback": [
+          "Correct! An earthquake drill is a fundamental preparedness measure. It helps citizens and students know how to react, reduces panic and increases safety in case of an earthquake.",
+          "Wrong choice. Avoiding action does not reduce risk. On the contrary, proper information and preparation enhance safety without causing panic.",
+          "Wrong choice. Preparation must happen before a geophysical event. If we wait for it to happen, it's already too late to reduce the consequences."
+        ],
+        "conclusion": "Timely preparation saves lives and reduces risk."
+      }
     },
     "quest2": {
-      "title": "River",
-      "riddle": "It usually stays on its path. But during the last heavy rainfall, it kept growing and growing and wouldn't stop. Its borders disappeared, the roads became its extension, and cars ended up in the water…",
-      "successMessage": "Well done! You found the right spot!"
+      "title": "Maria's House",
+      "caller": "Maria's Call",
+      "riddle": "A small earthquake just occurred. Maria and her friends disagree about what to do.\n\nMaria: Let's run outside the house immediately.\n\nNikos: Let's protect ourselves under a sturdy table until it stops.\n\nYiannis: Let's stand on the balcony.",
+      "successMessage": "Well done! You reached the right spot!",
+      "quiz": {
+        "question": "Who do you agree with?",
+        "options": [
+          "Maria",
+          "Nikos",
+          "Yiannis"
+        ],
+        "optionFeedback": [
+          "Wrong choice. Running outside during an earthquake is dangerous because objects, glass or structural elements may fall. Evacuation happens after the earthquake and in an organized manner.",
+          "Correct! During an earthquake we protect ourselves by applying the rule: 'drop, cover, hold on'. A sturdy table can protect us from falling objects.",
+          "Wrong choice. The balcony is a dangerous spot during an earthquake because there is risk of falling or detachment of materials."
+        ],
+        "conclusion": "During an earthquake: Stay inside - protect yourself - don't panic."
+      }
     },
     "quest3": {
-      "title": "Concrete",
-      "riddle": "In the city there are two areas of equal size. When it starts raining, however, they don't 'react' the same way.\n\n• One keeps the water on the surface, doesn't absorb it easily.\n• The other absorbs it faster, before the surrounding area floods.\n\nYou need to go to the first area.",
-      "successMessage": "Well done! You found the right spot!"
+      "title": "Konstantinos's House",
+      "caller": "Konstantinos's Call",
+      "riddle": "Konstantinos's family discusses what measures to take to be ready for a possible earthquake.\n\nKonstantinos's Mom: Let's secure the heavy furniture to the wall.\n\nKonstantinos's Grandpa: We don't need to do anything.\n\nKonstantinos: Let's move the furniture to the middle of the room.",
+      "successMessage": "Well done! You reached the right spot!",
+      "quiz": {
+        "question": "Who do you agree with?",
+        "options": [
+          "Konstantinos's Mom",
+          "Konstantinos's Grandpa",
+          "Konstantinos"
+        ],
+        "optionFeedback": [
+          "Correct! Securing heavy furniture to the wall is an important mitigation measure because it reduces the risk of injury from falling objects during an earthquake.",
+          "Wrong choice. The absence of measures increases vulnerability. Preparation and mitigation are essential for safety.",
+          "Wrong choice. Moving furniture to the middle of the room doesn't reduce risk and may create obstacles in case of evacuation."
+        ],
+        "conclusion": "Small actions at home can significantly reduce risk."
+      }
     },
     "quest4": {
-      "title": "River vegetation",
-      "riddle": "The river is blue... But does it also have green? It's not water, but it holds it back.",
-      "successMessage": "Well done! You found the right spot!"
+      "title": "Mountain Road",
+      "caller": "Stelios's Call",
+      "riddle": "Three friends are on the road outside the city leading to the mountain. It has rained heavily and they see a sign 'Caution: rock falls'.\n\nPanos: Let's pass quickly before rocks fall.\n\nGeorge: Let's change route for safety.\n\nStelios: Let's stop to take photos.",
+      "successMessage": "Well done! You reached the right spot!",
+      "quiz": {
+        "question": "Who do you agree with?",
+        "options": [
+          "Panos",
+          "George",
+          "Stelios"
+        ],
+        "optionFeedback": [
+          "Wrong choice. Passing quickly doesn't reduce risk. Rock falls can happen unpredictably and exposure remains high.",
+          "Correct! Changing route reduces exposure to danger. This is a prevention measure because we avoid a dangerous area.",
+          "Wrong choice. Staying in a dangerous area significantly increases the risk of injury, especially after heavy rainfall which favors landslides."
+        ],
+        "conclusion": "The best protection is to avoid danger before we are exposed to it."
+      }
     },
     "quest5": {
-      "title": "Old sewer",
-      "riddle": "During the last big flood, they weren't draining water well. They've probably aged…",
-      "successMessage": "Well done! You found the right spot!"
+      "title": "Volcano Neighborhood",
+      "caller": "Polyvotis Neighborhood Call",
+      "riddle": "The local volcano has been showing active activity in recent days. Civil Protection sends an evacuation message to residents living near it.\n\nResident 1: There's nothing to fear! We're used to this…\n\nResident 2: I'm not leaving my house.\n\nResident 3: Let's follow the evacuation instructions.",
+      "successMessage": "Well done! You reached the right spot!",
+      "quiz": {
+        "question": "Who do you agree with?",
+        "options": [
+          "Resident 1",
+          "Resident 2",
+          "Resident 3"
+        ],
+        "optionFeedback": [
+          "Wrong choice. The fact that a phenomenon occurs frequently doesn't mean it's not dangerous. Underestimating risk can lead to serious consequences.",
+          "Wrong choice. Refusing to evacuate significantly increases the risk to life. In cases of volcanic activity, conditions can change very quickly.",
+          "Correct! Complying with Civil Protection instructions is a key element of readiness and preparation. Instructions are based on scientific data and aim to protect citizens."
+        ],
+        "conclusion": "We trust official instructions and act promptly to protect ourselves."
+      }
     },
     "quest6": {
-      "title": "Blocked sewer",
-      "riddle": "It doesn't seem to have been maintained well. It has leaves and twigs…",
-      "successMessage": "Well done! You found the right spot!"
+      "title": "Loukia's House",
+      "caller": "Loukia's Call",
+      "riddle": "Visitors from another city came to Loukia's house. They really want to go on a trip to the volcano near the crater.\n\nMaria: What do you say? Shall we get ready?\n\nLoukia: Let's check the safety guidelines first.\n\nStavros: There's no danger at all.",
+      "successMessage": "Well done! You reached the right spot!",
+      "quiz": {
+        "question": "Who do you agree with?",
+        "options": [
+          "Maria",
+          "Loukia",
+          "Stavros"
+        ],
+        "optionFeedback": [
+          "Wrong choice. Making an immediate decision without checking conditions can be dangerous, especially in an area with volcanic activity.",
+          "Correct! Checking safety guidelines is a key element of prevention and readiness. Proper information before an activity significantly reduces risk.",
+          "Wrong choice. Underestimating danger can lead to dangerous situations. Volcanoes can show unpredictable activity."
+        ],
+        "conclusion": "Before any activity in a hazard zone, we inform ourselves and follow guidelines."
+      }
     },
     "quest7": {
-      "title": "Building ruins",
-      "riddle": "For several years now they have been abandoned and half-demolished. No one lives there anymore…",
-      "successMessage": "Well done! You found the right spot!"
+      "title": "House Yard",
+      "caller": "House Yard Call",
+      "riddle": "After the earthquake, the children want to enter the house.\n\nAnna: Let's wait first for the house to be checked.\n\nKostas: Let's go in normally.\n\nStavroula: Let's go get our toys.",
+      "successMessage": "Well done! You reached the right spot!",
+      "quiz": {
+        "question": "Who do you agree with?",
+        "options": [
+          "Anna",
+          "Kostas",
+          "Stavroula"
+        ],
+        "optionFeedback": [
+          "Correct! After an earthquake, there is a risk that the building may have suffered damage. It must first be checked by experts before we go back inside. This is an element of safe behavior and resilience.",
+          "Wrong choice. Entering a building without inspection can be dangerous due to possible cracks or collapses.",
+          "Wrong choice. Personal items don't have priority over safety. Entering an unchecked building can put lives at risk."
+        ],
+        "conclusion": "After an earthquake: Safety first - everything else after."
+      }
     },
     "quest8": {
-      "title": "Sea trees",
-      "riddle": "You look at the sea and see it turquoise instead of blue. What element around it could be changing its color?",
-      "successMessage": "Well done! You found the right spot!"
+      "title": "Factory",
+      "caller": "Factory Call",
+      "riddle": "After an earthquake there is a gas leak at the factory.\n\nWorker 1: Let's turn on the lights to see better and locate the leak.\n\nWorker 2: Let's evacuate immediately and notify the authorities.\n\nWorker 3: Let's try to fix the leak ourselves.",
+      "successMessage": "Well done! You reached the right spot!",
+      "quiz": {
+        "question": "Who do you agree with?",
+        "options": [
+          "Worker 1",
+          "Worker 2",
+          "Worker 3"
+        ],
+        "optionFeedback": [
+          "Wrong choice. Activating electrical devices can cause a spark and lead to an explosion. In case of a gas leak we avoid any source of ignition.",
+          "Correct! Immediate evacuation and notifying experts is a fundamental action of readiness and risk management. It protects human lives and prevents accidents.",
+          "Wrong choice. Dealing with a gas leak requires specialized equipment and training. Intervention without safety measures can be very dangerous."
+        ],
+        "conclusion": "In secondary hazards after an earthquake: First we move away - notify experts - don't take risks."
+      }
     },
     "quest9": {
-      "title": "River banks",
-      "riddle": "'If you cover me with concrete,\nthe river gets angry.\nIf you leave me free,\nI protect the city.'",
-      "successMessage": "Well done! You found the right spot!"
+      "title": "Vasiliki's House",
+      "caller": "Vasiliki's Call",
+      "riddle": "The family is preparing an emergency backpack.\n\nVasiliki: Let's put our toys in the backpack to pass the time.\n\nAntonis: Let's put water, a flashlight, a radio, a can of food and a first aid kit in the backpack.\n\nThanos: Let's put warm clothes in the backpack.",
+      "successMessage": "Well done! You reached the right spot!",
+      "quiz": {
+        "question": "Who do you agree with?",
+        "options": [
+          "Vasiliki",
+          "Antonis",
+          "Thanos"
+        ],
+        "optionFeedback": [
+          "Wrong choice. Toys may be pleasant, but they are not basic survival equipment. In an emergency backpack, priority goes to essentials for safety and survival.",
+          "Correct! The emergency backpack should include basic items such as water, food, a flashlight, a radio and a first aid kit. These are essential for survival and communication during a crisis.",
+          "Partially correct. Warm clothes are useful, especially in low temperatures, but they are not enough on their own. They must be combined with other basic survival items."
+        ],
+        "conclusion": "In a crisis, priority goes to essentials for safety and survival."
+      }
     },
     "quest10": {
-      "title": "Sewer grates",
-      "riddle": "'I'm underground and I work non-stop. When it rains a little, I manage just fine.\nBut when the rain gets angry, I narrow, I choke, and the water looks for another way… above the ground.'",
-      "successMessage": "Well done! You found the right spot!"
+      "title": "Neighborhood Street",
+      "caller": "Street Call",
+      "riddle": "After an earthquake, the CP Team goes outside and notices that poles have fallen and there are bare electrical cables on the ground.\n\nFriends discuss what to do:\n\nFriend 1: Let's approach to see what's happening.\n\nFriend 2: Let's step on them carefully to pass.\n\nFriend 3: Let's move away and notify the authorities.",
+      "successMessage": "Well done! You reached the right spot!",
+      "quiz": {
+        "question": "Who do you agree with?",
+        "options": [
+          "Friend 1",
+          "Friend 2",
+          "Friend 3"
+        ],
+        "optionFeedback": [
+          "Wrong choice. Bare cables may be live and cause electrocution. Never approach them.",
+          "Very dangerous choice. Even contact with the ground near the cables can be dangerous due to electrical current.",
+          "Correct! We move away immediately and notify the authorities. This is fundamental readiness and safety behavior."
+        ],
+        "conclusion": "After an earthquake: Don't approach bare cables - move away - notify."
+      }
     },
     "quest11": {
       "title": "Park"

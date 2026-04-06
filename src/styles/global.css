@@ -33,7 +33,7 @@ body {
 }
 
 :root {
-  --color-accent: #fbbf24;
+  --color-accent: #f97316;
 }
 .text-accent {
   color: var(--color-accent);
@@ -44,7 +44,7 @@ body {
 }
 
 .hud-glow {
-  text-shadow: 0 0 8px rgba(251, 191, 36, 0.35);
+  text-shadow: 0 0 8px rgba(249, 115, 22, 0.35);
 }
 .shadow-accent {
   box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.4);

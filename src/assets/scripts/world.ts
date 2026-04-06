@@ -103,7 +103,7 @@ export class World {
         `questBeamMat-${quest.id}`,
         this._scene,
       );
-      beamMat.emissiveColor = new Color3(0.2, 0.6, 1);
+      beamMat.emissiveColor = new Color3(1, 0.5, 0.1);
       beamMat.alpha = 0.4;
       beamMat.disableLighting = true;
       beamMat.backFaceCulling = false;
@@ -123,7 +123,7 @@ export class World {
         `questRingMat-${quest.id}`,
         this._scene,
       );
-      ringMat.emissiveColor = new Color3(0, 0.5, 1);
+      ringMat.emissiveColor = new Color3(1, 0.4, 0);
       ringMat.alpha = 0.8;
       ringMat.disableLighting = true;
       ring.material = ringMat;
@@ -207,7 +207,7 @@ export class World {
       // Main Circle Background
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-      ctx.fillStyle = quest.isFake ? "#f8fafc" : "#f0f9ff";
+      ctx.fillStyle = quest.isFake ? "#f8fafc" : "#fff7ed";
       ctx.fill();
 
       // Reset shadow
@@ -216,9 +216,9 @@ export class World {
       ctx.shadowOffsetX = 0;
       ctx.shadowOffsetY = 0;
 
-      // Border ring - blue for flood theme
+      // Border ring - orange for geophysical hazards theme
       ctx.lineWidth = 15;
-      ctx.strokeStyle = quest.isFake ? "#64748b" : "#3b82f6";
+      ctx.strokeStyle = quest.isFake ? "#64748b" : "#f97316";
       ctx.stroke();
 
       // Inner ring
