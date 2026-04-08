@@ -44,7 +44,7 @@ const DEFAULT_GAME_CONFIG: GameConfig = {
   gravity: new Vector3(0, -9.81, 0),
   initialQuestDelay: 3000,
   questCompleteAnimationDelay: 2000,
-  questTimeLimit: 4 * 60 * 1000, // 4 lepta
+  questTimeLimit: 8 * 60 * 1000, // 8 lepta
 };
 
 export class Game {
