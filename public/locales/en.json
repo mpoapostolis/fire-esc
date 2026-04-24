@@ -78,8 +78,8 @@
       }
     },
     "messages": {
-      "gameInstructions": "Instructions\n\nWelcome to the CP TEAM game!\n\nYour goal is to make the right decisions to protect the people of the city from geophysical hazards.\n\nHow to play:\n\nThe game has 10 stations that you need to find on the map. To find a station you receive a call that names it. At each station a situation will appear. You need to choose the correct answer. Every correct decision brings you closer to completing the mission.\n\nTips:\nBefore making a decision:\n- Always think about people's safety.\n- Prioritize decisions that prevent danger.\n\nGood luck!",
-      "welcome": "CP TEAM member, it's time to act!\n\nYour name is called at the CP TEAM operations center. Your city needs you!\n\nYour role is important! You must help your fellow citizens make the right decisions to avoid geophysical hazards and stay safe.\n\nWhat actions would you suggest to reduce geophysical risks?\n\nThe mission starts now! Are you ready?",
+      "gameInstructions": "Welcome to the game, CP TEAM!\n\nYour goal is to make the right decisions to protect the people of the city from geophysical hazards.\n\nHow to play:\n\nThe game has 10 stations that you need to find on the map. To find a station you receive a call that names it. At each station a situation will appear. You need to choose the correct answer. Every correct decision brings you closer to completing the mission.\n\nTips:\nBefore making a decision:\n- Always think about people's safety.\n- Prioritize decisions that prevent danger.\n\nGood luck!",
+      "welcome": "CP TEAM member, it's time to act!\n\nYour name is called at the CP TEAM operations center. Your city needs you!",
       "falseAlarmMessage": "You reached the spot but... this isn't it! Try again!",
       "correctPoint": "Well done! You reached the right spot!",
       "quizFailMessage": "That's not the right choice. Think again!"
@@ -110,7 +110,7 @@
     "quest2": {
       "title": "Maria's House",
       "caller": "Maria's Call",
-      "riddle": "A small earthquake just occurred. Maria and her friends disagree about what to do.",
+      "riddle": "A small earthquake is happening right now. Maria and her friends disagree about what to do.",
       "quizContext": "Maria: Let's run outside the house immediately.\n\nNikos: Let's protect ourselves under a sturdy table until it stops.\n\nYiannis: Let's stand on the balcony.",
       "successMessage": "Well done! You reached the right spot!",
       "quiz": {
